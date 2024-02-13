@@ -1,51 +1,62 @@
 import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { StyleSheet, View, Text, Button, type GestureResponderEvent } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
 import * as MappIntelligence from 'react-native-mappinteligence-plugin';
+import FlatListBasics from './mainView';
+import PageTrackingView from './PageTracking';
+import ActionTrackingView from './ActionTracking';
+import CampaignTrackingView from './CampaignTracking';
+import EcommerceTrackingView from './EcommerceTracking';
+import MediaTrackingView from './MediaTracking';
+import ExceptionTrackingView from './ExceptionTracking';
 
+const Stack = createNativeStackNavigator();
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+  // function onPressLearnMore(): void {
+  //   MappIntelligence.setAnonymousTracking(false);
+  //   MappIntelligence.initWithConfiguration([794940687426749], "http://tracker-int-01.webtrekk.net").then(setResult);
+  //   MappIntelligence.setLogLevel(1);
+  //   MappIntelligence.setBatchSupportEnabled(false);
+  //   MappIntelligence.setBatchSupportSize(150);
+  //   MappIntelligence.setRequestInterval(1);
+  //   MappIntelligence.setRequestPerQueue(300);
+  //   MappIntelligence.setShouldMigrate(true);
+  //   MappIntelligence.setSendAppVersionInEveryRequest(true);
+  //   MappIntelligence.setEnableBackgroundSendout(true);
+  //   MappIntelligence.setEnableUserMatching(false);
+  // }
+  function Home({ navigation }) {
+    var home = new FlatListBasics({});
+    home.navigation = navigation;
+    return home.render();
+  }
 
-  React.useEffect(() => {
-    MappIntelligence. multiply(3, 7).then(setResult);
-  }, []);
-
-  function onPressLearnMore(): void {
-    MappIntelligence.setAnonymousTracking(false);
-    MappIntelligence.initWithConfiguration([794940687426749], "http://tracker-int-01.webtrekk.net").then(setResult);
-    MappIntelligence.setLogLevel(1);
-    MappIntelligence.setBatchSupportEnabled(false);
-    MappIntelligence.setBatchSupportSize(150);
-    MappIntelligence.setRequestInterval(1);
-    MappIntelligence.setRequestPerQueue(300);
-    MappIntelligence.setShouldMigrate(true);
-    MappIntelligence.setSendAppVersionInEveryRequest(true);
-    MappIntelligence.setEnableBackgroundSendout(true);
-    MappIntelligence.setEnableUserMatching(false);
+  function PageTracking() {
+    return new PageTrackingView({}).render();
   }
 
   return (
-    <View style={styles.container}>
-      <Text>Result: {result}</Text>
-      <Button
-        onPress={onPressLearnMore}
-        title="Init MappIntelligence"
-        color="#841584"
-        accessibilityLabel="Learn more about this purple button"
-      />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="PageTracking" component={PageTracking} />
+        <Stack.Screen name="ActionTracking" component={ActionTrackingView} />
+        <Stack.Screen
+          name="CampaignTracking"
+          component={CampaignTrackingView}
+        />
+        <Stack.Screen
+          name="EcommerceTracking"
+          component={EcommerceTrackingView}
+        />
+        <Stack.Screen name="MediaTracking" component={MediaTrackingView} />
+        <Stack.Screen
+          name="ExceptionTracking"
+          component={ExceptionTrackingView}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
-  },
-});
