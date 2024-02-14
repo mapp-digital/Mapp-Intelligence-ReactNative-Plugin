@@ -2,7 +2,6 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { SafeAreaView, StyleSheet, View } from 'react-native';
 import * as MappIntelligence from 'react-native-mappinteligence-plugin';
 import FlatListBasics from './mainView';
 import PageTrackingView from './PageTracking';
@@ -15,21 +14,23 @@ import ConfigurationTrackingView from './ConfigurationTracking';
 
 const Stack = createNativeStackNavigator();
 export default function App() {
-  // function onPressLearnMore(): void {
-  //   MappIntelligence.setAnonymousTracking(false);
-  //   MappIntelligence.initWithConfiguration([794940687426749], "http://tracker-int-01.webtrekk.net").then(setResult);
-  //   MappIntelligence.setLogLevel(1);
-  //   MappIntelligence.setBatchSupportEnabled(false);
-  //   MappIntelligence.setBatchSupportSize(150);
-  //   MappIntelligence.setRequestInterval(1);
-  //   MappIntelligence.setRequestPerQueue(300);
-  //   MappIntelligence.setShouldMigrate(true);
-  //   MappIntelligence.setSendAppVersionInEveryRequest(true);
-  //   MappIntelligence.setEnableBackgroundSendout(true);
-  //   MappIntelligence.setEnableUserMatching(false);
-  // }
+
   function Home({ navigation }) {
     var home = new FlatListBasics({});
+    MappIntelligence.setAnonymousTracking(false);
+    MappIntelligence.initWithConfiguration(
+      [794940687426749],
+      'http://tracker-int-01.webtrekk.net'
+    ).then(setResult);
+    MappIntelligence.setLogLevel(1);
+    MappIntelligence.setBatchSupportEnabled(false);
+    MappIntelligence.setBatchSupportSize(150);
+    MappIntelligence.setRequestInterval(1);
+    MappIntelligence.setRequestPerQueue(300);
+    MappIntelligence.setShouldMigrate(true);
+    MappIntelligence.setSendAppVersionInEveryRequest(true);
+    MappIntelligence.setEnableBackgroundSendout(true);
+    MappIntelligence.setEnableUserMatching(false);
     home.navigation = navigation;
     return home.render();
   }
@@ -65,3 +66,7 @@ export default function App() {
     </NavigationContainer>
   );
 }
+function setResult(value: number): number | PromiseLike<number> {
+  throw new Error('Function not implemented.');
+}
+

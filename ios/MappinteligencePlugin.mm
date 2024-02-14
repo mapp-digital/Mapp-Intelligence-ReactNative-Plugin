@@ -130,6 +130,22 @@ RCT_EXPORT_METHOD(setEnableUserMatching:(BOOL)enabled
     resolve(@1);
 }
 
+RCT_EXPORT_METHOD(trackPage:
+                                        (RCTPromiseResolveBlock)resolve
+                                        reject:(RCTPromiseRejectBlock)reject)
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIViewController *topController = [UIApplication sharedApplication].keyWindow.rootViewController;
+
+        while (topController.presentedViewController) {
+            topController = topController.presentedViewController;
+        }
+        [[MappIntelligence shared] trackPageWithViewController:topController pageViewEvent:NULL];
+    });
+    resolve(@1);
+}
+
 //[[MappIntelligence shared] setEnableUserMatching:true];
+
 
 @end

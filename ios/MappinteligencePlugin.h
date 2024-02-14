@@ -8,5 +8,4 @@
 
 @interface MappinteligencePlugin : NSObject <RCTBridgeModule>
 #endif
-
 @end

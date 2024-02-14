@@ -1,12 +1,6 @@
-import React, { Component } from 'react';  
-import {
-  AppRegistry,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-  Alert,
-} from 'react-native';
+import React, { Component } from 'react';
+import * as MappIntelligence from 'react-native-mappinteligence-plugin';
+import { AppRegistry, FlatList, StyleSheet, View, Button } from 'react-native';
 
 export default class PageTrackingView extends Component {
   renderSeparator = () => {
@@ -23,7 +17,18 @@ export default class PageTrackingView extends Component {
   };
   //handling onPress action
   getListViewItem = (item: any) => {
-    Alert.alert(item.key);
+    switch (item.key) {
+      case 'Track Page':
+        MappIntelligence.trackPage();
+        return 'haha';
+      case 'Track Custom Page':
+        return 'haha';
+      case 'Track Page with Custom Data':
+        return 'haha';
+
+      default:
+        break;
+    }
   };
 
   render() {
@@ -36,12 +41,12 @@ export default class PageTrackingView extends Component {
             { key: 'Track Page with Custom Data' },
           ]}
           renderItem={({ item }) => (
-            <Text
-              style={styles.item}
-              onPress={this.getListViewItem.bind(this, item)}
-            >
-              {item.key}
-            </Text>
+            <Button
+              title={item.key}
+              onPress={() => {
+                this.getListViewItem(item);
+              }}
+            />
           )}
           ItemSeparatorComponent={this.renderSeparator}
         />

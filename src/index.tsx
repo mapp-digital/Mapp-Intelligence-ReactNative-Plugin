@@ -61,7 +61,10 @@ export function setSendAppVersionInEveryRequest(flag:boolean): Promise<number> {
   return MappinteligencePlugin.setSendAppVersionInEveryRequest(flag)
 }
 
-export function setEnableUserMatching(enabled:boolean): Promise<number> {
-  return MappinteligencePlugin.setEnableUserMatching(enabled)
+export function setEnableUserMatching(enabled: boolean): Promise<number> {
+  return MappinteligencePlugin.setEnableUserMatching(enabled);
+}
+export function trackPage(): Promise<number> {
+  return MappinteligencePlugin.trackPage();
 }
 //setEnableUserMatching
