@@ -48,7 +48,8 @@ export default class FlatListBasics extends Component {
   getListViewItem = (item: any) => {
     switch (item.key) {
       case 'Configuration':
-        return 'z';
+        this.navigation.navigate('ConfigurationTracking');
+        return 'configuration tracking';
       case 'Page Tracking':
         this.navigation.navigate('PageTracking');
         return 'page tracking';

@@ -11,6 +11,7 @@ import CampaignTrackingView from './CampaignTracking';
 import EcommerceTrackingView from './EcommerceTracking';
 import MediaTrackingView from './MediaTracking';
 import ExceptionTrackingView from './ExceptionTracking';
+import ConfigurationTrackingView from './ConfigurationTracking';
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -55,6 +56,10 @@ export default function App() {
         <Stack.Screen
           name="ExceptionTracking"
           component={ExceptionTrackingView}
+        />
+        <Stack.Screen
+          name="ConfigurationTracking"
+          component={ConfigurationTrackingView}
         />
       </Stack.Navigator>
     </NavigationContainer>
