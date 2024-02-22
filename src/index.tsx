@@ -1,4 +1,10 @@
 import { NativeModules, Platform } from 'react-native';
+import type {
+  CampaignParameters,
+  EcommerceParameters,
+  PageParameters,
+  UserCategories,
+} from './helperMethods';
 
 const LINKING_ERROR =
   `The package 'react-native-mappinteligence-plugin' doesn't seem to be linked. Make sure: \n\n` +
@@ -57,8 +63,10 @@ export function setAnonymousTracking(anonymous:boolean): Promise<number> {
   return MappinteligencePlugin.setAnonymousTracking(anonymous)
 }
 
-export function setSendAppVersionInEveryRequest(flag:boolean): Promise<number> {
-  return MappinteligencePlugin.setSendAppVersionInEveryRequest(flag)
+export function setSendAppVersionInEveryRequest(
+  flag: boolean
+): Promise<number> {
+  return MappinteligencePlugin.setSendAppVersionInEveryRequest(flag);
 }
 
 export function setEnableUserMatching(enabled: boolean): Promise<number> {
@@ -66,5 +74,23 @@ export function setEnableUserMatching(enabled: boolean): Promise<number> {
 }
 export function trackPage(): Promise<number> {
   return MappinteligencePlugin.trackPage();
+}
+
+export function trackCustomPage(
+  pageParameters?: PageParameters | null,
+  sessionParamters?: {
+    [code: number]: string;
+  } | null,
+  userCategories?: UserCategories | null,
+  ecommerceParameters?: EcommerceParameters | null,
+  campaignParameters?: CampaignParameters | null
+): Promise<number> {
+  return MappinteligencePlugin.trackCustomPage(
+    pageParameters,
+    sessionParamters,
+    userCategories,
+    ecommerceParameters,
+    campaignParameters
+  );
 }
 //setEnableUserMatching
