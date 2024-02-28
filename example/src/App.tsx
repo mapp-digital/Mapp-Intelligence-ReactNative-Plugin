@@ -14,8 +14,7 @@ import ConfigurationTrackingView from './ConfigurationTracking';
 
 const Stack = createNativeStackNavigator();
 export default function App() {
-
-  function Home({ navigation }) {
+  function Home({ navigation }: { navigation: any }) {
     var home = new FlatListBasics({});
     MappIntelligence.setAnonymousTracking(false);
     MappIntelligence.initWithConfiguration(
@@ -69,4 +68,3 @@ export default function App() {
 function setResult(value: number): number | PromiseLike<number> {
   throw new Error('Function not implemented.');
 }
-
