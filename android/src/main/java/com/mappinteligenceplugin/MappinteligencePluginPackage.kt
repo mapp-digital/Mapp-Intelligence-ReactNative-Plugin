@@ -12,7 +12,8 @@ class MappinteligencePluginPackage : ReactPackage {
     return listOf(MappinteligencePluginModule(reactContext))
   }
 
-  override fun createJSModules(): MutableList<Class<out JavaScriptModule>> {
+  @Suppress("unused")
+  fun createJSModules(): MutableList<Class<out JavaScriptModule>> {
     return mutableListOf()
   }
 
