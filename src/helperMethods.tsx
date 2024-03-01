@@ -1,7 +1,7 @@
 interface PartialPageParameters {
-  internalSearch?: string | null;
-  details?: [number, string] | null;
-  group?: [string, string] | null;
+  searchTerm?: string | null;
+  params?: string | null;
+  categories?: string | null;
 }
 export type PageParameters = Required<PartialPageParameters>;
 
@@ -12,20 +12,20 @@ interface PartialBirthday {
 }
 export type MIBirthday = Required<PartialBirthday>;
 
-enum MIGender {
+export enum MIGender {
   unknown = 1,
   male = 2,
   female = 3,
 }
 
 interface PartialUserCategoris {
-  birthday?: MIBirthday;
+  birthday?: String;
   city?: string;
   country?: string;
   emailAddress?: string;
   emailReceiverId?: string;
   firstName?: string;
-  gender?: MIGender;
+  gender?: string;
   customerId?: string;
   lastName?: string;
   newsletterSubscribed?: boolean;
@@ -33,7 +33,7 @@ interface PartialUserCategoris {
   street?: string;
   streetNumber?: string;
   zipCode?: string;
-  customCategories?: [number, string];
+  customCategories?: string;
 }
 export type UserCategories = Required<PartialUserCategoris>;
 
@@ -93,3 +93,8 @@ interface ParticularCampaignParameters {
   customParameters?: [number, string] | null;
 }
 export type CampaignParameters = Required<ParticularCampaignParameters>;
+
+interface ParticularSessionParameters {
+  parameters?: string | null;
+}
+export type SessionParameters = Required<ParticularSessionParameters>;

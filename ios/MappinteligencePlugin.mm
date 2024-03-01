@@ -145,7 +145,53 @@ RCT_EXPORT_METHOD(trackPage:
     resolve(@1);
 }
 
-//[[MappIntelligence shared] setEnableUserMatching:true];
+RCT_EXPORT_METHOD(trackCustomPage:(NSDictionary*)pageParameters  
+                                        sessionParamters:(NSDictionary*)sessionParamters
+                                        userCategories:(NSDictionary*)userCategories
+                                        ecommerceParameters:(NSDictionary*)ecommerceParameters
+                                        campaignParameters:(NSDictionary*)campaignParameters
+                                        resolve:(RCTPromiseResolveBlock)resolve
+                                        reject:(RCTPromiseRejectBlock)reject)
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        MIPageViewEvent* event = [[MIPageViewEvent alloc] initWithName:@"test page 1"];
+        
+        if (pageParameters) {
+            MIPageParameters* parameter = [[MIPageParameters alloc] initWithPageParams:[self getFromString:pageParameters[@"params"]] pageCategory:[self getFromString:pageParameters[@"categories"]] search:pageParameters[@"searchTerm"]];
+            [event setPageParameters:parameter];
+        }
+        if (userCategories) {
+            NSMutableDictionary* userCatDict = [userCategories mutableCopy];
+            if (userCatDict[@"birthday"]) {
+                userCatDict[@"birthday"] = [self getFromString:userCategories[@"birthday"]];
+            }
+            if (userCatDict[@"birthday"]) {
+                userCatDict[@"customCategories"] = [self getFromString:userCategories[@"customCategories"]];
+            }
+            MIUserCategories* userCategoriesNew = [[MIUserCategories alloc] initWithDictionary:userCatDict];
+            [event setUserCategories:userCategoriesNew];
+        }
+        if (sessionParamters) {
+            NSMutableDictionary* sDict = [sessionParamters mutableCopy];
+            MISessionParameters* sessionParamtersObject = [[MISessionParameters alloc] initWithParameters:[self getFromString:sDict[@"parameters"]]];
+            [event setSessionParameters:sessionParamtersObject];
+        }
+
+        [[MappIntelligence shared] trackPage:event];
+    });
+    resolve(@1);
+}
+
+//MARK: helper methods
+-(NSMutableDictionary*)getFromString:(NSString*)item {
+    NSString *jsonString = item;
+    NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *error;
+    NSMutableDictionary *dataParam = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                       options:NSJSONReadingAllowFragments
+                                                         error:&error];
+    return dataParam;
+}
 
 
 @end

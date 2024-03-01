@@ -3,6 +3,7 @@ import type {
   CampaignParameters,
   EcommerceParameters,
   PageParameters,
+  SessionParameters,
   UserCategories,
 } from './helperMethods';
 
@@ -78,9 +79,7 @@ export function trackPage(): Promise<number> {
 
 export function trackCustomPage(
   pageParameters?: PageParameters | null,
-  sessionParamters?: {
-    [code: number]: string;
-  } | null,
+  sessionParamters?: SessionParameters | null,
   userCategories?: UserCategories | null,
   ecommerceParameters?: EcommerceParameters | null,
   campaignParameters?: CampaignParameters | null

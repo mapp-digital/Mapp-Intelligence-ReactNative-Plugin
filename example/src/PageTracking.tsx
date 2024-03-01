@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
 import * as MappIntelligence from 'react-native-mappinteligence-plugin';
+import {
+  MIGender,
+  type MIBirthday,
+  type PageParameters,
+  type UserCategories,
+  type SessionParameters,
+} from '../../src/helperMethods';
 import { AppRegistry, FlatList, StyleSheet, View, Button } from 'react-native';
 
 export default class PageTrackingView extends Component {
@@ -22,6 +29,46 @@ export default class PageTrackingView extends Component {
         MappIntelligence.trackPage();
         return 'haha';
       case 'Track Custom Page':
+        var paramsDict = new Map<number, string>().set(20, 'cp20Override');
+        var categoriesDict = new Map<number, string>();
+        categoriesDict.set(10, 'test');
+        const pagaParameters: PageParameters = {
+          params: JSON.stringify(Object.fromEntries(paramsDict)),
+          categories: JSON.stringify(Object.fromEntries(categoriesDict)),
+          searchTerm: 'testSearchTerm',
+        };
+        const bithday: MIBirthday = {
+          day: 7,
+          month: 12,
+          year: 1991,
+        };
+        var customCategoriesDict = new Map<number, string>().set(
+          20,
+          'userParam1'
+        );
+        const userCategories: UserCategories = {
+          birthday: JSON.stringify(bithday),
+          city: 'Paris',
+          country: 'France',
+          gender: String(Number(MIGender.female)),
+          customerId: 'CustomerID',
+          newsletterSubscribed: false,
+          customCategories: JSON.stringify(
+            Object.fromEntries(customCategoriesDict)
+          ),
+        };
+        var customSessionDict = new Map<number, string>().set(
+          10,
+          'sessionParam1'
+        );
+        const sessionParamters: SessionParameters = {
+          parameters: JSON.stringify(Object.fromEntries(customSessionDict)),
+        };
+        MappIntelligence.trackCustomPage(
+          pagaParameters,
+          sessionParamters,
+          userCategories
+        );
         return 'haha';
       case 'Track Page with Custom Data':
         return 'haha';
