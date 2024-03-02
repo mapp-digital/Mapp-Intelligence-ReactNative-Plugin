@@ -71,6 +71,13 @@ export default class PageTrackingView extends Component {
         );
         return 'haha';
       case 'Track Page with Custom Data':
+        var customParameters = new Map<string, string>();
+        customParameters.set('cp10', 'cp10Override');
+        customParameters.set('cg10', 'test');
+        MappIntelligence.trackPageWithCustomData(
+          customParameters,
+          'testTitle1'
+        );
         return 'haha';
 
       default:

@@ -182,6 +182,18 @@ RCT_EXPORT_METHOD(trackCustomPage:(NSDictionary*)pageParameters
     resolve(@1);
 }
 
+RCT_EXPORT_METHOD(trackPageWithCustomData:(NSString*)pageParameters
+                                            pageTitle:(NSString*)pageTitle
+                                            resolve:(RCTPromiseResolveBlock)resolve
+                                            reject:(RCTPromiseRejectBlock)reject)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSDictionary* dict = [self getFromString:pageParameters];
+            [[MappIntelligence shared] trackCustomPage:pageTitle trackingParams:dict];
+        });
+        resolve(@1);
+    }
+
 //MARK: helper methods
 -(NSMutableDictionary*)getFromString:(NSString*)item {
     NSString *jsonString = item;
@@ -192,6 +204,8 @@ RCT_EXPORT_METHOD(trackCustomPage:(NSDictionary*)pageParameters
                                                          error:&error];
     return dataParam;
 }
+
+//[[MappIntelligence shared] setEnableUserMatching:true];
 
 
 @end

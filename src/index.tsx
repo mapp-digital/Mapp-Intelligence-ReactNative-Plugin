@@ -95,4 +95,13 @@ export function trackCustomPage(
     campaignParameters
   );
 }
+export function trackPageWithCustomData(
+  pageParameters: Map<string, string>,
+  pageTitle: string
+): Promise<number> {
+  return MappinteligencePlugin.trackPageWithCustomData(
+    JSON.stringify(Object.fromEntries(pageParameters)),
+    pageTitle
+  );
+}
 //setEnableUserMatching
