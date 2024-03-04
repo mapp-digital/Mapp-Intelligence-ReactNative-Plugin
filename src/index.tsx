@@ -28,6 +28,10 @@ export function multiply(a: number, b: number): Promise<number> {
   return MappinteligencePlugin.multiply(a, b);
 }
 
+export function build(): Promise<number> {
+  return MappinteligencePlugin.build();
+}
+
 export function initWithConfiguration(
   trackIDs: any,
   domain: string

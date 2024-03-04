@@ -7,28 +7,30 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
+import com.mappinteligenceplugin.mapper.ActionEventMapper
+import com.mappinteligenceplugin.mapper.MediaEventMapper
 import webtrekk.android.sdk.Logger
+import webtrekk.android.sdk.TrackingParams
 import webtrekk.android.sdk.Webtrekk
 import webtrekk.android.sdk.WebtrekkConfiguration
 import webtrekk.android.sdk.events.PageViewEvent
+import java.math.BigDecimal
+import java.util.concurrent.TimeUnit
 
 class MappinteligencePluginModule(private val reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext) {
 
-  lateinit var instance: Webtrekk
-  private var anonymousTracking: Boolean = false
+  private lateinit var instance: Webtrekk
+  private val configAdapter = ConfigAdapter()
 
   /**
    * Initialize native SDK with the provided trackIds and trackDomain and with the default other parameters
    */
   @ReactMethod
-  fun initWithConfiguration(trackIds: ReadableArray, trackDomain: String,promise: Promise) {
-    val ids = trackIds.toArrayList().map { it.toString() }
-    val configuration = WebtrekkConfiguration.Builder(ids, trackDomain)
-      .build()
-    instance = Webtrekk.getInstance()
-    instance.init(context = reactContext, config = configuration)
-    instance.anonymousTracking(anonymousTracking)
+  fun initWithConfiguration(trackIds: ReadableArray, trackDomain: String, promise: Promise) {
+    val ids = trackIds.toArrayList().map { (it as Double).toBigDecimal().toPlainString() }
+    configAdapter.trackIds = ids
+    configAdapter.trackDomain = trackDomain
     promise.resolve(true)
   }
 
@@ -38,7 +40,11 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
    */
   @ReactMethod
   fun setAnonymousTracking(enabled: Boolean, promise: Promise) {
-    this.anonymousTracking = enabled
+    runOnPlugin({
+      instance.anonymousTracking(enabled)
+    }, {
+      configAdapter.anonymousTracking = enabled
+    })
     promise.resolve(true)
   }
 
@@ -47,7 +53,11 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
    */
   @ReactMethod
   fun setSendAppVersionInEveryRequest(enabled: Boolean, promise: Promise) {
-    instance.setVersionInEachRequest(enabled)
+    runOnPlugin({
+      instance.setVersionInEachRequest(enabled)
+    }, {
+      configAdapter.versionInEachRequest = enabled
+    })
     promise.resolve(true)
   }
 
@@ -57,7 +67,11 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
    */
   @ReactMethod
   fun setEnableUserMatching(enabled: Boolean, promise: Promise) {
-    instance.setUserMatchingEnabled(enabled)
+    runOnPlugin({
+      instance.setUserMatchingEnabled(enabled)
+    }, {
+      configAdapter.userMatchingEnabled = enabled
+    })
     promise.resolve(true)
   }
 
@@ -66,7 +80,9 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
    */
   @ReactMethod
   fun trackPage(page: ReadableMap, promise: Promise) {
-    //instance.trackPage(page)
+    runOnPlugin({
+      instance.trackPage(PageViewEvent(""))
+    })
     promise.resolve(true)
   }
 
@@ -75,11 +91,16 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
    */
   @ReactMethod
   fun setLogLevel(level: Int, promise: Promise) {
-    if (level == Logger.Level.BASIC.ordinal) {
-      instance.setLogLevel(Logger.Level.BASIC)
+    val nativeLevel = if (level == Logger.Level.BASIC.ordinal) {
+      Logger.Level.BASIC
     } else {
-      instance.setLogLevel(Logger.Level.NONE)
+      Logger.Level.NONE
     }
+    runOnPlugin({
+      instance.setLogLevel(nativeLevel)
+    }, {
+      configAdapter.logLevel = nativeLevel
+    })
     promise.resolve(true)
   }
 
@@ -90,7 +111,11 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
    */
   @ReactMethod
   fun setBatchSupportEnabled(enabled: Boolean, promise: Promise) {
-    instance.setBatchEnabled(enabled)
+    runOnPlugin({
+      instance.setBatchEnabled(enabled)
+    }, {
+      configAdapter.batchSupport = enabled
+    })
     promise.resolve(true)
   }
 
@@ -103,7 +128,11 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
     @IntRange size: Int,
     promise: Promise
   ) {
-    instance.setRequestPerBatch(size)
+    runOnPlugin({
+      instance.setRequestPerBatch(size)
+    }, {
+      configAdapter.requestPerBatch = size
+    })
     promise.resolve(true)
   }
 
@@ -116,7 +145,11 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
     @IntRange(from = 15) interval: Int,
     promise: Promise
   ) {
-    instance.setRequestInterval(interval.toLong())
+    runOnPlugin({
+      instance.setRequestInterval(interval.toLong())
+    }, {
+      configAdapter.requestsIntervalMinutes = interval
+    })
     promise.resolve(true)
   }
 
@@ -136,9 +169,13 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
    */
   @ReactMethod
   fun setShouldMigrate(migrate: Boolean, promise: Promise) {
-    if (migrate) {
-      reset { it.enableMigration() }
-    }
+    runOnPlugin({
+      if (migrate) {
+        reset { it.enableMigration() }
+      }
+    }, {
+      configAdapter.shouldMigrate = migrate
+    })
     promise.resolve(true)
   }
 
@@ -154,7 +191,116 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   @ReactMethod
   fun trackCustomPage(pageName: String, params: ReadableMap, promise: Promise) {
     //instance.trackCustomPage(pageName, params)
+    runOnPlugin({
+      val trackingParams = TrackingParams().apply {
+
+      }
+      instance.trackCustomPage(pageName, trackingParams)
+    })
     promise.resolve(true)
+  }
+
+  @ReactMethod
+  fun sendRequestsAndClean(promise: Promise) {
+    runOnPlugin({
+      instance.sendRequestsNowAndClean()
+    })
+    promise.resolve(true)
+  }
+
+  @ReactMethod
+  fun trackAction(action: ReadableMap, promise: Promise) {
+    runOnPlugin({
+      ActionEventMapper(action).getData()?.let {
+        instance.trackAction(it)
+      }
+    })
+    promise.resolve(true)
+  }
+
+  @ReactMethod
+  fun trackException(exception: ReadableMap, promise: Promise) {
+    runOnPlugin({
+      val innerException = Exception(exception.getString("message"))
+      instance.trackException(innerException)
+
+    })
+    promise.resolve(true)
+  }
+
+  @ReactMethod
+  fun trackMedia(pageName: String, mediaName: String, params: ReadableMap, promise: Promise) {
+    runOnPlugin({
+      val trackParams = mutableMapOf<String, String>()
+      params.entryIterator.forEach {
+        trackParams[it.key] = it.value.toString()
+      }
+      instance.trackMedia(pageName, mediaName, trackParams)
+    })
+    promise.resolve(true)
+  }
+
+  @ReactMethod
+  fun trackMedia(mediaName: String, params: ReadableMap, promise: Promise) {
+    runOnPlugin({
+      val trackParams = mutableMapOf<String, String>()
+      params.entryIterator.forEach {
+        trackParams[it.key] = it.value.toString()
+      }
+      instance.trackMedia(mediaName, trackParams)
+    })
+    promise.resolve(true)
+  }
+
+  @ReactMethod
+  fun trackMedia(event: ReadableMap, promise: Promise) {
+    runOnPlugin({
+      MediaEventMapper(event).getData()?.let {
+        instance.trackMedia(it)
+      }
+    })
+    promise.resolve(true)
+  }
+
+  fun trackUrl() {
+
+  }
+
+  @ReactMethod
+  fun build(promise: Promise) {
+    runOnPlugin(whenNotInitialized = {
+      val builder = WebtrekkConfiguration.Builder(configAdapter.trackIds, configAdapter.trackDomain)
+        .logLevel(configAdapter.logLevel)
+        .enableCrashTracking(configAdapter.exceptionLogLevel)
+        .setBatchSupport(configAdapter.batchSupport, configAdapter.requestPerBatch)
+        .requestsInterval(TimeUnit.MINUTES, configAdapter.requestsIntervalMinutes.toLong())
+        .sendAppVersionInEveryRequest(configAdapter.versionInEachRequest)
+
+      if (configAdapter.shouldMigrate)
+        builder.enableMigration()
+
+      if (!configAdapter.autoTracking)
+        builder.disableAutoTracking()
+
+      if (!configAdapter.activityAutoTracking)
+        builder.disableActivityAutoTracking()
+
+      if (!configAdapter.fragmentsAutoTracking)
+        builder.disableFragmentsAutoTracking()
+
+      Webtrekk.getInstance().init(reactContext.applicationContext, builder.build())
+
+      instance = Webtrekk.getInstance().apply {
+        this.anonymousTracking(configAdapter.anonymousTracking)
+      }
+
+    }, whenInitialized = {})
+    promise.resolve(true)
+  }
+
+  private fun runOnPlugin(whenInitialized: () -> Unit, whenNotInitialized: (() -> Unit)? = null) {
+    if (::instance.isInitialized) whenInitialized.invoke()
+    else whenNotInitialized?.invoke()
   }
 
   private fun reset(presetAction: (WebtrekkConfiguration.Builder) -> Unit) {
