@@ -20,5 +20,6 @@ data class ConfigAdapter(
   var versionInEachRequest: Boolean = false,
   var everId: String? = null,
   var userMatchingEnabled: Boolean = false,
+  var temporarySessionId:String="",
   var everIdMode: GenerationMode? = GenerationMode.AUTO_GENERATED,
 )

@@ -24,10 +24,6 @@ const MappinteligencePlugin = NativeModules.MappinteligencePlugin
       }
     );
 
-export function multiply(a: number, b: number): Promise<number> {
-  return MappinteligencePlugin.multiply(a, b);
-}
-
 export function build(): Promise<number> {
   return MappinteligencePlugin.build();
 }
@@ -80,6 +76,8 @@ export function setSendAppVersionInEveryRequest(
 export function setEnableUserMatching(enabled: boolean): Promise<number> {
   return MappinteligencePlugin.setEnableUserMatching(enabled);
 }
+
+//TODO: parameterless function??
 export function trackPage(): Promise<number> {
   return MappinteligencePlugin.trackPage();
 }
@@ -104,8 +102,20 @@ export function trackPageWithCustomData(
   pageTitle: string
 ): Promise<number> {
   return MappinteligencePlugin.trackPageWithCustomData(
+    /* can this be just Map<string, string> 
+    it should be Dictionary/ReadableMap on native sides iOS/Android ??? */
     JSON.stringify(Object.fromEntries(pageParameters)),
     pageTitle
   );
+}
+
+export function setEverId(everId?: String | null): Promise<number> {
+  return MappinteligencePlugin.setEverId(everId);
+}
+
+export function setTemporarySessionId(
+  sessionId?: String | null
+): Promise<number> {
+  return MappinteligencePlugin.setTemporarySessionId(sessionId);
 }
 //setEnableUserMatching
