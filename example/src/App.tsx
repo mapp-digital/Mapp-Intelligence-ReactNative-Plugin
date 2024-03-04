@@ -30,6 +30,7 @@ export default function App() {
     MappIntelligence.setSendAppVersionInEveryRequest(true);
     MappIntelligence.setEnableBackgroundSendout(true);
     MappIntelligence.setEnableUserMatching(false);
+    MappIntelligence.build();
     home.navigation = navigation;
     return home.render();
   }
