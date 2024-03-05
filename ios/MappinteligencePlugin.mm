@@ -17,6 +17,13 @@ RCT_EXPORT_METHOD(multiply:(double)a
 
     resolve(result);
 }
+RCT_EXPORT_METHOD(build:
+                  (RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+{
+
+    resolve(@1);
+}
 
 RCT_EXPORT_METHOD(initWithConfiguration:(NSArray*)trackIDs
                                         domain:(NSString*)domain
@@ -207,8 +214,9 @@ RCT_EXPORT_METHOD(trackAction:(NSString*)name
          MIActionEvent* actionEvent = [[MIActionEvent alloc] initWithName:name];
         
         if (eventParameters) {
-             MIEventParameters* eventParameters = [[MIEventParameters alloc] initWithDictionary:eventParameters];
-            [actionEvent setEventParameters:eventParameters];
+            NSMutableDictionary* eDict = [eventParameters mutableCopy];
+             MIEventParameters* eParameters = [[MIEventParameters alloc] initWithDictionary:[self getFromString:eDict[@"parameters"]]];
+            [actionEvent setEventParameters:eParameters];
         }
         if (userCategories) {
             NSMutableDictionary* userCatDict = [userCategories mutableCopy];
