@@ -100,6 +100,6 @@ interface ParticularSessionParameters {
 export type SessionParameters = Required<ParticularSessionParameters>;
 
 interface ParticularEventParameters {
-    parameters?: string | null;
-  }
-  export type EventParameters = Required<ParticularEventParameters>;
+  parameters?: string | null;
+}
+export type EventParameters = Required<ParticularEventParameters>;

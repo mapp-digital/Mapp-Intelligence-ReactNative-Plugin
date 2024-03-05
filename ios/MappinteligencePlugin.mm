@@ -194,6 +194,54 @@ RCT_EXPORT_METHOD(trackPageWithCustomData:(NSString*)pageParameters
         resolve(@1);
     }
 
+RCT_EXPORT_METHOD(trackAction:(NSString*)name 
+                                        eventParameters:(NSDictionary*)eventParameters  
+                                        sessionParamters:(NSDictionary*)sessionParamters
+                                        userCategories:(NSDictionary*)userCategories
+                                        ecommerceParameters:(NSDictionary*)ecommerceParameters
+                                        campaignParameters:(NSDictionary*)campaignParameters
+                                        resolve:(RCTPromiseResolveBlock)resolve
+                                        reject:(RCTPromiseRejectBlock)reject)
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+         MIActionEvent* actionEvent = [[MIActionEvent alloc] initWithName:name];
+        
+        if (eventParameters) {
+             MIEventParameters* eventParameters = [[MIEventParameters alloc] initWithDictionary:eventParameters];
+            [actionEvent setEventParameters:eventParameters];
+        }
+        if (userCategories) {
+            NSMutableDictionary* userCatDict = [userCategories mutableCopy];
+            if (userCatDict[@"birthday"]) {
+                userCatDict[@"birthday"] = [self getFromString:userCategories[@"birthday"]];
+            }
+            if (userCatDict[@"birthday"]) {
+                userCatDict[@"customCategories"] = [self getFromString:userCategories[@"customCategories"]];
+            }
+            MIUserCategories* userCategoriesNew = [[MIUserCategories alloc] initWithDictionary:userCatDict];
+            [actionEvent setUserCategories:userCategoriesNew];
+        }
+        if (sessionParamters) {
+            NSMutableDictionary* sDict = [sessionParamters mutableCopy];
+            MISessionParameters* sessionParamtersObject = [[MISessionParameters alloc] initWithParameters:[self getFromString:sDict[@"parameters"]]];
+            [actionEvent setSessionParameters:sessionParamtersObject];
+        }
+
+        if (ecommerceParameters) {
+            MIEcommerceParameters* ecoParameters = [[MIEcommerceParameters alloc] initWithDictionary:ecommerceParameters];
+            [actionEvent setEcommerceParameters:ecoParameters];
+        }
+
+        if(campaignParameters) {
+            MICampaignParameters* cParamaters = [[MICampaignParameters alloc] initWithDictionary:campaignParameters];
+            [actionEvent setCampaignParameters:cParamaters];
+        }
+
+        [[MappIntelligence shared] trackAction:actionEvent];
+    });
+    resolve(@1);
+}
+
 //MARK: helper methods
 -(NSMutableDictionary*)getFromString:(NSString*)item {
     NSString *jsonString = item;
