@@ -2,12 +2,14 @@ package com.mappinteligenceplugin
 
 import android.net.Uri
 import androidx.annotation.IntRange
+import androidx.fragment.app.FragmentActivity
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.ReadableNativeMap
 import com.mappinteligenceplugin.mapper.ActionEventMapper
 import com.mappinteligenceplugin.mapper.MediaEventMapper
 import webtrekk.android.sdk.Logger
@@ -15,6 +17,7 @@ import webtrekk.android.sdk.TrackingParams
 import webtrekk.android.sdk.Webtrekk
 import webtrekk.android.sdk.WebtrekkConfiguration
 import webtrekk.android.sdk.events.PageViewEvent
+import java.util.Arrays
 import java.util.concurrent.TimeUnit
 
 class MappinteligencePluginModule(private val reactContext: ReactApplicationContext) :
@@ -28,7 +31,11 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
    */
   @ReactMethod
   fun initWithConfiguration(trackIds: ReadableArray, trackDomain: String, promise: Promise) {
-    val ids = trackIds.toArrayList().mapNotNull { (it as Double?)?.toBigDecimal()?.toPlainString() }
+    val trackValues = mutableListOf<Double?>()
+    for (i in 0 until trackIds.size()) {
+      trackValues.add(trackIds.getDouble(i))
+    }
+    val ids = trackValues.mapNotNull { it?.toBigDecimal()?.toPlainString() }
     runOnPlugin(whenInitialized = {
       instance.setIdsAndDomain(ids, trackDomain)
     }, whenNotInitialized = {
@@ -101,17 +108,6 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
       instance.setTemporarySessionId(sessionId)
     }, whenNotInitialized = {
       configAdapter.temporarySessionId = sessionId
-    })
-    promise.resolve(true)
-  }
-
-  /**
-   * Track page with a provided [PageViewEvent]
-   */
-  @ReactMethod
-  fun trackPage(page: ReadableMap, promise: Promise) {
-    runOnPlugin(whenInitialized = {
-      instance.trackPage(PageViewEvent(""))
     })
     promise.resolve(true)
   }
@@ -220,15 +216,57 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   }
 
   @ReactMethod
-  fun trackCustomPage(pageName: String, params: ReadableMap, promise: Promise) {
+  fun trackCustomPage(
+    pageParams: ReadableMap?,
+    sessionParams: ReadableMap?,
+    userCategoryParams: ReadableMap?,
+    ecommerceParams: ReadableMap?,
+    campaignParams: ReadableMap?,
+    promise: Promise
+  ) {
     runOnPlugin(
       whenInitialized = {
-        val trackingParams = TrackingParams().apply {
+        if(pageParams!=null && sessionParams!=null && userCategoryParams!=null && ecommerceParams!=null && campaignParams!=null){
 
         }
-        instance.trackCustomPage(pageName, trackingParams)
+        val pageViewEvent = PageViewEvent("page name").apply {
+
+        }
+        instance.trackCustomPage(pageParams.toString())
       }
     )
+    promise.resolve(true)
+  }
+
+  /**
+   * Track page with a provided [PageViewEvent]
+   */
+  @ReactMethod
+  fun trackPageWithCustomData(params: ReadableMap?, pageName: String, promise: Promise) {
+    runOnPlugin(whenInitialized = {
+      instance.trackPage(PageViewEvent(pageName).apply {
+        if(params!=null){
+          this.customParameters.clear()
+          this.customParameters.putAll(mapOf("a" to "p1"))
+        }
+      })
+    })
+    promise.resolve(true)
+  }
+
+  @ReactMethod
+  fun trackPage(promise: Promise) {
+    runOnPlugin(whenInitialized = {
+      (currentActivity as FragmentActivity?)?.let { fragmentActivity ->
+        val count = fragmentActivity.supportFragmentManager.backStackEntryCount
+        if (count > 0) {
+          val fragment = fragmentActivity.supportFragmentManager.getBackStackEntryAt(count - 1)
+          instance.trackPage(fragmentActivity, fragment::class.java.name)
+        } else {
+          instance.trackPage(fragmentActivity, fragmentActivity::class.java.name)
+        }
+      }
+    })
     promise.resolve(true)
   }
 
@@ -268,8 +306,9 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
     runOnPlugin(
       whenInitialized = {
         val trackParams = mutableMapOf<String, String>()
-        params.entryIterator.forEach {
-          trackParams[it.key] = it.value.toString()
+        while (params.keySetIterator().hasNextKey()) {
+          val key = params.keySetIterator().nextKey()
+          trackParams[key] = params.getString(key) as String
         }
         instance.trackMedia(pageName, mediaName, trackParams)
       })
@@ -281,8 +320,9 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
     runOnPlugin(
       whenInitialized = {
         val trackParams = mutableMapOf<String, String>()
-        params.entryIterator.forEach {
-          trackParams[it.key] = it.value.toString()
+        while (params.keySetIterator().hasNextKey()) {
+          val key = params.keySetIterator().nextKey()
+          trackParams[key] = params.getString(key) as String
         }
         instance.trackMedia(mediaName, trackParams)
       })

@@ -16,23 +16,27 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   function Home({ navigation }: { navigation: any }) {
     var home = new FlatListBasics({});
-    MappIntelligence.setAnonymousTracking(false);
-    MappIntelligence.initWithConfiguration(
-      [794940687426749],
-      'http://tracker-int-01.webtrekk.net'
-    ).then(setResult);
-    MappIntelligence.setLogLevel(1);
-    MappIntelligence.setBatchSupportEnabled(false);
-    MappIntelligence.setBatchSupportSize(150);
-    MappIntelligence.setRequestInterval(1);
-    MappIntelligence.setRequestPerQueue(300);
-    MappIntelligence.setShouldMigrate(true);
-    MappIntelligence.setSendAppVersionInEveryRequest(true);
-    MappIntelligence.setEnableBackgroundSendout(true);
-    MappIntelligence.setEnableUserMatching(false);
-    MappIntelligence.build();
+    initMappTracking();
     home.navigation = navigation;
     return home.render();
+  }
+
+  async function initMappTracking() {
+    await MappIntelligence.setAnonymousTracking(false);
+    await MappIntelligence.initWithConfiguration(
+      [794940687426749],
+      'http://tracker-int-01.webtrekk.net'
+    );
+    await MappIntelligence.setLogLevel(1);
+    await MappIntelligence.setBatchSupportEnabled(false);
+    await MappIntelligence.setBatchSupportSize(150);
+    await MappIntelligence.setRequestInterval(1);
+    await MappIntelligence.setRequestPerQueue(300);
+    await MappIntelligence.setShouldMigrate(true);
+    await MappIntelligence.setSendAppVersionInEveryRequest(true);
+    await MappIntelligence.setEnableBackgroundSendout(true);
+    await MappIntelligence.setEnableUserMatching(false);
+    await MappIntelligence.build();
   }
 
   function PageTracking() {
@@ -65,7 +69,4 @@ export default function App() {
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
-function setResult(value: number): number | PromiseLike<number> {
-  throw new Error('Function not implemented.');
 }

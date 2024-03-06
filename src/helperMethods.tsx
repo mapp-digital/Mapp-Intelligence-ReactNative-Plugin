@@ -39,7 +39,7 @@ interface PartialUserCategoris {
 export type UserCategories = Required<PartialUserCategoris>;
 
 interface ParticularEcommerceParameters {
-  products?: [MIProduct] | null;
+  products?: MIProduct[] | null;
   status?: MIStatus | null;
   currency?: string | null;
   orderID?: string | null;
@@ -54,7 +54,7 @@ interface ParticularEcommerceParameters {
   shippingCost?: number | null;
   markUp?: number | null;
   orderStatus?: string | null;
-  customParameters?: [number, string] | null;
+  customParameters?: Map<number, string> | null;
 }
 export type EcommerceParameters = Required<ParticularEcommerceParameters>;
 
@@ -65,12 +65,12 @@ interface ParticularMIProduct {
   productAdvertiseID?: number | null;
   productSoldOut?: number | null;
   productVariant?: string | null;
-  categories?: [number, string] | null;
-  ecommerceParameters?: EcommerceParameters | null;
+  categories?: Map<number, string> | null;
+  ecommerceParameters?: Map<string, string> | null;
 }
 export type MIProduct = Required<ParticularMIProduct>;
 
-enum MIStatus {
+export enum MIStatus {
   noneStatus = 0,
   addedToBasket = 1,
   purchased = 2,
@@ -81,7 +81,7 @@ enum MIStatus {
   checkout = 7,
 }
 
-enum MIAction {
+export enum MIAction {
   click = 1,
   view = 2,
 }
@@ -91,7 +91,7 @@ interface ParticularCampaignParameters {
   action?: MIAction | null;
   mediaCode?: string | null;
   oncePerSession?: boolean | null;
-  customParameters?: [number, string] | null;
+  customParameters?: Map<number, string> | null;
 }
 export type CampaignParameters = Required<ParticularCampaignParameters>;
 

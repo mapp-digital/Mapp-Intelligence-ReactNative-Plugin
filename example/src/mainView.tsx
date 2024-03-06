@@ -25,7 +25,7 @@ const showAlert = () =>
       cancelable: true,
       onDismiss: () =>
         Alert.alert(
-          'This alert was dismissed by tapping outside of the alert dialog.',
+          'This alert was dismissed by tapping outside of the alert dialog.'
         ),
     }
   );

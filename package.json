@@ -73,7 +73,8 @@
     "@types/react": "17.0.21"
   },
   "peerDependencies": {
-    "react": "*"
+    "react": "*",
+    "react-native": "*"
   },
   "workspaces": [
     "example"
