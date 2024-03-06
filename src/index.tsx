@@ -2,6 +2,7 @@ import { NativeModules, Platform } from 'react-native';
 import type {
   CampaignParameters,
   EcommerceParameters,
+  EventParameters,
   PageParameters,
   SessionParameters,
   UserCategories,
@@ -106,6 +107,24 @@ export function trackPageWithCustomData(
     it should be Dictionary/ReadableMap on native sides iOS/Android ??? */
     JSON.stringify(Object.fromEntries(pageParameters)),
     pageTitle
+  );
+}
+
+export function trackAction(
+  name: string,
+  eventParameters?: EventParameters | null,
+  sessionParamters?: SessionParameters | null,
+  userCategories?: UserCategories | null,
+  ecommerceParameters?: EcommerceParameters | null,
+  campaignParameters?: CampaignParameters | null
+): Promise<number> {
+  return MappinteligencePlugin.trackAction(
+    name,
+    eventParameters,
+    sessionParamters,
+    userCategories,
+    ecommerceParameters,
+    campaignParameters
   );
 }
 
