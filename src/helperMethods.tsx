@@ -1,7 +1,7 @@
 interface PartialPageParameters {
   searchTerm?: string | null;
-  params?: string | null;
-  categories?: string | null;
+  params?: Map<number, string> | null;
+  categories?: Map<number, string> | null;
 }
 export type PageParameters = Required<PartialPageParameters>;
 
@@ -19,13 +19,13 @@ export enum MIGender {
 }
 
 interface PartialUserCategoris {
-  birthday?: String;
+  birthday?: MIBirthday;
   city?: string;
   country?: string;
   emailAddress?: string;
   emailReceiverId?: string;
   firstName?: string;
-  gender?: string;
+  gender?: MIGender;
   customerId?: string;
   lastName?: string;
   newsletterSubscribed?: boolean;
@@ -33,8 +33,9 @@ interface PartialUserCategoris {
   street?: string;
   streetNumber?: string;
   zipCode?: string;
-  customCategories?: string;
+  customCategories?: Map<number, string>;
 }
+
 export type UserCategories = Required<PartialUserCategoris>;
 
 interface ParticularEcommerceParameters {
@@ -95,7 +96,7 @@ interface ParticularCampaignParameters {
 export type CampaignParameters = Required<ParticularCampaignParameters>;
 
 interface ParticularSessionParameters {
-  parameters?: string | null;
+  parameters?: Map<number, string> | null;
 }
 export type SessionParameters = Required<ParticularSessionParameters>;
 
