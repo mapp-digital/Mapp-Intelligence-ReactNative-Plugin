@@ -221,7 +221,6 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
 
   @ReactMethod
   fun trackCustomPage(pageName: String, params: ReadableMap, promise: Promise) {
-    //instance.trackCustomPage(pageName, params)
     runOnPlugin(
       whenInitialized = {
         val trackingParams = TrackingParams().apply {
@@ -337,7 +336,6 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
         this.anonymousTracking(configAdapter.anonymousTracking)
         this.setTemporarySessionId(configAdapter.temporarySessionId)
       }
-
     }, whenInitialized = {})
     promise.resolve(true)
   }
