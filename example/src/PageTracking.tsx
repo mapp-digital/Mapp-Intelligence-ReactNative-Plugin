@@ -33,8 +33,8 @@ export default class PageTrackingView extends Component {
         var categoriesDict = new Map<number, string>();
         categoriesDict.set(10, 'test');
         const pagaParameters: PageParameters = {
-          params: JSON.stringify(Object.fromEntries(paramsDict)),
-          categories: JSON.stringify(Object.fromEntries(categoriesDict)),
+          params: paramsDict,
+          categories: categoriesDict,
           searchTerm: 'testSearchTerm',
         };
         const bithday: MIBirthday = {
@@ -53,16 +53,14 @@ export default class PageTrackingView extends Component {
           gender: String(Number(MIGender.female)),
           customerId: 'CustomerID',
           newsletterSubscribed: false,
-          customCategories: JSON.stringify(
-            Object.fromEntries(customCategoriesDict)
-          ),
+          customCategories: customCategoriesDict,
         };
         var customSessionDict = new Map<number, string>().set(
           10,
           'sessionParam1'
         );
         const sessionParamters: SessionParameters = {
-          parameters: JSON.stringify(Object.fromEntries(customSessionDict)),
+          parameters: customSessionDict,
         };
         MappIntelligence.trackCustomPage(
           pagaParameters,

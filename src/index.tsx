@@ -91,9 +91,9 @@ export function trackCustomPage(
   campaignParameters?: CampaignParameters | null
 ): Promise<number> {
   return MappinteligencePlugin.trackCustomPage(
-    pageParameters,
-    sessionParamters,
-    userCategories,
+    converPageParameters(pageParameters),
+    convertSessionParamters(sessionParamters),
+    convertUserCategories(userCategories),
     ecommerceParameters,
     campaignParameters
   );
@@ -137,4 +137,53 @@ export function setTemporarySessionId(
 ): Promise<number> {
   return MappinteligencePlugin.setTemporarySessionId(sessionId);
 }
-//setEnableUserMatching
+//MARK: methods for converting objects
+function convertUserCategories(userCategories?: UserCategories | null) {
+  if (userCategories == null) {
+    return null;
+  }
+  const userCategorisesDict: Object = {
+    birthday: JSON.stringify(userCategories?.birthday),
+    city: userCategories?.city,
+    country: userCategories?.country,
+    emailAddress: userCategories?.emailAddress,
+    emailReceiverId: userCategories?.emailReceiverId,
+    firstName: userCategories?.firstName,
+    gender: String(Number(userCategories?.gender)),
+    customerId: userCategories?.customerId,
+    lastName: userCategories?.lastName,
+    newsletterSubscribed: userCategories?.newsletterSubscribed,
+    phoneNumber: userCategories?.phoneNumber,
+    street: userCategories?.street,
+    streetNumber: userCategories?.streetNumber,
+    zipCode: userCategories?.zipCode,
+    customCategories: JSON.stringify(
+      Object.fromEntries(userCategories?.customCategories)
+    ),
+  };
+  return userCategorisesDict;
+}
+
+function converPageParameters(pageParameters?: PageParameters | null) {
+  if (pageParameters == null) {
+    return null;
+  }
+  const pagaParametersDict: Object = {
+    params: JSON.stringify(Object.fromEntries(pageParameters?.params)),
+    categories: JSON.stringify(Object.fromEntries(pageParameters?.categories)),
+    searchTerm: pageParameters?.searchTerm,
+  };
+  return pagaParametersDict;
+}
+
+function convertSessionParamters(sessionParamaters?: SessionParameters | null) {
+  if (sessionParamaters == null) {
+    return null;
+  }
+  const seesionParamtersDict: string = {
+    parameters: JSON.stringify(
+      Object.fromEntries(sessionParamaters?.parameters)
+    ),
+  };
+  return seesionParamtersDict;
+}
