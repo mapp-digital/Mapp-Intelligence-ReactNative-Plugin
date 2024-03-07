@@ -163,40 +163,22 @@ RCT_EXPORT_METHOD(trackCustomPage:(NSDictionary*)pageParameters
     dispatch_async(dispatch_get_main_queue(), ^{
         MIPageViewEvent* event = [[MIPageViewEvent alloc] initWithName:@"test page 1"];
         
-        if (pageParameters) {
-            MIPageParameters* parameter = [[MIPageParameters alloc] initWithPageParams:[self getFromString:pageParameters[@"params"]] pageCategory:[self getFromString:pageParameters[@"categories"]] search:pageParameters[@"searchTerm"]];
-            [event setPageParameters:parameter];
-        }
-        if (userCategories) {
-            NSMutableDictionary* userCatDict = [userCategories mutableCopy];
-            if (userCatDict[@"birthday"]) {
-                userCatDict[@"birthday"] = [self getFromString:userCategories[@"birthday"]];
-            }
-            if (userCatDict[@"birthday"]) {
-                userCatDict[@"customCategories"] = [self getFromString:userCategories[@"customCategories"]];
-            }
-            MIUserCategories* userCategoriesNew = [[MIUserCategories alloc] initWithDictionary:userCatDict];
-            [event setUserCategories:userCategoriesNew];
-        }
-        if (sessionParamters) {
-            NSMutableDictionary* sDict = [sessionParamters mutableCopy];
-            MISessionParameters* sessionParamtersObject = [[MISessionParameters alloc] initWithParameters:[self getFromString:sDict[@"parameters"]]];
-            [event setSessionParameters:sessionParamtersObject];
-        }
-
+        [event setPageParameters:[self preparePageParameters:pageParameters]];
+        [event setUserCategories:[self prepareUserCategories:userCategories]];
+        [event setSessionParameters:[self prepareSessionParameters:sessionParamters]];
+        
         [[MappIntelligence shared] trackPage:event];
     });
     resolve(@1);
 }
 
-RCT_EXPORT_METHOD(trackPageWithCustomData:(NSString*)pageParameters
+RCT_EXPORT_METHOD(trackPageWithCustomData:(NSDictionary*)pageParameters
                                             pageTitle:(NSString*)pageTitle
                                             resolve:(RCTPromiseResolveBlock)resolve
                                             reject:(RCTPromiseRejectBlock)reject)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSDictionary* dict = [self getFromString:pageParameters];
-            [[MappIntelligence shared] trackCustomPage:pageTitle trackingParams:dict];
+            [[MappIntelligence shared] trackCustomPage:pageTitle trackingParams:pageParameters];
         });
         resolve(@1);
     }
@@ -259,6 +241,30 @@ RCT_EXPORT_METHOD(trackAction:(NSString*)name
                                                        options:NSJSONReadingAllowFragments
                                                          error:&error];
     return dataParam;
+}
+
+-(MIPageParameters*)preparePageParameters:(NSDictionary*) pageParameters {
+    if (pageParameters == NULL) {
+        return NULL;
+    }
+    MIPageParameters* parameter = [[MIPageParameters alloc] initWithPageParams:pageParameters[@"params"] pageCategory:pageParameters[@"categories"] search:pageParameters[@"searchTerm"]];
+    return parameter;
+}
+
+-(MIUserCategories*)prepareUserCategories:(NSDictionary*) userCategories {
+    if (userCategories == NULL) {
+        return NULL;
+    }
+    MIUserCategories* userCategoriesNew = [[MIUserCategories alloc] initWithDictionary:userCategories];
+    return userCategoriesNew;
+}
+
+-(MISessionParameters*)prepareSessionParameters:(NSDictionary*) sessionParamters {
+    if (sessionParamters == NULL) {
+        return NULL;
+    }
+    MISessionParameters* sessionParamtersObject = [[MISessionParameters alloc] initWithParameters:sessionParamters];
+    return sessionParamtersObject;
 }
 
 //[[MappIntelligence shared] setEnableUserMatching:true];
