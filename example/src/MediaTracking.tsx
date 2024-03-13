@@ -7,6 +7,8 @@ import {
   View,
   Alert,
 } from 'react-native';
+import { DefaultStyles } from './components/Styles';
+import { MappButton } from './components/MappButton';
 
 export default class MediaTrackingView extends Component {
   renderSeparator = () => {
@@ -28,7 +30,7 @@ export default class MediaTrackingView extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={DefaultStyles.sectionContainer}>
         <FlatList
           data={[
             { key: 'Test Media1' },
@@ -37,29 +39,17 @@ export default class MediaTrackingView extends Component {
             { key: 'Live Stream Example' },
           ]}
           renderItem={({ item }) => (
-            <Text
-              style={styles.item}
-              onPress={this.getListViewItem.bind(this, item)}
-            >
-              {item.key}
-            </Text>
+            <MappButton
+              buttonTitle={item.key}
+              buttonOnPress={() => {
+                this.getListViewItem(item);
+              }}
+            />
           )}
-          ItemSeparatorComponent={this.renderSeparator}
         />
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
-  },
-});
 
 AppRegistry.registerComponent('MediaTracking', () => MediaTrackingView);

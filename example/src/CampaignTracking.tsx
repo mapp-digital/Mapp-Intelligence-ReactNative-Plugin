@@ -1,4 +1,4 @@
-import React, { Component } from 'react';  
+import React, { Component } from 'react';
 import {
   AppRegistry,
   FlatList,
@@ -7,6 +7,8 @@ import {
   View,
   Alert,
 } from 'react-native';
+import { MappButton } from './components/MappButton';
+import { DefaultStyles } from './components/Styles';
 
 export default class CampaignTrackingView extends Component {
   renderSeparator = () => {
@@ -28,7 +30,7 @@ export default class CampaignTrackingView extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={DefaultStyles.sectionContainer}>
         <FlatList
           data={[
             { key: 'Track Campaign' },
@@ -36,29 +38,17 @@ export default class CampaignTrackingView extends Component {
             { key: 'Test Link2' },
           ]}
           renderItem={({ item }) => (
-            <Text
-              style={styles.item}
-              onPress={this.getListViewItem.bind(this, item)}
-            >
-              {item.key}
-            </Text>
+            <MappButton
+              buttonTitle={item.key}
+              buttonOnPress={() => {
+                this.getListViewItem.bind(this, item);
+              }}
+            />
           )}
-          ItemSeparatorComponent={this.renderSeparator}
         />
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
-  },
-});
 
 AppRegistry.registerComponent('CampaignTracking', () => CampaignTrackingView);

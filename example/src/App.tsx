@@ -1,5 +1,9 @@
 import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import {
+  NavigationContainer,
+  type EventArg,
+  DefaultTheme,
+} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import * as MappIntelligence from 'react-native-mappinteligence-plugin';
@@ -45,7 +49,19 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator
+        initialRouteName="Home"
+        screenListeners={{
+          transitionEnd: (e) => {
+            if (e.data.closing != true) {
+              console.log(
+                'Transition end: ',
+                e.target?.substring(0, e.target?.indexOf('-'))
+              );
+            }
+          },
+        }}
+      >
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="PageTracking" component={PageTracking} />
         <Stack.Screen name="ActionTracking" component={ActionTrackingView} />

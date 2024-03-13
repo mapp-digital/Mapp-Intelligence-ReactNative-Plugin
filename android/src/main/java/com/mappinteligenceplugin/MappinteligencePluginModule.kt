@@ -2,22 +2,24 @@ package com.mappinteligenceplugin
 
 import android.net.Uri
 import androidx.annotation.IntRange
-import androidx.fragment.app.FragmentActivity
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
-import com.facebook.react.bridge.ReadableNativeMap
 import com.mappinteligenceplugin.mapper.ActionEventMapper
+import com.mappinteligenceplugin.mapper.CampaignParametersMapper
+import com.mappinteligenceplugin.mapper.ECommerceParametersMapper
 import com.mappinteligenceplugin.mapper.MediaEventMapper
+import com.mappinteligenceplugin.mapper.PageParametersMapper
+import com.mappinteligenceplugin.mapper.SessionParametersMapper
+import com.mappinteligenceplugin.mapper.UserCategoriesMapper
+import com.mappinteligenceplugin.mapper.Util.toMap
 import webtrekk.android.sdk.Logger
-import webtrekk.android.sdk.TrackingParams
 import webtrekk.android.sdk.Webtrekk
 import webtrekk.android.sdk.WebtrekkConfiguration
 import webtrekk.android.sdk.events.PageViewEvent
-import java.util.Arrays
 import java.util.concurrent.TimeUnit
 
 class MappinteligencePluginModule(private val reactContext: ReactApplicationContext) :
@@ -217,6 +219,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
 
   @ReactMethod
   fun trackCustomPage(
+    pageTitle: String,
     pageParams: ReadableMap?,
     sessionParams: ReadableMap?,
     userCategoryParams: ReadableMap?,
@@ -226,13 +229,20 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   ) {
     runOnPlugin(
       whenInitialized = {
-        if(pageParams!=null && sessionParams!=null && userCategoryParams!=null && ecommerceParams!=null && campaignParams!=null){
+        val page = PageParametersMapper(pageParams).getData()
+        val session = SessionParametersMapper(sessionParams).getData()
+        val userCat = UserCategoriesMapper(userCategoryParams).getData()
+        val ecommerce = ECommerceParametersMapper(ecommerceParams).getData()
+        val campaign = CampaignParametersMapper(campaignParams).getData()
 
+        val pageViewEvent = PageViewEvent(pageTitle).apply {
+          this.pageParameters = page
+          this.sessionParameters = session
+          this.userCategories = userCat
+          this.eCommerceParameters = ecommerce
+          this.campaignParameters = campaign
         }
-        val pageViewEvent = PageViewEvent("page name").apply {
-
-        }
-        instance.trackCustomPage(pageParams.toString())
+        instance.trackPage(pageViewEvent)
       }
     )
     promise.resolve(true)
@@ -242,30 +252,17 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
    * Track page with a provided [PageViewEvent]
    */
   @ReactMethod
-  fun trackPageWithCustomData(params: ReadableMap?, pageName: String, promise: Promise) {
+  fun trackPageWithCustomData(params: ReadableMap?, pageTitle: String, promise: Promise) {
     runOnPlugin(whenInitialized = {
-      instance.trackPage(PageViewEvent(pageName).apply {
-        if(params!=null){
-          this.customParameters.clear()
-          this.customParameters.putAll(mapOf("a" to "p1"))
-        }
-      })
+      instance.trackCustomPage(pageTitle, params.toMap<String,String>())
     })
     promise.resolve(true)
   }
 
   @ReactMethod
-  fun trackPage(promise: Promise) {
+  fun trackPage(pageTitle: String, promise: Promise) {
     runOnPlugin(whenInitialized = {
-      (currentActivity as FragmentActivity?)?.let { fragmentActivity ->
-        val count = fragmentActivity.supportFragmentManager.backStackEntryCount
-        if (count > 0) {
-          val fragment = fragmentActivity.supportFragmentManager.getBackStackEntryAt(count - 1)
-          instance.trackPage(fragmentActivity, fragment::class.java.name)
-        } else {
-          instance.trackPage(fragmentActivity, fragmentActivity::class.java.name)
-        }
-      }
+      instance.trackPage(PageViewEvent(pageTitle))
     })
     promise.resolve(true)
   }

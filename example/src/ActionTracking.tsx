@@ -9,6 +9,12 @@ import {
   type SessionParameters,
 } from '../../src/helperMethods';
 
+import {
+  MappButton,
+  MappInputText,
+  DefaultStyles,
+} from './components/MappComponents';
+
 export default class ActionTrackingView extends Component {
   renderSeparator = () => {
     return (
@@ -28,14 +34,14 @@ export default class ActionTrackingView extends Component {
       case 'Track Action':
         var eventDict = new Map<number, string>().set(20, 'ck20Param1');
         var eventParamters: EventParameters = {
-          parameters: JSON.stringify(Object.fromEntries(eventDict)),
+          customParameters: eventDict,
         };
         MappIntelligence.trackAction('TestAction', eventParamters);
         break;
       case 'Track Custom Action':
         var eventDict = new Map<number, string>().set(20, 'ck20Param1');
         eventParamters = {
-          parameters: JSON.stringify(Object.fromEntries(eventDict)),
+          customParameters: eventDict,
         };
         const bithday: MIBirthday = {
           day: 12,
@@ -47,22 +53,20 @@ export default class ActionTrackingView extends Component {
           "( $', /:?@=&+ !.;()-_*"
         );
         var userCategories: UserCategories = {
-          birthday: JSON.stringify(bithday),
+          birthday: bithday,
           city: 'Paris',
           country: 'France',
           emailReceiverId: 'testd598378532',
-          gender: String(Number(MIGender.unknown)),
+          gender: MIGender.unknown,
           customerId: 'CustomerID',
-          customCategories: JSON.stringify(
-            Object.fromEntries(customCategoriesDict)
-          ),
+          customCategories: customCategoriesDict,
         };
         var customSessionDict = new Map<number, string>().set(
           10,
           'sessionParam1'
         );
         const sessionParamters: SessionParameters = {
-          parameters: JSON.stringify(Object.fromEntries(customSessionDict)),
+          parameters: customSessionDict,
         };
         MappIntelligence.trackAction(
           'TestAction',
@@ -79,33 +83,21 @@ export default class ActionTrackingView extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={DefaultStyles.sectionContainer}>
         <FlatList
           data={[{ key: 'Track Action' }, { key: 'Track Custom Action' }]}
           renderItem={({ item }) => (
-            <Button
-              title={item.key}
-              onPress={() => {
+            <MappButton
+              buttonTitle={item.key}
+              buttonOnPress={() => {
                 this.getListViewItem(item);
               }}
             />
           )}
-          ItemSeparatorComponent={this.renderSeparator}
         />
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
-  },
-});
 
 AppRegistry.registerComponent('ActionTracking', () => ActionTrackingView);

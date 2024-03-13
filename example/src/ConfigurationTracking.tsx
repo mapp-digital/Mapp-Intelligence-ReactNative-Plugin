@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import {
   AppRegistry,
   FlatList,
@@ -6,18 +6,21 @@ import {
   Text,
   View,
   Alert,
-  Switch,
-  TextInput,
 } from 'react-native';
+import { MappButton } from './components/MappButton';
+import { DefaultStyles } from './components/Styles';
+import { MappInputText } from './components/MappInputText';
+import { MappSwitch } from './components/MappSwitch';
 
 export default class ConfigurationTrackingView extends Component {
-  constructor(props) {
+  constructor(props: {
+    isEnabled: boolean;
+    isInitialized: boolean;
+    text?: string | null;
+  }) {
     super(props);
-    this.state = {
-      isEnabled: false,
-      text: 'Useless Text',
-    };
   }
+
   toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   renderSeparator = () => {
     return (
@@ -37,26 +40,19 @@ export default class ConfigurationTrackingView extends Component {
   };
 
   render() {
-    function onChangeNumber(_text: string): void {
-      throw new Error('Function not implemented.');
-    }
-
     return (
-      <View style={styles.container}>
-        <Text>EverID:090909090</Text>
-        <Text>Anonymous tracking</Text>
-        <Switch
-          trackColor={{ false: '#767577', true: '#81b0ff' }}
-          thumbColor={this.state.isEnabled ? '#f5dd4b' : '#f4f3f4'}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={this.toggleSwitch}
-          value={this.state.isEnabled}
+      <View style={DefaultStyles.sectionContainer}>
+        <MappSwitch
+          onCheckedChanged={this.toggleSwitch}
+          isChecked={true}
+          text={'Is Ready'}
+          isEnabled={false}
         />
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeNumber}
-          value={this.state.text}
-          placeholder="Ever ID"
+        <MappInputText
+          buttonTitle="Ever ID"
+          onValueChanged={(value: string) => {}}
+          textValue=""
+          hintValue="Ever ID"
         />
         <FlatList
           data={[
@@ -68,14 +64,13 @@ export default class ConfigurationTrackingView extends Component {
             { key: 'User matching set to true' },
           ]}
           renderItem={({ item }) => (
-            <Text
-              style={styles.item}
-              onPress={this.getListViewItem.bind(this, item)}
-            >
-              {item.key}
-            </Text>
+            <MappButton
+              buttonTitle={item.key}
+              buttonOnPress={() => {
+                this.getListViewItem(item);
+              }}
+            />
           )}
-          ItemSeparatorComponent={this.renderSeparator}
         />
       </View>
     );

@@ -1,12 +1,7 @@
-import React, { Component } from 'react';  
-import {
-  AppRegistry,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-  Alert,
-} from 'react-native';
+import React, { Component } from 'react';
+import { AppRegistry, FlatList, View, Alert } from 'react-native';
+import { MappButton } from './components/MappButton';
+import { DefaultStyles } from './components/Styles';
 
 export default class EcommerceTrackingView extends Component {
   renderSeparator = () => {
@@ -28,7 +23,7 @@ export default class EcommerceTrackingView extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={DefaultStyles.sectionContainer}>
         <FlatList
           data={[
             { key: 'View Product' },
@@ -40,29 +35,17 @@ export default class EcommerceTrackingView extends Component {
             { key: 'Checkout' },
           ]}
           renderItem={({ item }) => (
-            <Text
-              style={styles.item}
-              onPress={this.getListViewItem.bind(this, item)}
-            >
-              {item.key}
-            </Text>
+            <MappButton
+              buttonTitle={item.key}
+              buttonOnPress={() => {
+                this.getListViewItem(item);
+              }}
+            />
           )}
-          ItemSeparatorComponent={this.renderSeparator}
         />
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
-  },
-});
 
 AppRegistry.registerComponent('EcommerceTracking', () => EcommerceTrackingView);

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';  
+import React, { Component } from 'react';
 import {
   AppRegistry,
   FlatList,
@@ -7,6 +7,8 @@ import {
   View,
   Alert,
 } from 'react-native';
+import { DefaultStyles } from './components/Styles';
+import { MappButton } from './components/MappButton';
 
 export default class ExceptionTrackingView extends Component {
   renderSeparator = () => {
@@ -28,7 +30,7 @@ export default class ExceptionTrackingView extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={DefaultStyles.sectionContainer}>
         <FlatList
           data={[
             { key: 'Track Exception With Name' },
@@ -36,14 +38,13 @@ export default class ExceptionTrackingView extends Component {
             { key: 'Uncought Error' },
           ]}
           renderItem={({ item }) => (
-            <Text
-              style={styles.item}
-              onPress={this.getListViewItem.bind(this, item)}
-            >
-              {item.key}
-            </Text>
+            <MappButton
+              buttonTitle={item.key}
+              buttonOnPress={() => {
+                this.getListViewItem(item);
+              }}
+            />
           )}
-          ItemSeparatorComponent={this.renderSeparator}
         />
       </View>
     );

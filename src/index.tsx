@@ -92,12 +92,13 @@ export function setEnableUserMatching(enabled: boolean): Promise<number> {
 }
 
 //TODO: parameterless function??
-export function trackPage(): Promise<number> {
+export function trackPage(pageTitle: string): Promise<number> {
   console.log('trackPage');
-  return MappIntelligencePlugin.trackPage();
+  return MappIntelligencePlugin.trackPage(pageTitle);
 }
 
 export function trackCustomPage(
+  pageTitle: string,
   pageParameters?: PageParameters | null,
   sessionParamters?: SessionParameters | null,
   userCategories?: UserCategories | null,
@@ -106,11 +107,12 @@ export function trackCustomPage(
 ): Promise<number> {
   console.log('trackCustomPage');
   return MappIntelligencePlugin.trackCustomPage(
+    pageTitle,
     convertPageParameters(pageParameters),
     convertSessionParamters(sessionParamters),
     convertUserCategories(userCategories),
     convertEcommerceParameters(ecommerceParameters),
-    convertCapaignParameters(campaignParameters)
+    convertCampaignParameters(campaignParameters)
   );
 }
 export function trackPageWithCustomData(
@@ -172,7 +174,7 @@ function convertUserCategories(userCategories?: UserCategories | null) {
     emailAddress: userCategories?.emailAddress,
     emailReceiverId: userCategories?.emailReceiverId,
     firstName: userCategories?.firstName,
-    gender: String(Number(userCategories?.gender)),
+    gender: userCategories?.gender,
     customerId: userCategories?.customerId,
     lastName: userCategories?.lastName,
     newsletterSubscribed: userCategories?.newsletterSubscribed,
@@ -220,6 +222,7 @@ function convertSessionParamters(
 function convertEcommerceParameters(
   ecommerceParameters?: EcommerceParameters | null
 ): Object | null {
+  console.log('convertEcommerceParameters');
   if (ecommerceParameters == null) {
     return null;
   }
@@ -228,7 +231,6 @@ function convertEcommerceParameters(
   ecommerceParameters.products?.map((item) => {
     let categories = item.categories;
     let ecommercParams = item.ecommerceParameters;
-
     products.push({
       name: item?.name,
       cost: item.cost,
@@ -249,7 +251,7 @@ function convertEcommerceParameters(
 
   const ecommerce: Object = {
     products: products,
-    status: ecommerceParameters.status?.valueOf,
+    status: ecommerceParameters.status,
     currency: ecommerceParameters.currency,
     orderID: ecommerceParameters.orderID,
     orderValue: ecommerceParameters.orderValue,
@@ -270,9 +272,10 @@ function convertEcommerceParameters(
   return ecommerce;
 }
 
-function convertCapaignParameters(
+function convertCampaignParameters(
   campaignParameters?: CampaignParameters | null
 ): Object | null {
+  console.log('convertCapaignParameters');
   if (campaignParameters == null) {
     return null;
   }

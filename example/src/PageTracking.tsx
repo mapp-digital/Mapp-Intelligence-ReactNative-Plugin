@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import * as MappIntelligence from 'react-native-mappinteligence-plugin';
+
 import {
   MIGender,
   type MIBirthday,
@@ -16,11 +17,11 @@ import {
   AppRegistry,
   StyleSheet,
   View,
-  Button,
   ScrollView,
   SafeAreaView,
   StatusBar,
 } from 'react-native';
+import { MappButton } from './components/MappButton';
 
 export default class PageTrackingView extends Component {
   renderSeparator = () => {
@@ -36,14 +37,14 @@ export default class PageTrackingView extends Component {
     );
   };
 
-  async trackPage(): Promise<number> {
+  trackPage(): void {
     console.log('trackPage()');
-    return MappIntelligence.trackPage();
+    MappIntelligence.trackPage('Page 1');
   }
 
-  trackCustomPage(): Promise<number> {
+  trackCustomPage(): void {
     console.log('trackCustomPage()');
-    var paramsDict = new Map<number, string>().set(20, 'cp20Override');
+    var paramsDict = new Map<number, string>().set(20, 'cp20');
     var categoriesDict = new Map<number, string>().set(10, 'test');
 
     const pageParameters: PageParameters = {
@@ -58,6 +59,7 @@ export default class PageTrackingView extends Component {
       year: 1991,
     };
     var customCategoriesDict = new Map<number, string>().set(20, 'userParam1');
+
     const userCategories: UserCategories = {
       birthday: bithday,
       city: 'Paris',
@@ -66,15 +68,8 @@ export default class PageTrackingView extends Component {
       customerId: 'CustomerID',
       newsletterSubscribed: false,
       customCategories: customCategoriesDict,
-      emailAddress: '',
-      emailReceiverId: '',
-      firstName: '',
-      lastName: '',
-      phoneNumber: '',
-      street: '',
-      streetNumber: '',
-      zipCode: '',
     };
+
     var customSessionDict = new Map<number, string>().set(10, 'sessionParam1');
     const sessionParameters: SessionParameters = {
       parameters: customSessionDict,
@@ -85,7 +80,7 @@ export default class PageTrackingView extends Component {
       cost: 110.56,
       quantity: 1,
       productAdvertiseID: 12345,
-      productSoldOut: 2,
+      productSoldOut: true,
       productVariant: 'a',
       categories: new Map<number, string>([[1, 'group 1']]),
       ecommerceParameters: null,
@@ -117,7 +112,8 @@ export default class PageTrackingView extends Component {
       oncePerSession: true,
       customParameters: new Map<number, string>([[12, 'camParam1']]),
     };
-    return MappIntelligence.trackCustomPage(
+    MappIntelligence.trackCustomPage(
+      'Page Tracking Example 1',
       pageParameters,
       sessionParameters,
       userCategories,
@@ -126,15 +122,12 @@ export default class PageTrackingView extends Component {
     );
   }
 
-  trackPageWithCustomData(): Promise<number> {
+  trackPageWithCustomData(): void {
     console.log('trackPageWithCustomData()');
     var customParameters = new Map<string, string>();
     customParameters.set('cp10', 'cp10Override');
     customParameters.set('cg10', 'test');
-    return MappIntelligence.trackPageWithCustomData(
-      'testTitle1',
-      customParameters
-    );
+    MappIntelligence.trackPageWithCustomData('testTitle1', customParameters);
   }
 
   render() {
@@ -145,11 +138,14 @@ export default class PageTrackingView extends Component {
           contentInsetAdjustmentBehavior="automatic"
           style={styles.sectionContainer}
         >
-          <Button title="Track Page" onPress={this.trackPage} />
-          <Button title="Track Custom Page" onPress={this.trackCustomPage} />
-          <Button
-            title="Track Page with Custom Data"
-            onPress={this.trackPageWithCustomData}
+          <MappButton buttonTitle="Track Page" buttonOnPress={this.trackPage} />
+          <MappButton
+            buttonTitle="Track Custom Page"
+            buttonOnPress={this.trackCustomPage}
+          />
+          <MappButton
+            buttonTitle="Track Page with Custom Data"
+            buttonOnPress={this.trackPageWithCustomData}
           />
         </ScrollView>
       </SafeAreaView>

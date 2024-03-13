@@ -1,34 +1,9 @@
 import React, { Component } from 'react';
 
-import {
-  AppRegistry,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-  Alert,
-  Button,
-} from 'react-native';
-import PageTrackingView from './PageTracking';
-const showAlert = () =>
-  Alert.alert(
-    'Alert Title',
-    'My Alert Msg',
-    [
-      {
-        text: 'Cancel',
-        onPress: () => Alert.alert('Cancel Pressed'),
-        style: 'cancel',
-      },
-    ],
-    {
-      cancelable: true,
-      onDismiss: () =>
-        Alert.alert(
-          'This alert was dismissed by tapping outside of the alert dialog.'
-        ),
-    }
-  );
+import { AppRegistry, FlatList, View, Alert } from 'react-native';
+import { MappButton } from './components/MappButton';
+import { DefaultStyles } from './components/Styles';
+
 export default class FlatListBasics extends Component {
   navigation: any;
 
@@ -70,15 +45,15 @@ export default class FlatListBasics extends Component {
       case 'Exceptions':
         this.navigation.navigate('ExceptionTracking');
         return 'exception tracking';
-
       default:
-        Alert.alert(item.key);
+        this.navigation.navigate('Home');
+        return 'Home';
     }
   };
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={DefaultStyles.sectionContainer}>
         <FlatList
           data={[
             { key: 'Configuration' },
@@ -91,29 +66,17 @@ export default class FlatListBasics extends Component {
             { key: 'Exceptions' },
           ]}
           renderItem={({ item }) => (
-            <Button
-              title={item.key}
-              onPress={() => {
+            <MappButton
+              buttonTitle={item.key}
+              buttonOnPress={() => {
                 this.getListViewItem(item);
               }}
             />
           )}
-          ItemSeparatorComponent={this.renderSeparator}
         />
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
-  },
-});
 
 AppRegistry.registerComponent('AwesomeProject', () => FlatListBasics);

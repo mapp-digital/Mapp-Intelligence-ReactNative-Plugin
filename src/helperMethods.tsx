@@ -19,24 +19,24 @@ export enum MIGender {
 }
 
 interface PartialUserCategoris {
-  birthday?: MIBirthday;
-  city?: string;
-  country?: string;
-  emailAddress?: string;
-  emailReceiverId?: string;
-  firstName?: string;
-  gender?: MIGender;
-  customerId?: string;
-  lastName?: string;
-  newsletterSubscribed?: boolean;
-  phoneNumber?: string;
-  street?: string;
-  streetNumber?: string;
-  zipCode?: string;
-  customCategories?: Map<number, string>;
+  birthday?: MIBirthday | null;
+  city?: string | null;
+  country?: string | null;
+  emailAddress?: string | null;
+  emailReceiverId?: string | null;
+  firstName?: string | null;
+  gender?: MIGender | MIGender.unknown;
+  customerId?: string | null;
+  lastName?: string | null;
+  newsletterSubscribed?: boolean | null;
+  phoneNumber?: string | null;
+  street?: string | null;
+  streetNumber?: string | null;
+  zipCode?: string | null | undefined;
+  customCategories?: Map<number, string> | null;
 }
 
-export type UserCategories = Required<PartialUserCategoris>;
+export type UserCategories = PartialUserCategoris;
 
 interface ParticularEcommerceParameters {
   products?: MIProduct[] | null;
@@ -63,7 +63,7 @@ interface ParticularMIProduct {
   cost?: number | null;
   quantity?: number | null;
   productAdvertiseID?: number | null;
-  productSoldOut?: number | null;
+  productSoldOut?: boolean | null;
   productVariant?: string | null;
   categories?: Map<number, string> | null;
   ecommerceParameters?: Map<string, string> | null;
@@ -100,7 +100,26 @@ interface ParticularSessionParameters {
 }
 export type SessionParameters = Required<ParticularSessionParameters>;
 
-interface ParticularEventParameters {
-  parameters?: string | null;
+export interface EventParameters {
+  customParameters: Map<number, string>;
 }
-export type EventParameters = Required<ParticularEventParameters>;
+
+export interface MediaParameteres {
+  name: string;
+  action: string;
+  position: number;
+  duration: number;
+  bandwith?: number | null;
+  soundIsMuted?: boolean | null;
+  soundVolume?: number | null;
+  customCategories: Map<number, string> | {};
+}
+
+export interface MediaEvent {
+  pageName: string;
+  parameters: MediaParameteres | {};
+  eventParameters?: EventParameters | null;
+  sessionParameters?: SessionParameters | null;
+  eCommerceParameters?: EcommerceParameters | null;
+  customParameters?: Map<string, string> | null;
+}
