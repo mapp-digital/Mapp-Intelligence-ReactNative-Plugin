@@ -22,17 +22,14 @@ import {
   StatusBar,
 } from 'react-native';
 import { MappButton } from './components/MappButton';
+import { DefaultStyles } from './components/Styles';
 
 export default class PageTrackingView extends Component {
   renderSeparator = () => {
     return (
       <View
         // eslint-disable-next-line react-native/no-inline-styles
-        style={{
-          height: 1,
-          width: '100%',
-          backgroundColor: '#000',
-        }}
+        style={DefaultStyles.sectionContainer}
       />
     );
   };

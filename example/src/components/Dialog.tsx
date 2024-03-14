@@ -5,22 +5,12 @@ export const Dialog = {
     title: string;
     message: string;
     positiveButtonText: string | 'OK';
-    positiveAction?: () => void | null;
+    positiveAction?: () => void | Promise<void> | null;
     negativeButtonText?: string | null;
     negativeAction?: () => void | null;
     onDismissCallback?: () => void | null;
   }): void {
-    let actions = [
-      {
-        text: props.positiveButtonText,
-        isPreferred: true,
-        onPress: () => {
-          if (props.positiveAction) {
-            props.positiveAction();
-          }
-        },
-      },
-    ];
+    let actions = [];
 
     if (props.negativeButtonText) {
       actions.push({
@@ -33,6 +23,15 @@ export const Dialog = {
         },
       });
     }
+    actions.push({
+      text: props.positiveButtonText,
+      isPreferred: true,
+      onPress: () => {
+        if (props.positiveAction) {
+          props.positiveAction();
+        }
+      },
+    });
 
     Alert.alert(props.title, props.message, actions, {
       cancelable: true,

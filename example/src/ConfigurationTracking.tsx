@@ -1,103 +1,117 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import {
   AppRegistry,
   FlatList,
-  StyleSheet,
-  Text,
   View,
   Alert,
+  ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import { MappButton } from './components/MappButton';
 import { DefaultStyles } from './components/Styles';
 import { MappInputText } from './components/MappInputText';
 import { MappSwitch } from './components/MappSwitch';
+import * as MappIntelligencePlugin from 'react-native-mappinteligence-plugin';
+import TextWithLabel from './components/TextWithLabel';
+import { Dialog } from './components/Dialog';
 
-export default class ConfigurationTrackingView extends Component {
-  constructor(props: {
-    isEnabled: boolean;
-    isInitialized: boolean;
-    text?: string | null;
-  }) {
-    super(props);
-  }
+const ConfigurationTrackingView = (props: { text?: string | null }) => {
+  const [readySwitchEnabled] = useState(false);
+  const [everId, setEverId] = useState('');
+  const [isReady, setIsReady] = useState(false);
+  const [newEverId, setNewEverId] = useState('');
 
-  toggleSwitch = () => setIsEnabled((previousState) => !previousState);
-  renderSeparator = () => {
-    return (
-      <View
-        // eslint-disable-next-line react-native/no-inline-styles
-        style={{
-          height: 1,
-          width: '100%',
-          backgroundColor: '#000',
-        }}
-      />
-    );
-  };
-  //handling onPress action
-  getListViewItem = (item: any) => {
+  const getListViewItem = (item: any) => {
     Alert.alert(item.key);
   };
 
-  render() {
-    return (
-      <View style={DefaultStyles.sectionContainer}>
-        <MappSwitch
-          onCheckedChanged={this.toggleSwitch}
-          isChecked={true}
-          text={'Is Ready'}
-          isEnabled={false}
-        />
-        <MappInputText
-          buttonTitle="Ever ID"
-          onValueChanged={(value: string) => {}}
-          textValue=""
-          hintValue="Ever ID"
-        />
-        <FlatList
-          data={[
-            { key: 'Init with everID' },
-            { key: 'Opt out' },
-            { key: 'Opt in' },
-            { key: 'Reset' },
-            { key: 'Init at Runtime' },
-            { key: 'User matching set to true' },
-          ]}
-          renderItem={({ item }) => (
-            <MappButton
-              buttonTitle={item.key}
-              buttonOnPress={() => {
-                this.getListViewItem(item);
-              }}
-            />
-          )}
-        />
-      </View>
-    );
-  }
-}
+  const updateEverId = async (value?: string | null) => {
+    if (!value) {
+      Dialog.show({
+        title: 'Reset EverId',
+        message:
+          'Empty everID will reset and autogenerate everId. Do you want to proceed?',
+        positiveButtonText: 'Yes',
+        positiveAction: async () => {
+          const result = await MappIntelligencePlugin.setEverId(value);
+          if (result) {
+            setTimeout(() => {
+              init();
+            }, 300);
+          }
+        },
+        negativeButtonText: 'No',
+      });
+    } else {
+      const result = await MappIntelligencePlugin.setEverId(value);
+      if (result) {
+        setTimeout(() => {
+          init();
+        }, 300);
+      }
+    }
+  };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
-  },
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
-  },
-});
+  const init = async () => {
+    let isInitialized = await MappIntelligencePlugin.isInitialized();
+    setIsReady(isInitialized);
+    if (isInitialized) {
+      let everId = await MappIntelligencePlugin.getEverId();
+      setEverId(everId);
+    }
+  };
 
-AppRegistry.registerComponent(
-  'ConfigurationTracking',
-  () => ConfigurationTrackingView
-);
-function setIsEnabled(_arg0: (previousState: any) => boolean) {
-  throw new Error('Function not implemented.');
-}
+  init();
+  return (
+    <SafeAreaView>
+      <ScrollView>
+        <View style={DefaultStyles.sectionContainer}>
+          <MappSwitch
+            onCheckedChanged={(_) => {}}
+            isChecked={isReady}
+            text={'Is Ready'}
+            isEnabled={readySwitchEnabled}
+          />
+
+          <TextWithLabel label="Current Ever ID" content={everId} />
+          <MappInputText
+            disableWhenEmpty={false}
+            buttonTitle="Set"
+            buttonTitleColor={'#ffffff'}
+            buttonBackgroundColor={'#06A806'}
+            onValueChanged={(value: string) => {
+              setNewEverId(value);
+            }}
+            onClick={async (value) => {
+              updateEverId(value);
+            }}
+            textValue={newEverId}
+            hintValue="Ever ID"
+          />
+
+          <MappButton buttonTitle="Init with everID" buttonOnPress={() => {}} />
+          <MappButton
+            buttonTitle="Opt out"
+            buttonOnPress={() => {
+              MappIntelligencePlugin.optOut(true);
+            }}
+          />
+          <MappButton
+            buttonTitle="Opt in"
+            buttonOnPress={() => {
+              MappIntelligencePlugin.optIn(true);
+            }}
+          />
+          <MappButton buttonTitle="Reset" buttonOnPress={() => {}} />
+          <MappButton buttonTitle="Init at Runtime" buttonOnPress={() => {}} />
+          <MappButton
+            buttonTitle="User matching set to true"
+            buttonOnPress={() => {}}
+          />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+export default ConfigurationTrackingView;

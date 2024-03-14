@@ -48,6 +48,19 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   }
 
   /**
+   * Check if SDK is initialized and ready for usage
+   * Returns true if initialization was finished, otherwise false
+   */
+  @ReactMethod
+  fun isInitialized(promise: Promise) {
+    runOnPlugin(whenInitialized = {
+      promise.resolve(true)
+    }, whenNotInitialized = {
+      promise.resolve(false)
+    })
+  }
+
+  /**
    * Enable or disable anonymous tracking
    * When anonymous tracking is enabled, everId will be deleted and not created again while this value stays true
    */
@@ -105,11 +118,37 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   }
 
   @ReactMethod
+  fun getEverId(promise: Promise) {
+    runOnPlugin(whenInitialized = {
+      val everId = instance.getEverId()
+      promise.resolve(everId)
+    }, whenNotInitialized = {
+      promise.reject("", "SDK not initialized yet!")
+    })
+  }
+
+  @ReactMethod
   fun setTemporarySessionId(sessionId: String, promise: Promise) {
     runOnPlugin(whenInitialized = {
       instance.setTemporarySessionId(sessionId)
     }, whenNotInitialized = {
       configAdapter.temporarySessionId = sessionId
+    })
+    promise.resolve(true)
+  }
+
+  @ReactMethod
+  fun optOut(sendData:Boolean,promise: Promise){
+    runOnPlugin(whenInitialized = {
+      instance.optOut(true,sendData)
+    })
+    promise.resolve(true)
+  }
+
+  @ReactMethod
+  fun optIn(sendData: Boolean, promise: Promise){
+    runOnPlugin(whenInitialized = {
+      instance.optOut(false,sendData)
     })
     promise.resolve(true)
   }
@@ -254,7 +293,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   @ReactMethod
   fun trackPageWithCustomData(params: ReadableMap?, pageTitle: String, promise: Promise) {
     runOnPlugin(whenInitialized = {
-      instance.trackCustomPage(pageTitle, params.toMap<String,String>())
+      instance.trackCustomPage(pageTitle, params.toMap<String, String>())
     })
     promise.resolve(true)
   }
@@ -386,6 +425,13 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
     else whenNotInitialized?.invoke()
   }
 
+  @ReactMethod
+  private fun reset(promise: Promise){
+    runOnPlugin(whenInitialized = {
+      reset {  }
+    })
+    promise.resolve(true)
+  }
   /**
    * Reset underlying SDK and set new values via
    * @param presetAction - action that has access to WebtrekkConfiguration Builder

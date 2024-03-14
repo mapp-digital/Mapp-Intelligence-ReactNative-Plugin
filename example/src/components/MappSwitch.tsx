@@ -12,9 +12,7 @@ export const MappSwitch = (props: {
       <Switch
         value={props.isChecked}
         onValueChange={props.onCheckedChanged}
-        disabled={
-          props.isEnabled == true || props.isEnabled == undefined ? true : false
-        }
+        disabled={props.isEnabled != true ? true : false}
       />
     </View>
   );

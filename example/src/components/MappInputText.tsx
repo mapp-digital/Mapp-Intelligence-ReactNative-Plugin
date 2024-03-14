@@ -1,25 +1,27 @@
 import React from 'react';
 import { useState } from 'react';
-import { TouchableOpacity, TextInput, Text, View } from 'react-native';
+import {
+  TouchableOpacity,
+  TextInput,
+  Text,
+  View,
+  type StyleProp,
+  type ColorValue,
+} from 'react-native';
+import { DefaultStyles } from './Styles';
 export const MappInputText = (props: {
   textValue: string;
   hintValue: string;
   buttonTitle: string;
+  buttonTitleColor?: ColorValue | '#ffffff';
+  buttonBackgroundColor?: ColorValue | '#06A806';
   onValueChanged: (newValue: string) => void | null;
   onClick?: (value: string) => void;
+  disableWhenEmpty?: boolean | false;
 }) => {
   const [inputValue, setInputValue] = useState(props.textValue);
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        borderColor: '#cccccc',
-        borderWidth: 1,
-        borderRadius: 10,
-        marginVertical: 5,
-        padding: 5,
-      }}
-    >
+    <View style={DefaultStyles.sectionTextRow}>
       <TextInput
         style={{ flex: 1 }}
         onChangeText={(value) => {
@@ -33,16 +35,20 @@ export const MappInputText = (props: {
       />
       <View style={{ margin: 0 }}>
         <TouchableOpacity
-          disabled={inputValue == undefined || inputValue == ''}
+          disabled={
+            props.disableWhenEmpty &&
+            (inputValue == undefined || inputValue == '')
+          }
           style={{
             margin: 5,
             padding: 10,
             borderRadius: 100,
             justifyContent: 'space-around',
             backgroundColor:
-              inputValue == undefined || inputValue == ''
+              props.disableWhenEmpty &&
+              (inputValue == undefined || inputValue == '')
                 ? '#cccccc'
-                : '#06A806',
+                : props.buttonBackgroundColor,
           }}
           onPress={() => {
             if (props.onClick) {
@@ -51,7 +57,9 @@ export const MappInputText = (props: {
             setInputValue('');
           }}
         >
-          <Text>{props.buttonTitle}</Text>
+          <Text style={{ color: props.buttonTitleColor }}>
+            {props.buttonTitle}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>

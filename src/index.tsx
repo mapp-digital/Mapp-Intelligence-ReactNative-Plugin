@@ -3,7 +3,6 @@ import type {
   CampaignParameters,
   EcommerceParameters,
   EventParameters,
-  MIProduct,
   PageParameters,
   SessionParameters,
   UserCategories,
@@ -149,12 +148,33 @@ export function setEverId(everId?: String | null): Promise<number> {
   return MappIntelligencePlugin.setEverId(everId);
 }
 
+export function getEverId(): Promise<string> {
+  return MappIntelligencePlugin.getEverId();
+}
+
+export function isInitialized(): Promise<boolean> {
+  return MappIntelligencePlugin.isInitialized();
+}
+
 export function setTemporarySessionId(
   sessionId?: String | null
 ): Promise<number> {
   console.log('setTemporarySessionId');
   return MappIntelligencePlugin.setTemporarySessionId(sessionId);
 }
+
+export function optOut(sendData: boolean): Promise<number> {
+  return MappIntelligencePlugin.optOut(sendData);
+}
+
+export function optIn(sendData: boolean): Promise<number> {
+  return MappIntelligencePlugin.optIn(sendData);
+}
+
+export function reset(): Promise<number> {
+  return MappIntelligencePlugin.reset();
+}
+
 //MARK: methods for converting objects
 function convertUserCategories(userCategories?: UserCategories | null) {
   if (userCategories == null) {
