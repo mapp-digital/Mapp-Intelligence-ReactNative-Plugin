@@ -137,8 +137,8 @@ RCT_EXPORT_METHOD(setEnableUserMatching:(BOOL)enabled
     resolve(@1);
 }
 
-RCT_EXPORT_METHOD(trackPage:
-                                        (RCTPromiseResolveBlock)resolve
+RCT_EXPORT_METHOD(trackPage:(NSString*)pageTitle
+                                        reslove:(RCTPromiseResolveBlock)resolve
                                         reject:(RCTPromiseRejectBlock)reject)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -147,12 +147,18 @@ RCT_EXPORT_METHOD(trackPage:
         while (topController.presentedViewController) {
             topController = topController.presentedViewController;
         }
-        [[MappIntelligence shared] trackPageWithViewController:topController pageViewEvent:NULL];
+        if(pageTitle) {
+          MIPageViewEvent* event = [[MIPageViewEvent alloc] initWithName:pageTitle];
+          [[MappIntelligence shared] trackPage:event];
+        } else {
+          [[MappIntelligence shared] trackPageWithViewController:topController pageViewEvent:NULL];
+        }
     });
     resolve(@1);
 }
 
-RCT_EXPORT_METHOD(trackCustomPage:(NSDictionary*)pageParameters  
+RCT_EXPORT_METHOD(trackCustomPage:(NSString*)pageTitle
+                                        pageParameters:(NSDictionary*)pageParameters
                                         sessionParamters:(NSDictionary*)sessionParamters
                                         userCategories:(NSDictionary*)userCategories
                                         ecommerceParameters:(NSDictionary*)ecommerceParameters
@@ -161,12 +167,12 @@ RCT_EXPORT_METHOD(trackCustomPage:(NSDictionary*)pageParameters
                                         reject:(RCTPromiseRejectBlock)reject)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        MIPageViewEvent* event = [[MIPageViewEvent alloc] initWithName:@"test page 1"];
-        
+        MIPageViewEvent* event = [[MIPageViewEvent alloc] initWithName:pageTitle];
+
         [event setPageParameters:[self preparePageParameters:pageParameters]];
         [event setUserCategories:[self prepareUserCategories:userCategories]];
         [event setSessionParameters:[self prepareSessionParameters:sessionParamters]];
-        
+
         [[MappIntelligence shared] trackPage:event];
     });
     resolve(@1);
@@ -183,8 +189,8 @@ RCT_EXPORT_METHOD(trackPageWithCustomData:(NSDictionary*)pageParameters
         resolve(@1);
     }
 
-RCT_EXPORT_METHOD(trackAction:(NSString*)name 
-                                        eventParameters:(NSDictionary*)eventParameters  
+RCT_EXPORT_METHOD(trackAction:(NSString*)name
+                                        eventParameters:(NSDictionary*)eventParameters
                                         sessionParamters:(NSDictionary*)sessionParamters
                                         userCategories:(NSDictionary*)userCategories
                                         ecommerceParameters:(NSDictionary*)ecommerceParameters
@@ -194,7 +200,7 @@ RCT_EXPORT_METHOD(trackAction:(NSString*)name
 {
     dispatch_async(dispatch_get_main_queue(), ^{
          MIActionEvent* actionEvent = [[MIActionEvent alloc] initWithName:name];
-        
+
         if (eventParameters) {
             NSMutableDictionary* eDict = [eventParameters mutableCopy];
              MIEventParameters* eParameters = [[MIEventParameters alloc] initWithDictionary:[self getFromString:eDict[@"parameters"]]];
