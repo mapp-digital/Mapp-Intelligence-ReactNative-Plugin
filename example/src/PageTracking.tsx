@@ -12,7 +12,7 @@ import {
   MIStatus,
   type MIProduct,
   MIAction,
-} from '../../src/helperMethods';
+} from '../../src/DataTypes';
 import {
   AppRegistry,
   StyleSheet,

@@ -3,10 +3,13 @@ import type {
   CampaignParameters,
   EcommerceParameters,
   EventParameters,
+  MediaEvent,
+  MediaParameteres,
   PageParameters,
   SessionParameters,
   UserCategories,
-} from './helperMethods';
+} from './DataTypes';
+import type { isValidElement } from 'react';
 
 const LINKING_ERROR =
   `The package 'react-native-mappinteligence-plugin' doesn't seem to be linked. Make sure: \n\n` +
@@ -149,6 +152,51 @@ export function trackUrl(
 ): Promise<number> {
   return MappIntelligencePlugin.trackUrl(url, mediaCode);
 }
+
+export function trackMedia(params: MediaEvent): Promise<number>;
+
+export function trackMedia(
+  params: Map<string, string>,
+  mediaName?: string | null,
+  pageName?: string | null
+): Promise<number>;
+
+export function trackMedia(
+  params: Map<string, string> | MediaEvent,
+  mediaName?: string | null,
+  pageName?: string | null
+): Promise<number> {
+  if ('pageName' in params) {
+    console.log('Execute MediaEvent');
+    return MappIntelligencePlugin.trackMedia(
+      convertMediaEvent(params as MediaEvent)
+    );
+  } else {
+    console.log('Execute CustomMediaEvent');
+    const cp = params as Map<string, string>;
+    const customParams = cp != null ? Object.fromEntries(cp.entries()) : {};
+    const name = mediaName != null ? mediaName : '';
+    return MappIntelligencePlugin.trackCustomMedia(
+      pageName,
+      name,
+      customParams
+    );
+  }
+}
+
+// export function trackMedia(mediaEvent: MediaEvent): Promise<number> {
+//   const mediaObject = convertMediaEvent(mediaEvent);
+//   return MappIntelligencePlugin.trackMedia(mediaObject);
+// }
+
+// export function trackCustomMedia(
+//   params: Map<string, string>,
+//   mediaName: string,
+//   pageName?: string | null
+// ): Promise<number> {
+//   return MappIntelligencePlugin.trackCustomMedia(pageName, mediaName, params);
+// }
+
 export function setEverId(everId?: String | null): Promise<number> {
   console.log('setEverId');
   return MappIntelligencePlugin.setEverId(everId);
@@ -321,4 +369,71 @@ function convertCampaignParameters(
       params != null ? Object.fromEntries(params.entries()) : {},
   };
   return campaign;
+}
+
+function convertEventParameters(event?: EventParameters | null): Object | null {
+  if (event == null) {
+    return null;
+  }
+
+  const customParams =
+    event.customParameters != null
+      ? Object.fromEntries(event.customParameters?.entries())
+      : null;
+
+  const eventParams: Object = {
+    customParameters: customParams,
+  };
+
+  return eventParams;
+}
+
+function convertMediaParameters(
+  mediaParam?: MediaParameteres | null
+): Object | null {
+  if (mediaParam == null) {
+    return null;
+  }
+
+  const params: Object = {
+    name: mediaParam?.name,
+    action: mediaParam?.action,
+    position: mediaParam?.position,
+    duration: mediaParam?.duration,
+    bandwith: mediaParam?.bandwith,
+    soundIsMuted: mediaParam?.soundIsMuted,
+    soundVolume: mediaParam?.soundVolume,
+    customCategories:
+      mediaParam?.customCategories != null
+        ? Object.fromEntries(mediaParam.customCategories?.entries())
+        : null,
+  };
+
+  return params;
+}
+
+function convertMediaEvent(mediaEvent?: MediaEvent | null): Object | null {
+  if (mediaEvent == null) {
+    return null;
+  }
+
+  const custom =
+    mediaEvent.customParameters != null
+      ? Object.fromEntries(mediaEvent?.customParameters?.entries())
+      : null;
+  const eCommerce = convertEcommerceParameters(mediaEvent.eCommerceParameters);
+  const session = convertSessionParamters(mediaEvent.sessionParameters);
+  const event = convertEventParameters(mediaEvent.eventParameters);
+  const mediaParams = convertMediaParameters(mediaEvent.parameters);
+
+  const data: Object = {
+    pageName: mediaEvent.pageName,
+    parameters: mediaParams,
+    eventParameters: event,
+    sessionParameters: session,
+    eCommerceParameters: eCommerce,
+    customParameters: custom,
+  };
+
+  return data;
 }

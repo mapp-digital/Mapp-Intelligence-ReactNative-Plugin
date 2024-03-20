@@ -1,6 +1,7 @@
 package com.mappinteligenceplugin
 
 import android.net.Uri
+import android.util.Log
 import androidx.annotation.IntRange
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
@@ -20,7 +21,9 @@ import webtrekk.android.sdk.Logger
 import webtrekk.android.sdk.Webtrekk
 import webtrekk.android.sdk.WebtrekkConfiguration
 import webtrekk.android.sdk.events.ActionEvent
+import webtrekk.android.sdk.events.MediaEvent
 import webtrekk.android.sdk.events.PageViewEvent
+import webtrekk.android.sdk.events.eventParams.MediaParameters
 import java.util.concurrent.TimeUnit
 
 class MappinteligencePluginModule(private val reactContext: ReactApplicationContext) :
@@ -363,44 +366,33 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   }
 
   @ReactMethod
-  fun trackMedia(pageName: String, mediaName: String, params: ReadableMap, promise: Promise) {
+  fun trackCustomMedia(
+    pageName: String?,
+    mediaName: String,
+    params: ReadableMap,
+    promise: Promise
+  ) {
     runOnPlugin(
       whenInitialized = {
-        val trackParams = mutableMapOf<String, String>()
-        while (params.keySetIterator().hasNextKey()) {
-          val key = params.keySetIterator().nextKey()
-          trackParams[key] = params.getString(key) as String
+        val trackParams = params.toMap<String,String>()
+        if (pageName != null) {
+          instance.trackMedia(pageName, mediaName, trackParams)
+        } else {
+          instance.trackMedia(mediaName, trackParams)
         }
-        instance.trackMedia(pageName, mediaName, trackParams)
       })
     promise.resolve(true)
   }
 
   @ReactMethod
-  fun trackMedia(mediaName: String, params: ReadableMap, promise: Promise) {
-    runOnPlugin(
-      whenInitialized = {
-        val trackParams = mutableMapOf<String, String>()
-        while (params.keySetIterator().hasNextKey()) {
-          val key = params.keySetIterator().nextKey()
-          trackParams[key] = params.getString(key) as String
-        }
-        instance.trackMedia(mediaName, trackParams)
-      })
+  fun trackMedia(readableMap: ReadableMap?, promise: Promise){
+    runOnPlugin(whenInitialized = {
+      MediaEventMapper(readableMap).getData()?.let {
+        instance.trackMedia(it)
+      }
+    })
     promise.resolve(true)
   }
-
-  @ReactMethod
-  fun trackMedia(event: ReadableMap, promise: Promise) {
-    runOnPlugin(
-      whenInitialized = {
-        MediaEventMapper(event).getData()?.let {
-          instance.trackMedia(it)
-        }
-      })
-    promise.resolve(true)
-  }
-
   @ReactMethod
   fun trackUrl(url: String, mediaCode: String?, promise: Promise) {
     runOnPlugin(

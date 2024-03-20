@@ -6,7 +6,7 @@ import {
   MIStatus,
   type EcommerceParameters,
   type MIProduct,
-} from '../../src/helperMethods';
+} from '../../src/DataTypes';
 
 import * as MappIntelligencePlugin from 'react-native-mappinteligence-plugin';
 

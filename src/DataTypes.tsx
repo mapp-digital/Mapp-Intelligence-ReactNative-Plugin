@@ -103,6 +103,16 @@ export interface EventParameters {
   customParameters: Map<number, string>;
 }
 
+export enum MediaParam {
+  media_category = 'mg',
+  media_action = 'mk',
+  media_position = 'mt1',
+  media_duration = 'mt2',
+  bandwidth = 'bw',
+  volume = 'vol',
+  mute = 'mut',
+  name = 'mi',
+}
 export interface MediaParameteres {
   name: string;
   action: string;
@@ -111,12 +121,12 @@ export interface MediaParameteres {
   bandwith?: number | null;
   soundIsMuted?: boolean | null;
   soundVolume?: number | null;
-  customCategories: Map<number, string> | {};
+  customCategories: Map<number, string> | null;
 }
 
 export interface MediaEvent {
   pageName: string;
-  parameters: MediaParameteres | {};
+  parameters: MediaParameteres | null;
   eventParameters?: EventParameters | null;
   sessionParameters?: SessionParameters | null;
   eCommerceParameters?: EcommerceParameters | null;

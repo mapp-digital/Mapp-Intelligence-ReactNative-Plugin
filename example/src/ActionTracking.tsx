@@ -7,7 +7,7 @@ import {
   type UserCategories,
   type MIBirthday,
   type SessionParameters,
-} from '../../src/helperMethods';
+} from '../../src/DataTypes';
 
 import { MappButton, DefaultStyles } from './components/MappComponents';
 
