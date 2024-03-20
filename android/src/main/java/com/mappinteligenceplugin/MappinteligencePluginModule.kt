@@ -8,9 +8,9 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
-import com.mappinteligenceplugin.mapper.ActionEventMapper
 import com.mappinteligenceplugin.mapper.CampaignParametersMapper
 import com.mappinteligenceplugin.mapper.ECommerceParametersMapper
+import com.mappinteligenceplugin.mapper.EventParametersMapper
 import com.mappinteligenceplugin.mapper.MediaEventMapper
 import com.mappinteligenceplugin.mapper.PageParametersMapper
 import com.mappinteligenceplugin.mapper.SessionParametersMapper
@@ -19,6 +19,7 @@ import com.mappinteligenceplugin.mapper.Util.toMap
 import webtrekk.android.sdk.Logger
 import webtrekk.android.sdk.Webtrekk
 import webtrekk.android.sdk.WebtrekkConfiguration
+import webtrekk.android.sdk.events.ActionEvent
 import webtrekk.android.sdk.events.PageViewEvent
 import java.util.concurrent.TimeUnit
 
@@ -138,17 +139,17 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   }
 
   @ReactMethod
-  fun optOut(sendData:Boolean,promise: Promise){
+  fun optOut(sendData: Boolean, promise: Promise) {
     runOnPlugin(whenInitialized = {
-      instance.optOut(true,sendData)
+      instance.optOut(true, sendData)
     })
     promise.resolve(true)
   }
 
   @ReactMethod
-  fun optIn(sendData: Boolean, promise: Promise){
+  fun optIn(sendData: Boolean, promise: Promise) {
     runOnPlugin(whenInitialized = {
-      instance.optOut(false,sendData)
+      instance.optOut(false, sendData)
     })
     promise.resolve(true)
   }
@@ -315,13 +316,37 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
     promise.resolve(true)
   }
 
+  /*  name: string,
+    eventParameters?: EventParameters | null,
+    sessionParamters?: SessionParameters | null,
+    userCategories?: UserCategories | null,
+    ecommerceParameters?: EcommerceParameters | null,
+    campaignParameters?: CampaignParameters | null*/
   @ReactMethod
-  fun trackAction(action: ReadableMap, promise: Promise) {
+  fun trackAction(
+    name: String,
+    eventParameters: ReadableMap?,
+    sessionParameters: ReadableMap?,
+    userCategories: ReadableMap?,
+    eCommerceParameters: ReadableMap?,
+    campaignParameters: ReadableMap?,
+    promise: Promise
+  ) {
     runOnPlugin(
       whenInitialized = {
-        ActionEventMapper(action).getData()?.let {
-          instance.trackAction(it)
+        val event = EventParametersMapper(eventParameters).getData()
+        val session = SessionParametersMapper(sessionParameters).getData()
+        val userCat = UserCategoriesMapper(userCategories).getData()
+        val ecommerce = ECommerceParametersMapper(eCommerceParameters).getData()
+        val campaignParams = CampaignParametersMapper(campaignParameters).getData()
+        val actionEvent = ActionEvent(name).apply {
+          this.eventParameters = event
+          this.sessionParameters = session
+          this.userCategories = userCat
+          this.eCommerceParameters = ecommerce
+          this.campaignParameters = campaignParams
         }
+        instance.trackAction(actionEvent)
       })
     promise.resolve(true)
   }
@@ -426,12 +451,13 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   }
 
   @ReactMethod
-  private fun reset(promise: Promise){
+  private fun reset(promise: Promise) {
     runOnPlugin(whenInitialized = {
-      reset {  }
+      reset { }
     })
     promise.resolve(true)
   }
+
   /**
    * Reset underlying SDK and set new values via
    * @param presetAction - action that has access to WebtrekkConfiguration Builder

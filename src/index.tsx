@@ -143,6 +143,12 @@ export function trackAction(
   );
 }
 
+export function trackUrl(
+  url: string,
+  mediaCode?: string | null
+): Promise<number> {
+  return MappIntelligencePlugin.trackUrl(url, mediaCode);
+}
 export function setEverId(everId?: String | null): Promise<number> {
   console.log('setEverId');
   return MappIntelligencePlugin.setEverId(everId);
@@ -173,6 +179,10 @@ export function optIn(sendData: boolean): Promise<number> {
 
 export function reset(): Promise<number> {
   return MappIntelligencePlugin.reset();
+}
+
+export function sendRequestsAndClean(): Promise<number> {
+  return MappIntelligencePlugin.sendRequestsAndClean();
 }
 
 //MARK: methods for converting objects

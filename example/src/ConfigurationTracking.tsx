@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-import {
-  AppRegistry,
-  FlatList,
-  View,
-  Alert,
-  ScrollView,
-  SafeAreaView,
-} from 'react-native';
+import { View, ScrollView, SafeAreaView } from 'react-native';
 import { MappButton } from './components/MappButton';
 import { DefaultStyles } from './components/Styles';
 import { MappInputText } from './components/MappInputText';
@@ -15,15 +8,11 @@ import * as MappIntelligencePlugin from 'react-native-mappinteligence-plugin';
 import TextWithLabel from './components/TextWithLabel';
 import { Dialog } from './components/Dialog';
 
-const ConfigurationTrackingView = (props: { text?: string | null }) => {
+const ConfigurationTrackingView = () => {
   const [readySwitchEnabled] = useState(false);
   const [everId, setEverId] = useState('');
   const [isReady, setIsReady] = useState(false);
   const [newEverId, setNewEverId] = useState('');
-
-  const getListViewItem = (item: any) => {
-    Alert.alert(item.key);
-  };
 
   const updateEverId = async (value?: string | null) => {
     if (!value) {
@@ -89,6 +78,12 @@ const ConfigurationTrackingView = (props: { text?: string | null }) => {
             hintValue="Ever ID"
           />
 
+          <MappButton
+            buttonTitle="Send requests and clean"
+            buttonOnPress={() => {
+              MappIntelligencePlugin.sendRequestsAndClean();
+            }}
+          />
           <MappButton buttonTitle="Init with everID" buttonOnPress={() => {}} />
           <MappButton
             buttonTitle="Opt out"

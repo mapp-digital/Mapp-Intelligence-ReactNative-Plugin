@@ -58,7 +58,7 @@ interface ParticularEcommerceParameters {
 }
 export type EcommerceParameters = Required<ParticularEcommerceParameters>;
 
-interface ParticularMIProduct {
+export interface MIProduct {
   name?: string | null;
   cost?: number | null;
   quantity?: number | null;
@@ -68,7 +68,6 @@ interface ParticularMIProduct {
   categories?: Map<number, string> | null;
   ecommerceParameters?: Map<string, string> | null;
 }
-export type MIProduct = Required<ParticularMIProduct>;
 
 export enum MIStatus {
   noneStatus = 0,

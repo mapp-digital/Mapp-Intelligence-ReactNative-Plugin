@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import * as MappIntelligence from 'react-native-mappinteligence-plugin';
-import { AppRegistry, FlatList, StyleSheet, View, Button } from 'react-native';
+import { AppRegistry, FlatList, View } from 'react-native';
 import {
   MIGender,
   type EventParameters,
@@ -9,11 +9,7 @@ import {
   type SessionParameters,
 } from '../../src/helperMethods';
 
-import {
-  MappButton,
-  MappInputText,
-  DefaultStyles,
-} from './components/MappComponents';
+import { MappButton, DefaultStyles } from './components/MappComponents';
 
 export default class ActionTrackingView extends Component {
   renderSeparator = () => {
@@ -32,55 +28,56 @@ export default class ActionTrackingView extends Component {
   getListViewItem = (item: any) => {
     switch (item.key) {
       case 'Track Action':
-        var eventDict = new Map<number, string>().set(20, 'ck20Param1');
-        var eventParamters: EventParameters = {
-          customParameters: eventDict,
-        };
-        MappIntelligence.trackAction('TestAction', eventParamters);
+        this.trackAction();
         break;
       case 'Track Custom Action':
-        var eventDict = new Map<number, string>().set(20, 'ck20Param1');
-        eventParamters = {
-          customParameters: eventDict,
-        };
-        const bithday: MIBirthday = {
-          day: 12,
-          month: 1,
-          year: 1993,
-        };
-        var customCategoriesDict = new Map<number, string>().set(
-          20,
-          "( $', /:?@=&+ !.;()-_*"
-        );
-        var userCategories: UserCategories = {
-          birthday: bithday,
-          city: 'Paris',
-          country: 'France',
-          emailReceiverId: 'testd598378532',
-          gender: MIGender.unknown,
-          customerId: 'CustomerID',
-          customCategories: customCategoriesDict,
-        };
-        var customSessionDict = new Map<number, string>().set(
-          10,
-          'sessionParam1'
-        );
-        const sessionParamters: SessionParameters = {
-          parameters: customSessionDict,
-        };
-        MappIntelligence.trackAction(
-          'TestAction',
-          eventParamters,
-          sessionParamters,
-          userCategories
-        );
-        break;
-
-      default:
+        this.trackCustomAction();
         break;
     }
   };
 
+  async trackAction() {
+    var eventDict = new Map<number, string>().set(20, 'ck20Param1');
+    var eventParamters: EventParameters = {
+      customParameters: eventDict,
+    };
+    await MappIntelligence.trackAction('TestAction', eventParamters);
+  }
+
+  async trackCustomAction() {
+    let eventDict = new Map<number, string>().set(20, 'ck20Param1');
+    let eventParamters = {
+      customParameters: eventDict,
+    };
+    const bithday: MIBirthday = {
+      day: 12,
+      month: 1,
+      year: 1993,
+    };
+    let customCategoriesDict = new Map<number, string>().set(
+      20,
+      "( $', /:?@=&+ !.;()-_*"
+    );
+    let userCategories: UserCategories = {
+      birthday: bithday,
+      city: 'Paris',
+      country: 'France',
+      emailReceiverId: 'testd598378532',
+      gender: MIGender.unknown,
+      customerId: 'CustomerID',
+      customCategories: customCategoriesDict,
+    };
+    let customSessionDict = new Map<number, string>().set(10, 'sessionParam1');
+    const sessionParamters: SessionParameters = {
+      parameters: customSessionDict,
+    };
+    await MappIntelligence.trackAction(
+      'TestAction',
+      eventParamters,
+      sessionParamters,
+      userCategories
+    );
+  }
   render() {
     return (
       <View style={DefaultStyles.sectionContainer}>
