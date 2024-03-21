@@ -132,3 +132,14 @@ export interface MediaEvent {
   eCommerceParameters?: EcommerceParameters | null;
   customParameters?: Map<string, string> | null;
 }
+
+export enum ExceptionType {
+  none = 0,
+  uncaught = 1,
+  caught = 2,
+  custom = 3,
+  all = 4,
+  uncaught_and_custom = 5,
+  uncaught_and_caught = 6,
+  custom_and_caught = 7,
+}

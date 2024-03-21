@@ -1,65 +1,64 @@
-import React, { Component } from 'react';
-import {
-  AppRegistry,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-  Alert,
-} from 'react-native';
+import React from 'react';
+import { FlatList, View } from 'react-native';
 import { DefaultStyles } from './components/Styles';
 import { MappButton } from './components/MappButton';
+import * as MappIntelligencePlugin from 'react-native-mappinteligence-plugin';
 
-export default class ExceptionTrackingView extends Component {
-  renderSeparator = () => {
-    return (
-      <View
-        // eslint-disable-next-line react-native/no-inline-styles
-        style={{
-          height: 1,
-          width: '100%',
-          backgroundColor: '#000',
-        }}
-      />
-    );
-  };
+const ExceptionTrackingView = () => {
+  const TRACK_EXCEPTION_WITH_NAME = 'Track Exception With Name';
+  const TRACK_ERROR = 'Track Error';
+
   //handling onPress action
-  getListViewItem = (item: any) => {
-    Alert.alert(item.key);
+  const getListViewItem = (item: any) => {
+    switch (item.key) {
+      case TRACK_EXCEPTION_WITH_NAME:
+        trackExceptionWithName();
+        break;
+      case TRACK_ERROR:
+        trackError();
+        break;
+    }
   };
 
-  render() {
-    return (
-      <View style={DefaultStyles.sectionContainer}>
-        <FlatList
-          data={[
-            { key: 'Track Exception With Name' },
-            { key: 'Track Error' },
-            { key: 'Uncought Error' },
-          ]}
-          renderItem={({ item }) => (
-            <MappButton
-              buttonTitle={item.key}
-              buttonOnPress={() => {
-                this.getListViewItem(item);
-              }}
-            />
-          )}
-        />
-      </View>
-    );
-  }
-}
+  const trackExceptionWithName = async () => {
+    console.log('trackExceptionWithName');
+    try {
+      const result = JSON.parse('Invalid JSON String');
+    } catch (e: any) {
+      const error = e as Error;
+      await MappIntelligencePlugin.trackExceptionWithName(
+        error.name,
+        error.message
+      );
+    }
+  };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
-  },
-});
+  const trackError = async () => {
+    console.log('trackError');
+    try {
+      const result = JSON.parse('Invalid JSON String');
+    } catch (e: any) {
+      console.log('trackError - catch block');
+      const error = e as Error;
+      await MappIntelligencePlugin.trackException(error);
+    }
+  };
 
-AppRegistry.registerComponent('ExceptionTracking', () => ExceptionTrackingView);
+  return (
+    <View style={DefaultStyles.sectionContainer}>
+      <FlatList
+        data={[{ key: TRACK_EXCEPTION_WITH_NAME }, { key: TRACK_ERROR }]}
+        renderItem={({ item }) => (
+          <MappButton
+            buttonTitle={item.key}
+            buttonOnPress={() => {
+              getListViewItem(item);
+            }}
+          />
+        )}
+      />
+    </View>
+  );
+};
+
+export default ExceptionTrackingView;

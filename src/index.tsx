@@ -3,13 +3,21 @@ import type {
   CampaignParameters,
   EcommerceParameters,
   EventParameters,
+  ExceptionType,
   MediaEvent,
-  MediaParameteres,
+  MediaParam,
   PageParameters,
   SessionParameters,
   UserCategories,
 } from './DataTypes';
-import type { isValidElement } from 'react';
+import {
+  convertCampaignParameters,
+  convertEcommerceParameters,
+  convertMediaEvent,
+  convertPageParameters,
+  convertSessionParamters,
+  convertUserCategories,
+} from './Converters';
 
 const LINKING_ERROR =
   `The package 'react-native-mappinteligence-plugin' doesn't seem to be linked. Make sure: \n\n` +
@@ -28,34 +36,74 @@ const MappIntelligencePlugin = NativeModules.MappinteligencePlugin
       }
     );
 
+/**
+ * Builds plugin with a provided configuration. After this method finishes, plugin is ready for use.
+ * @returns result if method executed succesfully or not
+ */
 export function build(): Promise<number> {
   console.log('build');
   return MappIntelligencePlugin.build();
 }
 
+/**
+ * Initialize plugin with a provided trackIds and domain
+ * @param trackIDs array of trackIds
+ * @param domain tracking domain url
+ * @returns result if method executed succesfully or not
+ */
 export function initWithConfiguration(
-  trackIDs: any,
+  trackIDs: number[],
   domain: string
 ): Promise<number> {
   console.log('initWithConfiguration');
   return MappIntelligencePlugin.initWithConfiguration(trackIDs, domain);
 }
 
+/**
+ * Set log level to define what will be logged to the console
+ * @param level log level
+ * @returns result if method executed succesfully or not
+ */
 export function setLogLevel(level: number): Promise<number> {
   console.log('setLogLevel');
   return MappIntelligencePlugin.setLogLevel(level);
 }
 
+/**
+ * Set exception log level
+ * @param level one of the predefined exception types
+ * @returns result if method executed succesfully or not
+ */
+export function setExceptionLogLevel(level: ExceptionType): Promise<number> {
+  return MappIntelligencePlugin.setExceptionLogLevel(level);
+}
+
+/**
+ * Sets interval in minutes, for periodic job to execute and send tracked requests to a server
+ * @param interval number in minutes. The minimum is 15, limited by Android specification for a worker.
+ * @returns result if method executed succesfully or not
+ */
 export function setRequestInterval(interval: number): Promise<number> {
   console.log('setRequestInterval');
   return MappIntelligencePlugin.setRequestInterval(interval);
 }
 
+/**
+ * If sets to true, request will be send in a batch (multiple records in single network call);
+ * Otherwise records are sent one record by one network call.
+ * @param enabled speciffy if batch is enabled or disabled
+ * @returns result if method executed succesfully or not
+ */
 export function setBatchSupportEnabled(enabled: boolean): Promise<number> {
   console.log('setBatchSupportEnabled');
   return MappIntelligencePlugin.setBatchSupportEnabled(enabled);
 }
 
+/**
+ *
+ * @param enabled
+ * @returns
+ */
 export function setEnableBackgroundSendout(enabled: boolean): Promise<number> {
   console.log('setEnableBackgroundSendout');
   return MappIntelligencePlugin.setEnableBackgroundSendout(enabled);
@@ -117,6 +165,7 @@ export function trackCustomPage(
     convertCampaignParameters(campaignParameters)
   );
 }
+
 export function trackPageWithCustomData(
   pageTitle: string,
   pageParameters: Map<string, string> | null
@@ -167,13 +216,13 @@ export function trackUrl(
 export function trackMedia(params: MediaEvent): Promise<number>;
 
 export function trackMedia(
-  params: Map<string, string>,
+  params: Map<MediaParam, string>,
   mediaName?: string | null,
   pageName?: string | null
 ): Promise<number>;
 
 export function trackMedia(
-  params: Map<string, string> | MediaEvent,
+  params: Map<MediaParam, string> | MediaEvent,
   mediaName?: string | null,
   pageName?: string | null
 ): Promise<number> {
@@ -184,7 +233,7 @@ export function trackMedia(
     );
   } else {
     console.log('Execute CustomMediaEvent');
-    const cp = params as Map<string, string>;
+    const cp = params as Map<MediaParam, string>;
     const customParams = cp != null ? Object.fromEntries(cp.entries()) : {};
     const name = mediaName != null ? mediaName : '';
     return MappIntelligencePlugin.trackCustomMedia(
@@ -195,18 +244,28 @@ export function trackMedia(
   }
 }
 
-// export function trackMedia(mediaEvent: MediaEvent): Promise<number> {
-//   const mediaObject = convertMediaEvent(mediaEvent);
-//   return MappIntelligencePlugin.trackMedia(mediaObject);
-// }
+export function trackException(
+  e: Error,
+  stackTrace?: string | null
+): Promise<number> {
+  return MappIntelligencePlugin.trackException(
+    e.name,
+    e.message.slice(0, 1000),
+    e.stack !== null ? e.stack?.slice(0, 1000) : stackTrace?.slice(0, 1000)
+  );
+}
 
-// export function trackCustomMedia(
-//   params: Map<string, string>,
-//   mediaName: string,
-//   pageName?: string | null
-// ): Promise<number> {
-//   return MappIntelligencePlugin.trackCustomMedia(pageName, mediaName, params);
-// }
+export function trackExceptionWithName(
+  name: string,
+  message: string,
+  stackTrace?: string | null
+): Promise<number> {
+  return MappIntelligencePlugin.trackException(
+    name,
+    message.slice(0, 1000),
+    stackTrace?.slice(0, 1000)
+  );
+}
 
 export function setEverId(everId?: String | null): Promise<number> {
   console.log('setEverId');
@@ -242,209 +301,4 @@ export function reset(): Promise<number> {
 
 export function sendRequestsAndClean(): Promise<number> {
   return MappIntelligencePlugin.sendRequestsAndClean();
-}
-
-//MARK: methods for converting objects
-function convertUserCategories(userCategories?: UserCategories | null) {
-  if (userCategories == null) {
-    return null;
-  }
-  console.log('convertUserCategories');
-  const birthday = userCategories?.birthday;
-  const categories = userCategories?.customCategories;
-
-  const userCategorisesDict: Object = {
-    birthday:
-      birthday != null
-        ? { day: birthday.day, month: birthday.month, year: birthday.year }
-        : null,
-    city: userCategories?.city,
-    country: userCategories?.country,
-    emailAddress: userCategories?.emailAddress,
-    emailReceiverId: userCategories?.emailReceiverId,
-    firstName: userCategories?.firstName,
-    gender: userCategories?.gender,
-    customerId: userCategories?.customerId,
-    lastName: userCategories?.lastName,
-    newsletterSubscribed: userCategories?.newsletterSubscribed,
-    phoneNumber: userCategories?.phoneNumber,
-    street: userCategories?.street,
-    streetNumber: userCategories?.streetNumber,
-    zipCode: userCategories?.zipCode,
-    customCategories:
-      categories != null ? Object.fromEntries(categories.entries()) : null,
-  };
-  return userCategorisesDict;
-}
-
-function convertPageParameters(
-  pageParameters?: PageParameters | null
-): Object | null {
-  console.log('convertPageParameters');
-  if (pageParameters == null) {
-    return null;
-  }
-
-  const params = pageParameters?.params;
-  const cat = pageParameters?.categories;
-
-  const page: Object = {
-    params: params != null ? Object.fromEntries(params.entries()) : {},
-    categories: cat != null ? Object.fromEntries(cat) : {},
-    searchTerm: pageParameters?.searchTerm,
-  };
-
-  return page;
-}
-
-function convertSessionParamters(
-  sessionParamaters?: SessionParameters | null
-): Object | null {
-  console.log('convertSessionParamters');
-  if (sessionParamaters == null) {
-    return null;
-  }
-  const data = sessionParamaters?.parameters;
-  return data != null ? Object.fromEntries(data.entries()) : {};
-}
-
-function convertEcommerceParameters(
-  ecommerceParameters?: EcommerceParameters | null
-): Object | null {
-  console.log('convertEcommerceParameters');
-  if (ecommerceParameters == null) {
-    return null;
-  }
-
-  let products: Object[] = [];
-  ecommerceParameters.products?.map((item) => {
-    let categories = item.categories;
-    let ecommercParams = item.ecommerceParameters;
-    products.push({
-      name: item?.name,
-      cost: item.cost,
-      quantity: item.quantity,
-      productAdvertiseID: item.productAdvertiseID,
-      productSoldOut: item.productSoldOut,
-      productVariant: item.productVariant,
-      categories:
-        categories != null ? Object.fromEntries(categories.entries()) : {},
-      ecommerceParameters:
-        ecommercParams != null
-          ? Object.fromEntries(ecommercParams.entries())
-          : {},
-    });
-  });
-
-  const customParams = ecommerceParameters.customParameters;
-
-  const ecommerce: Object = {
-    products: products,
-    status: ecommerceParameters.status,
-    currency: ecommerceParameters.currency,
-    orderID: ecommerceParameters.orderID,
-    orderValue: ecommerceParameters.orderValue,
-    returningOrNewCustomer: ecommerceParameters.returningOrNewCustomer,
-    returnValue: ecommerceParameters.returnValue,
-    cancellationValue: ecommerceParameters.cancellationValue,
-    couponValue: ecommerceParameters.couponValue,
-    paymentMethod: ecommerceParameters.paymentMethod,
-    shippingServiceProvider: ecommerceParameters.shippingServiceProvider,
-    shippingSpeed: ecommerceParameters.shippingSpeed,
-    shippingCost: ecommerceParameters.shippingCost,
-    markUp: ecommerceParameters.markUp,
-    orderStatus: ecommerceParameters.orderStatus,
-    customParameters:
-      customParams != null ? Object.fromEntries(customParams.entries()) : {},
-  };
-
-  return ecommerce;
-}
-
-function convertCampaignParameters(
-  campaignParameters?: CampaignParameters | null
-): Object | null {
-  console.log('convertCapaignParameters');
-  if (campaignParameters == null) {
-    return null;
-  }
-
-  const params = campaignParameters?.customParameters;
-
-  const campaign: Object = {
-    campaignId: campaignParameters?.campaignId,
-    action: campaignParameters?.action,
-    mediaCode: campaignParameters?.mediaCode,
-    oncePerSession: campaignParameters?.oncePerSession,
-    customParameters:
-      params != null ? Object.fromEntries(params.entries()) : {},
-  };
-  return campaign;
-}
-
-function convertEventParameters(event?: EventParameters | null): Object | null {
-  if (event == null) {
-    return null;
-  }
-
-  const customParams =
-    event.customParameters != null
-      ? Object.fromEntries(event.customParameters?.entries())
-      : null;
-
-  const eventParams: Object = {
-    customParameters: customParams,
-  };
-
-  return eventParams;
-}
-
-function convertMediaParameters(
-  mediaParam?: MediaParameteres | null
-): Object | null {
-  if (mediaParam == null) {
-    return null;
-  }
-
-  const params: Object = {
-    name: mediaParam?.name,
-    action: mediaParam?.action,
-    position: mediaParam?.position,
-    duration: mediaParam?.duration,
-    bandwith: mediaParam?.bandwith,
-    soundIsMuted: mediaParam?.soundIsMuted,
-    soundVolume: mediaParam?.soundVolume,
-    customCategories:
-      mediaParam?.customCategories != null
-        ? Object.fromEntries(mediaParam.customCategories?.entries())
-        : null,
-  };
-
-  return params;
-}
-
-function convertMediaEvent(mediaEvent?: MediaEvent | null): Object | null {
-  if (mediaEvent == null) {
-    return null;
-  }
-
-  const custom =
-    mediaEvent.customParameters != null
-      ? Object.fromEntries(mediaEvent?.customParameters?.entries())
-      : null;
-  const eCommerce = convertEcommerceParameters(mediaEvent.eCommerceParameters);
-  const session = convertSessionParamters(mediaEvent.sessionParameters);
-  const event = convertEventParameters(mediaEvent.eventParameters);
-  const mediaParams = convertMediaParameters(mediaEvent.parameters);
-
-  const data: Object = {
-    pageName: mediaEvent.pageName,
-    parameters: mediaParams,
-    eventParameters: event,
-    sessionParameters: session,
-    eCommerceParameters: eCommerce,
-    customParameters: custom,
-  };
-
-  return data;
 }
