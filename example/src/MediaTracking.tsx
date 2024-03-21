@@ -35,7 +35,7 @@ const MediaTrackingView = () => {
   };
 
   const testMedia = async () => {
-    let trackingParams: Map<string, string> = new Map<string, string>([
+    let trackingParams: Map<MediaParam, string> = new Map<MediaParam, string>([
       [MediaParam.media_position, '100'],
       [MediaParam.bandwidth, '80kbps'],
     ]);

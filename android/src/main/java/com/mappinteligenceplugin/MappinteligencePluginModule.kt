@@ -12,6 +12,7 @@ import com.facebook.react.bridge.ReadableMap
 import com.mappinteligenceplugin.mapper.CampaignParametersMapper
 import com.mappinteligenceplugin.mapper.ECommerceParametersMapper
 import com.mappinteligenceplugin.mapper.EventParametersMapper
+import com.mappinteligenceplugin.mapper.ExceptionTypeMapper
 import com.mappinteligenceplugin.mapper.MediaEventMapper
 import com.mappinteligenceplugin.mapper.PageParametersMapper
 import com.mappinteligenceplugin.mapper.SessionParametersMapper
@@ -21,9 +22,7 @@ import webtrekk.android.sdk.Logger
 import webtrekk.android.sdk.Webtrekk
 import webtrekk.android.sdk.WebtrekkConfiguration
 import webtrekk.android.sdk.events.ActionEvent
-import webtrekk.android.sdk.events.MediaEvent
 import webtrekk.android.sdk.events.PageViewEvent
-import webtrekk.android.sdk.events.eventParams.MediaParameters
 import java.util.concurrent.TimeUnit
 
 class MappinteligencePluginModule(private val reactContext: ReactApplicationContext) :
@@ -153,6 +152,17 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   fun optIn(sendData: Boolean, promise: Promise) {
     runOnPlugin(whenInitialized = {
       instance.optOut(false, sendData)
+    })
+    promise.resolve(true)
+  }
+
+  @ReactMethod
+  fun setExceptionLogLevel(exceptionLevel: Double, promise: Promise) {
+    val exceptionType = ExceptionTypeMapper(exceptionLevel).getData()
+    runOnPlugin(whenInitialized = {
+      instance.setExceptionLogLevel(exceptionType)
+    }, whenNotInitialized = {
+      configAdapter.exceptionLogLevel = exceptionType
     })
     promise.resolve(true)
   }
@@ -374,7 +384,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   ) {
     runOnPlugin(
       whenInitialized = {
-        val trackParams = params.toMap<String,String>()
+        val trackParams = params.toMap<String, String>()
         if (pageName != null) {
           instance.trackMedia(pageName, mediaName, trackParams)
         } else {
@@ -385,7 +395,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   }
 
   @ReactMethod
-  fun trackMedia(readableMap: ReadableMap?, promise: Promise){
+  fun trackMedia(readableMap: ReadableMap?, promise: Promise) {
     runOnPlugin(whenInitialized = {
       MediaEventMapper(readableMap).getData()?.let {
         instance.trackMedia(it)
@@ -393,12 +403,26 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
     })
     promise.resolve(true)
   }
+
   @ReactMethod
   fun trackUrl(url: String, mediaCode: String?, promise: Promise) {
     runOnPlugin(
       whenInitialized = {
         instance.trackUrl(Uri.parse(url), mediaCode)
       })
+    promise.resolve(true)
+  }
+
+  @ReactMethod
+  fun trackException(name: String, message: String, stacktrace: String?=null, promise: Promise) {
+    runOnPlugin(whenInitialized = {
+      Log.d("MappIntelligencePlugin", "trackException")
+      if (stacktrace.isNullOrEmpty()) {
+        instance.trackException(name, message)
+      } else {
+        instance.trackException(name, message + "\n${stacktrace}")
+      }
+    })
     promise.resolve(true)
   }
 
@@ -428,6 +452,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
       instance = Webtrekk.getInstance().apply {
         this.anonymousTracking(configAdapter.anonymousTracking)
         this.setTemporarySessionId(configAdapter.temporarySessionId)
+        this.setExceptionLogLevel(configAdapter.exceptionLogLevel)
       }
     }, whenInitialized = {})
     promise.resolve(true)

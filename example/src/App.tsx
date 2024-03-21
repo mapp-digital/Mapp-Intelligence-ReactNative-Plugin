@@ -1,9 +1,5 @@
 import * as React from 'react';
-import {
-  NavigationContainer,
-  type EventArg,
-  DefaultTheme,
-} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import * as MappIntelligence from 'react-native-mappinteligence-plugin';
@@ -15,10 +11,22 @@ import EcommerceTrackingView from './EcommerceTracking';
 import MediaTrackingView from './MediaTracking';
 import ExceptionTrackingView from './ExceptionTracking';
 import ConfigurationTrackingView from './ConfigurationTracking';
+import { ExceptionType } from '../../src/DataTypes';
+import {
+  setJSExceptionHandler,
+  type JSExceptionHandler,
+} from 'react-native-exception-handler';
 
 const Stack = createNativeStackNavigator();
-export default function App() {
+
+const errorHandler = (error: Error, isFatal: boolean) => {
+  console.log('Error thrown: ', error, error.stack);
+  MappIntelligence.trackException(error, error.stack);
+};
+
+const App = () => {
   function Home({ navigation }: { navigation: any }) {
+    setJSExceptionHandler(errorHandler, true);
     var home = new FlatListBasics({});
     initMappTracking();
     home.navigation = navigation;
@@ -39,7 +47,9 @@ export default function App() {
     await MappIntelligence.setShouldMigrate(true);
     await MappIntelligence.setSendAppVersionInEveryRequest(true);
     await MappIntelligence.setEnableBackgroundSendout(true);
+    await MappIntelligence.setExceptionLogLevel(ExceptionType.all);
     await MappIntelligence.setEnableUserMatching(false);
+
     await MappIntelligence.build();
   }
 
@@ -47,42 +57,48 @@ export default function App() {
     return new PageTrackingView({}).render();
   }
 
-  return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Home"
-        screenListeners={{
-          transitionEnd: (e) => {
-            if (e.data.closing != true) {
-              console.log(
-                'Transition end: ',
-                e.target?.substring(0, e.target?.indexOf('-'))
-              );
-            }
-          },
-        }}
-      >
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="PageTracking" component={PageTracking} />
-        <Stack.Screen name="ActionTracking" component={ActionTrackingView} />
-        <Stack.Screen
-          name="CampaignTracking"
-          component={CampaignTrackingView}
-        />
-        <Stack.Screen
-          name="EcommerceTracking"
-          component={EcommerceTrackingView}
-        />
-        <Stack.Screen name="MediaTracking" component={MediaTrackingView} />
-        <Stack.Screen
-          name="ExceptionTracking"
-          component={ExceptionTrackingView}
-        />
-        <Stack.Screen
-          name="ConfigurationTracking"
-          component={ConfigurationTrackingView}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
+  function DefaultPage() {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Home"
+          screenListeners={{
+            transitionEnd: (e) => {
+              if (e.data.closing != true) {
+                console.log(
+                  'Transition end: ',
+                  e.target?.substring(0, e.target?.indexOf('-'))
+                );
+              }
+            },
+          }}
+        >
+          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="PageTracking" component={PageTracking} />
+          <Stack.Screen name="ActionTracking" component={ActionTrackingView} />
+          <Stack.Screen
+            name="CampaignTracking"
+            component={CampaignTrackingView}
+          />
+          <Stack.Screen
+            name="EcommerceTracking"
+            component={EcommerceTrackingView}
+          />
+          <Stack.Screen name="MediaTracking" component={MediaTrackingView} />
+          <Stack.Screen
+            name="ExceptionTracking"
+            component={ExceptionTrackingView}
+          />
+          <Stack.Screen
+            name="ConfigurationTracking"
+            component={ConfigurationTrackingView}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  }
+
+  return <DefaultPage />;
+};
+
+export default App;
