@@ -13,6 +13,7 @@ import type {
 import {
   convertCampaignParameters,
   convertEcommerceParameters,
+  convertEventParameters,
   convertMediaEvent,
   convertPageParameters,
   convertSessionParamters,
