@@ -95,7 +95,7 @@ interface ParticularCampaignParameters {
 export type CampaignParameters = Required<ParticularCampaignParameters>;
 
 interface ParticularSessionParameters {
-  parameters?: Map<number, string> | string | null;
+  parameters?: Map<number, string> | null;
 }
 export type SessionParameters = Required<ParticularSessionParameters>;
 
