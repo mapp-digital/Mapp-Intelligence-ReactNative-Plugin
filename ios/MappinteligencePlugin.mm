@@ -211,28 +211,18 @@ RCT_EXPORT_METHOD(trackAction:(NSString*)name
     });
     resolve(@1);
 }
-
-//RCT_EXPORT_METHOD(trackAction:(NSString*)name
-//                                        eventParameters:(NSDictionary*)eventParameters
-//                                        sessionParamters:(NSDictionary*)sessionParamters
-//                                        userCategories:(NSDictionary*)userCategories
-//                                        ecommerceParameters:(NSDictionary*)ecommerceParameters
-//                                        campaignParameters:(NSDictionary*)campaignParameters
-//                                        resolve:(RCTPromiseResolveBlock)resolve
-//                                        reject:(RCTPromiseRejectBlock)reject)
-//{
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//         MIActionEvent* actionEvent = [[MIActionEvent alloc] initWithName:name];
-//
-//        [actionEvent setUserCategories:[self prepareUserCategories:userCategories]];
-//        [actionEvent setSessionParameters:[self prepareSessionParameters:sessionParamters]];
-//        [actionEvent setEcommerceParameters:[self prepareEcommerceParameters:ecommerceParameters]];
-//        [actionEvent setCampaignParameters:[self prepareCampaignParameters:campaignParameters]];
-//
-//        [[MappIntelligence shared] trackAction:actionEvent];
-//    });
-//    resolve(@1);
-//}
+// trackUrl(url, mediaCode)
+RCT_EXPORT_METHOD(trackUrl:(NSString*)url
+                                       mediaCode:(NSString*)mediaCode
+                                       resolve:(RCTPromiseResolveBlock)resolve
+                                       reject:(RCTPromiseRejectBlock)reject)
+{
+   dispatch_async(dispatch_get_main_queue(), ^{
+       
+       [[MappIntelligence shared] trackUrl:[[NSURL alloc] initWithString:url] withMediaCode:mediaCode];
+   });
+   resolve(@1);
+}
 
 //MARK: helper methods
 -(NSMutableDictionary*)getFromString:(NSString*)item {
