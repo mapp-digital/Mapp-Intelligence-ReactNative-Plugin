@@ -32,6 +32,11 @@ const MediaTrackingView = () => {
         livestreamExample();
         break;
     }
+
+    let params = new Map<MediaParam, string>([
+      [MediaParam.media_action, 'true'],
+    ]);
+    MappIntelligencePlugin.trackMedia(params);
   };
 
   const testMedia = async () => {
@@ -48,6 +53,7 @@ const MediaTrackingView = () => {
   };
 
   const playExample = async () => {
+    const customMediaCategories = new Map<number, string>([[20, 'mediaCat']]);
     const mediaParams: MediaParameteres = {
       name: 'Test Video',
       action: 'view',
@@ -56,7 +62,7 @@ const MediaTrackingView = () => {
       soundVolume: 6,
       soundIsMuted: false,
       bandwith: 140,
-      customCategories: new Map<number, string>([[20, 'mediaCat']]),
+      customCategories: customMediaCategories,
     };
 
     const eventParameters: EventParameters = {
@@ -103,11 +109,13 @@ const MediaTrackingView = () => {
       parameters: customSessionDict,
     };
 
+    const customParams = new Map<number, string>([[1, 'Param1']]);
+
     let mediaEvent: MediaEvent = {
       pageName: 'Playing Video Page',
       parameters: mediaParams,
       eventParameters: eventParameters,
-      customParameters: new Map<string, string>([['1', 'Param1']]),
+      customParameters: customParams,
       eCommerceParameters: ecommerceParam,
       sessionParameters: sessionParameters,
     };

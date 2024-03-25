@@ -51,7 +51,9 @@ class ECommerceParametersMapper(private val readableMap: ReadableMap?) :
       this.shippingCost = map.optDouble("shippingCost")
       this.markUp = map.optDouble("markUp")
       this.orderStatus = map.optString("orderStatus")
-      this.customParameters = map.optMap("customParameters").toMap()
+      this.customParameters = map.optMap("customParameters").toMap(keyTransform = {
+        it.toString().toInt()
+      })
     }
   }
 }
