@@ -172,7 +172,8 @@ RCT_EXPORT_METHOD(trackCustomPage:(NSString*)pageTitle
         [event setPageParameters:[self preparePageParameters:pageParameters]];
         [event setUserCategories:[self prepareUserCategories:userCategories]];
         [event setSessionParameters:[self prepareSessionParameters:sessionParamters]];
-
+        [event setEcommerceParameters:[self prepareEcommerceParameters:ecommerceParameters]];
+        [event setCampaignParameters:[self prepareCampaignParameters:campaignParameters]];
         [[MappIntelligence shared] trackPage:event];
     });
     resolve(@1);
@@ -201,41 +202,26 @@ RCT_EXPORT_METHOD(trackAction:(NSString*)name
     dispatch_async(dispatch_get_main_queue(), ^{
          MIActionEvent* actionEvent = [[MIActionEvent alloc] initWithName:name];
 
-        if (eventParameters) {
-            NSMutableDictionary* eDict = [eventParameters mutableCopy];
-             MIEventParameters* eParameters = [[MIEventParameters alloc] initWithDictionary:[self getFromString:eDict[@"parameters"]]];
-            [actionEvent setEventParameters:eParameters];
-        }
-        if (userCategories) {
-            NSMutableDictionary* userCatDict = [userCategories mutableCopy];
-            if (userCatDict[@"birthday"]) {
-                userCatDict[@"birthday"] = [self getFromString:userCategories[@"birthday"]];
-            }
-            if (userCatDict[@"birthday"]) {
-                userCatDict[@"customCategories"] = [self getFromString:userCategories[@"customCategories"]];
-            }
-            MIUserCategories* userCategoriesNew = [[MIUserCategories alloc] initWithDictionary:userCatDict];
-            [actionEvent setUserCategories:userCategoriesNew];
-        }
-        if (sessionParamters) {
-            NSMutableDictionary* sDict = [sessionParamters mutableCopy];
-            MISessionParameters* sessionParamtersObject = [[MISessionParameters alloc] initWithParameters:[self getFromString:sDict[@"parameters"]]];
-            [actionEvent setSessionParameters:sessionParamtersObject];
-        }
-
-        if (ecommerceParameters) {
-            MIEcommerceParameters* ecoParameters = [[MIEcommerceParameters alloc] initWithDictionary:ecommerceParameters];
-            [actionEvent setEcommerceParameters:ecoParameters];
-        }
-
-        if(campaignParameters) {
-            MICampaignParameters* cParamaters = [[MICampaignParameters alloc] initWithDictionary:campaignParameters];
-            [actionEvent setCampaignParameters:cParamaters];
-        }
+        [actionEvent setUserCategories:[self prepareUserCategories:userCategories]];
+        [actionEvent setSessionParameters:[self prepareSessionParameters:sessionParamters]];
+        [actionEvent setEcommerceParameters:[self prepareEcommerceParameters:ecommerceParameters]];
+        [actionEvent setCampaignParameters:[self prepareCampaignParameters:campaignParameters]];
 
         [[MappIntelligence shared] trackAction:actionEvent];
     });
     resolve(@1);
+}
+// trackUrl(url, mediaCode)
+RCT_EXPORT_METHOD(trackUrl:(NSString*)url
+                                       mediaCode:(NSString*)mediaCode
+                                       resolve:(RCTPromiseResolveBlock)resolve
+                                       reject:(RCTPromiseRejectBlock)reject)
+{
+   dispatch_async(dispatch_get_main_queue(), ^{
+       
+       [[MappIntelligence shared] trackUrl:[[NSURL alloc] initWithString:url] withMediaCode:mediaCode];
+   });
+   resolve(@1);
 }
 
 //MARK: helper methods
@@ -253,7 +239,8 @@ RCT_EXPORT_METHOD(trackAction:(NSString*)name
     if (pageParameters == NULL) {
         return NULL;
     }
-    MIPageParameters* parameter = [[MIPageParameters alloc] initWithPageParams:pageParameters[@"params"] pageCategory:pageParameters[@"categories"] search:pageParameters[@"searchTerm"]];
+    NSDictionary* pParameters = [self clearDictionaryFromNull:[pageParameters mutableCopy]];
+    MIPageParameters* parameter = [[MIPageParameters alloc] initWithPageParams:pParameters[@"params"] pageCategory:pParameters[@"categories"] search:pParameters[@"searchTerm"]];
     return parameter;
 }
 
@@ -261,7 +248,8 @@ RCT_EXPORT_METHOD(trackAction:(NSString*)name
     if (userCategories == NULL) {
         return NULL;
     }
-    MIUserCategories* userCategoriesNew = [[MIUserCategories alloc] initWithDictionary:userCategories];
+    NSDictionary* uCategories = [self clearDictionaryFromNull:[userCategories mutableCopy]];
+    MIUserCategories* userCategoriesNew = [[MIUserCategories alloc] initWithDictionary:uCategories];
     return userCategoriesNew;
 }
 
@@ -269,11 +257,49 @@ RCT_EXPORT_METHOD(trackAction:(NSString*)name
     if (sessionParamters == NULL) {
         return NULL;
     }
-    MISessionParameters* sessionParamtersObject = [[MISessionParameters alloc] initWithParameters:sessionParamters];
+    NSDictionary* sParameters = [self clearDictionaryFromNull:[sessionParamters mutableCopy]];
+    MISessionParameters* sessionParamtersObject = [[MISessionParameters alloc] initWithParameters:sParameters];
     return sessionParamtersObject;
 }
 
-//[[MappIntelligence shared] setEnableUserMatching:true];
+-(MIEcommerceParameters*)prepareEcommerceParameters:(NSDictionary*) ecommerceParamters {
+    if (ecommerceParamters == NULL) {
+        return NULL;
+    }
+    NSDictionary* eParameters = [self clearDictionaryFromNull:[ecommerceParamters mutableCopy]];
+    MIEcommerceParameters* ecommerceParamtersObject = [[MIEcommerceParameters alloc] initWithDictionary:eParameters];
+    return ecommerceParamtersObject;
+}
 
+-(MICampaignParameters*)prepareCampaignParameters:(NSDictionary*) campaignParamters {
+    if (campaignParamters == NULL) {
+        return NULL;
+    }
+    NSDictionary* cParameters = [self clearDictionaryFromNull:[campaignParamters mutableCopy]];
+    MICampaignParameters* campaignParamtersObject = [[MICampaignParameters alloc] initWithDictionary:cParameters];
+    return campaignParamtersObject;
+}
+
+- (NSMutableDictionary *)clearDictionaryFromNull:(NSMutableDictionary *)dictionary {
+    NSArray *keysToRemove = [NSArray array];
+
+    for (NSString *key in dictionary.allKeys) {
+        if ([dictionary[key] isKindOfClass:[NSDictionary class]]) {
+            // Recursively clear nested dictionaries
+            NSMutableDictionary *nestedDict = [self clearDictionaryFromNull:dictionary[key]];
+            if (nestedDict == nil) {
+                keysToRemove = [keysToRemove arrayByAddingObject:key];
+            } else {
+                dictionary[key] = nestedDict;
+            }
+        } else if ([dictionary[key] isEqual:[NSNull null]]) {
+            keysToRemove = [keysToRemove arrayByAddingObject:key];
+        }
+    }
+
+    [dictionary removeObjectsForKeys:keysToRemove];
+
+    return dictionary;
+}
 
 @end

@@ -13,6 +13,7 @@ import type {
 import {
   convertCampaignParameters,
   convertEcommerceParameters,
+  convertEventParameters,
   convertMediaEvent,
   convertPageParameters,
   convertSessionParamters,
@@ -185,14 +186,25 @@ export function trackAction(
   campaignParameters?: CampaignParameters | null
 ): Promise<number> {
   console.log('trackAction');
-  return MappIntelligencePlugin.trackAction(
-    name,
-    eventParameters,
-    sessionParamters,
-    userCategories,
-    ecommerceParameters,
-    campaignParameters
-  );
+  if (Platform.OS === 'ios') {
+    return MappIntelligencePlugin.trackAction(
+      name,
+      convertEventParameters(eventParameters),
+      convertSessionParamters(sessionParamters),
+      convertUserCategories(userCategories),
+      convertEcommerceParameters(ecommerceParameters),
+      convertCampaignParameters(campaignParameters)
+    );
+  } else {
+    return MappIntelligencePlugin.trackAction(
+      name,
+      eventParameters,
+      sessionParamters,
+      userCategories,
+      ecommerceParameters,
+      campaignParameters
+    );
+  }
 }
 
 export function trackUrl(
