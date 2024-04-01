@@ -211,18 +211,44 @@ RCT_EXPORT_METHOD(trackAction:(NSString*)name
     });
     resolve(@1);
 }
-// trackUrl(url, mediaCode)
+
 RCT_EXPORT_METHOD(trackUrl:(NSString*)url
                                        mediaCode:(NSString*)mediaCode
                                        resolve:(RCTPromiseResolveBlock)resolve
                                        reject:(RCTPromiseRejectBlock)reject)
 {
    dispatch_async(dispatch_get_main_queue(), ^{
-       
+
        [[MappIntelligence shared] trackUrl:[[NSURL alloc] initWithString:url] withMediaCode:mediaCode];
    });
    resolve(@1);
 }
+
+#define key_name @"name"
+#define key_action @"action"
+#define key_bandwith @"bandwith"
+#define key_duration @"duration"
+#define key_position @"position"
+#define key_sound_is_muted @"soundIsMuted"
+#define key_sound_volume @"soundVolume"
+#define key_custom_categories @"customCategories"
+
+RCT_EXPORT_METHOD(trackCustomMedia:(NSString*)pageName
+                                       name:(NSString*)name
+                                       customParams:(NSDictionary*)customParams
+                                       resolve:(RCTPromiseResolveBlock)resolve
+                                       reject:(RCTPromiseRejectBlock)reject)
+{
+   dispatch_async(dispatch_get_main_queue(), ^{
+       MIMediaParameters* mParameters = [self prepareMediaParameters:customParams];
+       mParameters.name = name;
+       MIMediaEvent* mediaEvent = [[MIMediaEvent alloc] initWithPageName:pageName parameters:mParameters];
+               [[MappIntelligence shared] trackMedia:mediaEvent];
+       [[MappIntelligence shared] trackMedia:mediaEvent];
+   });
+   resolve(@1);
+}
+
 
 //MARK: helper methods
 -(NSMutableDictionary*)getFromString:(NSString*)item {
@@ -242,6 +268,57 @@ RCT_EXPORT_METHOD(trackUrl:(NSString*)url
     NSDictionary* pParameters = [self clearDictionaryFromNull:[pageParameters mutableCopy]];
     MIPageParameters* parameter = [[MIPageParameters alloc] initWithPageParams:pParameters[@"params"] pageCategory:pParameters[@"categories"] search:pParameters[@"searchTerm"]];
     return parameter;
+}
+
+-(MIMediaParameters*)prepareMediaParameters:(NSDictionary*) mediaParameters {
+    if (mediaParameters == NULL) {
+        return NULL;
+    }
+    NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
+
+    for (NSString *paramKey in mediaParameters.allKeys) {
+         id paramValue = mediaParameters[paramKey];
+         NSString *key = nil;
+        
+         if ([paramKey isEqualToString:@"mk"]) {
+             key = key_action;
+         } else if ([paramKey isEqualToString:@"mt1"]) {
+             paramValue = [self extractFirstNumberFromString:mediaParameters[paramKey]];
+             key = key_position;
+         } else if ([paramKey isEqualToString:@"mt2"]) {
+             paramValue = [self extractFirstNumberFromString:mediaParameters[paramKey]];
+             key = key_duration;
+         } else if ([paramKey isEqualToString:@"mut"]) {
+             paramValue = [self extractFirstNumberFromString:mediaParameters[paramKey]];
+             key = key_sound_is_muted;
+         } else if ([paramKey isEqualToString:@"vol"]) {
+             paramValue = [self extractFirstNumberFromString:mediaParameters[paramKey]];
+             key = key_sound_volume;
+         } else if ([paramKey isEqualToString:@"bw"]) {
+             paramValue = [self extractFirstNumberFromString:mediaParameters[paramKey]];
+             key = key_bandwith;
+         }
+
+         if (key) {
+             [dict setObject:paramValue forKey:key];
+         }
+     }
+    MIMediaParameters* mParameters = [[MIMediaParameters alloc] initWithDictionary:[self clearDictionaryFromNull:dict]];
+    return mParameters;
+}
+
+- (NSNumber *)extractFirstNumberFromString:(NSString *)inputString {
+    NSScanner *scanner = [NSScanner scannerWithString:inputString];
+    NSCharacterSet *numbers = [NSCharacterSet decimalDigitCharacterSet];
+    BOOL found = [scanner scanCharactersFromSet:numbers intoString:nil];
+    
+    if (found) {
+        NSInteger extractedNumber;
+        [scanner scanInteger:&extractedNumber];
+        return @(extractedNumber);
+    } else {
+        return nil;
+    }
 }
 
 -(MIUserCategories*)prepareUserCategories:(NSDictionary*) userCategories {
