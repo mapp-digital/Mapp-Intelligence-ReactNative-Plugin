@@ -113,6 +113,7 @@ export enum MediaParam {
   mute = 'mut',
   name = 'mi',
 }
+
 export interface MediaParameteres {
   name: string;
   action: string;
@@ -130,7 +131,7 @@ export interface MediaEvent {
   eventParameters?: EventParameters | null;
   sessionParameters?: SessionParameters | null;
   eCommerceParameters?: EcommerceParameters | null;
-  customParameters?: Map<string, string> | null;
+  customParameters?: Map<number, string> | null;
 }
 
 export enum ExceptionType {

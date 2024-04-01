@@ -2,42 +2,38 @@ package com.mappinteligenceplugin.mapper
 
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
-import com.facebook.react.bridge.ReadableType
 
 object Util {
-  inline fun <reified K, reified V> ReadableMap?.toMap(): Map<K, V> {
-    val map = mutableMapOf<K, V>()
-    this?.entryIterator?.forEach {
-      val key = (it.key as? K)
-      val value = it.value as? V
-
-      if (key is K && value is V) {
-        map[key] = value
-      }
-    }
-    return map
-  }
-
-//  inline fun <K, V> ReadableMap?.toMap(): Map<K, V> {
+//  inline fun <reified K, reified V> ReadableMap?.toMap(): Map<K, V> {
 //    val map = mutableMapOf<K, V>()
-//    val iterator = this?.keySetIterator() ?: return map
+//    this?.entryIterator?.forEach {
+//      val key = it.key as K
+//      val value = it.value as? V
 //
-//    while (iterator.hasNextKey()) {
-//      val key = iterator.nextKey()
-//      val type = this.getType(key)
-//
-//      when (type) {
-//        ReadableType.Null -> continue
-//        ReadableType.Boolean -> map[key as K] = this.optBoolean(key) as V
-//        ReadableType.Number -> map[key as K] = this.optInt(key) as V
-//        ReadableType.String -> map[key as K] = this.optString(key) as V
-//        ReadableType.Map -> map[key as K] = this.optMap(key) as V
-//        ReadableType.Array -> map[key as K] = this.optArray(key) as V
+//      if (key is K && value is V) {
+//        map[key] = value
 //      }
 //    }
-//
 //    return map
 //  }
+
+  inline fun <K, V> ReadableMap?.toMap(
+    keyTransform: (k: Any) -> K, valueTransform: (v: String?) -> V? = { (it as V) }
+  ): Map<K, V> {
+    val map = mutableMapOf<K, V>()
+    val iterator = this?.keySetIterator() ?: return map
+
+    while (iterator.hasNextKey()) {
+      val key = iterator.nextKey()
+      val keyItem = keyTransform(key)
+      val valueItem = valueTransform(this.getString(key))
+      valueItem?.let {
+        map[keyItem] = it
+      }
+    }
+
+    return map
+  }
 
   fun ReadableMap?.optDouble(key: String?): Double? {
     if (this == null || key == null || !this.hasKey(key)) return null
@@ -61,7 +57,7 @@ object Util {
   fun ReadableMap?.optInt(key: String?): Int {
     if (this == null || key == null || !this.hasKey(key)) return 0
     return try {
-      this.getInt(key)
+      this.getDouble(key).toBigDecimal().toInt()
     } catch (ignored: Exception) {
       0
     }

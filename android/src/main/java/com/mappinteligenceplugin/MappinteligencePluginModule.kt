@@ -307,7 +307,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   @ReactMethod
   fun trackPageWithCustomData(params: ReadableMap?, pageTitle: String, promise: Promise) {
     runOnPlugin(whenInitialized = {
-      instance.trackCustomPage(pageTitle, params.toMap<String, String>())
+      instance.trackCustomPage(pageTitle, params.toMap(keyTransform = {it.toString()}))
     })
     promise.resolve(true)
   }
@@ -329,12 +329,6 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
     promise.resolve(true)
   }
 
-  /*  name: string,
-    eventParameters?: EventParameters | null,
-    sessionParamters?: SessionParameters | null,
-    userCategories?: UserCategories | null,
-    ecommerceParameters?: EcommerceParameters | null,
-    campaignParameters?: CampaignParameters | null*/
   @ReactMethod
   fun trackAction(
     name: String,
@@ -384,7 +378,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   ) {
     runOnPlugin(
       whenInitialized = {
-        val trackParams = params.toMap<String, String>()
+        val trackParams = params.toMap(keyTransform={it.toString()},valueTransform={it.toString()})
         if (pageName != null) {
           instance.trackMedia(pageName, mediaName, trackParams)
         } else {

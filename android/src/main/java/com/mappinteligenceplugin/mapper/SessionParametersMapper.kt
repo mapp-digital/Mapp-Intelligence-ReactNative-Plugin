@@ -1,7 +1,6 @@
 package com.mappinteligenceplugin.mapper
 
 import com.facebook.react.bridge.ReadableMap
-import com.mappinteligenceplugin.mapper.Util.optMap
 import com.mappinteligenceplugin.mapper.Util.toMap
 import webtrekk.android.sdk.events.eventParams.SessionParameters
 
@@ -9,7 +8,9 @@ class SessionParametersMapper(private val readableMap: ReadableMap?) : Mapper<Se
   override fun getData(): SessionParameters? {
     val map = readableMap ?: return null
     return SessionParameters().apply {
-      this.parameters=map.toMap()
+      this.parameters = map.toMap(keyTransform = {
+        it.toString().toInt()
+      })
     }
   }
 }

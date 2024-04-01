@@ -9,7 +9,9 @@ class EventParametersMapper(private val readableMap: ReadableMap?) : Mapper<Even
   override fun getData(): EventParameters? {
     val map = readableMap ?: return null
     return EventParameters().apply {
-      this.customParameters = map.optMap("customParameters").toMap()
+      this.customParameters = map.optMap("customParameters").toMap(keyTransform = {
+        it.toString().toInt()
+      })
     }
   }
 }

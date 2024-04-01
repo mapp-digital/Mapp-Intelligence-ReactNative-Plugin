@@ -12,8 +12,12 @@ class PageParametersMapper(private val readableMap: ReadableMap?) : Mapper<PageP
 
     return PageParameters().apply {
       this.search = map.optString("searchTerm") ?: ""
-      this.parameters = map.optMap("params").toMap()
-      this.pageCategory = map.optMap("categories").toMap()
+      this.parameters = map.optMap("params").toMap(keyTransform = {
+        it.toString().toInt()
+      })
+      this.pageCategory = map.optMap("categories").toMap(keyTransform = {
+        it.toString().toInt()
+      })
     }
   }
 }

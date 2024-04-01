@@ -18,8 +18,12 @@ class ProductMapper(private val readableMap: ReadableMap?) : Mapper<ProductParam
       this.productAdvertiseID=map.optDouble("productAdvertiseID")
       this.productSoldOut=map.optBoolean("productSoldOut")
       this.productVariant=map.optString("productVariant")
-      this.categories=map.optMap("categories").toMap()
-      this.ecommerceParameters=map.optMap("ecommerceParameters").toMap()
+      this.categories=map.optMap("categories").toMap(keyTransform = {
+        it.toString().toInt()
+      })
+      this.ecommerceParameters=map.optMap("ecommerceParameters").toMap(keyTransform = {
+        it.toString().toInt()
+      })
     }
   }
 }

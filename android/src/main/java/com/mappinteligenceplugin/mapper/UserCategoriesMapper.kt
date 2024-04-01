@@ -41,7 +41,9 @@ class UserCategoriesMapper(private val readableMap: ReadableMap?) : Mapper<UserC
       this.street = map.optString("street")
       this.streetNumber = map.optString("streetNumber")
       this.zipCode = map.optString("zipCode")
-      this.customCategories = map.optMap("customCategories").toMap()
+      this.customCategories = map.optMap("customCategories").toMap(keyTransform = {
+        it.toString().toInt()
+      })
     }
   }
 }

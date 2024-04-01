@@ -20,7 +20,9 @@ class CampaignParametersMapper(private val readableMap: ReadableMap?) : Mapper<C
       this.action = action
       this.mediaCode = mediaCode
       this.oncePerSession = oncePerSession
-      this.customParameters = map.getMap("customParameters").toMap()
+      this.customParameters = map.getMap("customParameters").toMap(keyTransform = {
+        it.toString().toInt()
+      })
     }
   }
 }
