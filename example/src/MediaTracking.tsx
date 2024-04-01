@@ -1,5 +1,6 @@
 import React from 'react';
 import { FlatList, View, SafeAreaView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { DefaultStyles } from './components/Styles';
 import { MappButton } from './components/MappButton';
 import * as MappIntelligencePlugin from 'react-native-mappinteligence-plugin';
@@ -14,11 +15,12 @@ import {
   type SessionParameters,
 } from '../../src/DataTypes';
 
-const MediaTrackingView = () => {
+function MediaTrackingView(props: { navigation: any }) {
   const TEST_MEDIA = 'Test Media';
   const PLAY_EXAMPLE = 'Play Example';
   const LIVE_STREAM_EXAMPLE = 'Live Stream Example';
 
+  //const navigation = useNavigation();
   //handling onPress action
   const getListViewItem = (item: any) => {
     switch (item.key) {
@@ -40,16 +42,17 @@ const MediaTrackingView = () => {
   };
 
   const testMedia = async () => {
-    let trackingParams: Map<MediaParam, string> = new Map<MediaParam, string>([
-      [MediaParam.media_position, '100'],
-      [MediaParam.bandwidth, '80kbps'],
-    ]);
+    // let trackingParams: Map<MediaParam, string> = new Map<MediaParam, string>([
+    //   [MediaParam.media_position, '100'],
+    //   [MediaParam.bandwidth, '80kbps'],
+    // ]);
 
-    await MappIntelligencePlugin.trackMedia(
-      trackingParams,
-      'Bunny 3gp',
-      'Media Tracking'
-    );
+    // await MappIntelligencePlugin.trackMedia(
+    //   trackingParams,
+    //   'Bunny 3gp',
+    //   'Media Tracking'
+    // );
+    props.navigation.navigate('VideoPlayer');
   };
 
   const playExample = async () => {
@@ -158,6 +161,6 @@ const MediaTrackingView = () => {
       </View>
     </SafeAreaView>
   );
-};
+}
 
 export default MediaTrackingView;

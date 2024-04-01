@@ -186,25 +186,14 @@ export function trackAction(
   campaignParameters?: CampaignParameters | null
 ): Promise<number> {
   console.log('trackAction');
-  if (Platform.OS === 'ios') {
-    return MappIntelligencePlugin.trackAction(
-      name,
-      convertEventParameters(eventParameters),
-      convertSessionParamters(sessionParamters),
-      convertUserCategories(userCategories),
-      convertEcommerceParameters(ecommerceParameters),
-      convertCampaignParameters(campaignParameters)
-    );
-  } else {
-    return MappIntelligencePlugin.trackAction(
-      name,
-      eventParameters,
-      sessionParamters,
-      userCategories,
-      ecommerceParameters,
-      campaignParameters
-    );
-  }
+  return MappIntelligencePlugin.trackAction(
+    name,
+    convertEventParameters(eventParameters),
+    convertSessionParamters(sessionParamters),
+    convertUserCategories(userCategories),
+    convertEcommerceParameters(ecommerceParameters),
+    convertCampaignParameters(campaignParameters)
+  );
 }
 
 export function trackUrl(
