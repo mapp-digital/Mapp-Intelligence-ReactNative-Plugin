@@ -226,6 +226,7 @@ export function trackMedia(
     const cp = params as Map<MediaParam, string>;
     const customParams = cp != null ? Object.fromEntries(cp.entries()) : {};
     const name = mediaName != null ? mediaName : '';
+
     return MappIntelligencePlugin.trackCustomMedia(
       pageName,
       name,
@@ -240,7 +241,7 @@ export function trackException(
 ): Promise<number> {
   return MappIntelligencePlugin.trackException(
     e.name,
-    e.message.slice(0, 1000),
+    e.message?.slice(0, 1000),
     e.stack !== null ? e.stack?.slice(0, 1000) : stackTrace?.slice(0, 1000)
   );
 }

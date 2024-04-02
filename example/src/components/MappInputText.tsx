@@ -7,6 +7,7 @@ import {
   View,
   type StyleProp,
   type ColorValue,
+  type InputModeOptions,
 } from 'react-native';
 import { DefaultStyles } from './Styles';
 export const MappInputText = (props: {
@@ -18,20 +19,22 @@ export const MappInputText = (props: {
   onValueChanged: (newValue: string) => void | null;
   onClick?: (value: string) => void;
   disableWhenEmpty?: boolean | false;
+  keyboardMode?: InputModeOptions | 'text' | null;
 }) => {
-  const [inputValue, setInputValue] = useState(props.textValue);
+  //const [inputValue, setInputValue] = useState(props.textValue);
   return (
     <View style={DefaultStyles.sectionTextRow}>
       <TextInput
         style={{ flex: 1 }}
         onChangeText={(value) => {
-          setInputValue(value);
+          //setInputValue(value);
           if (props.onValueChanged) {
             props.onValueChanged(value);
           }
         }}
         placeholder={props.hintValue}
-        value={inputValue}
+        value={props.textValue}
+        inputMode={props.keyboardMode ?? 'text'}
       />
       <View style={{ margin: 0 }}>
         <TouchableOpacity

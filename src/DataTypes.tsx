@@ -144,3 +144,13 @@ export enum ExceptionType {
   uncaught_and_caught = 6,
   custom_and_caught = 7,
 }
+
+export enum MediaAction {
+  init = 'init',
+  play = 'play',
+  pause = 'pause',
+  stop = 'stop',
+  seek = 'seek',
+  pos = 'pos',
+  eof = 'eof',
+}

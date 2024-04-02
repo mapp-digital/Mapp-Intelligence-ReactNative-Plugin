@@ -19,6 +19,7 @@ function MediaTrackingView(props: { navigation: any }) {
   const TEST_MEDIA = 'Test Media';
   const PLAY_EXAMPLE = 'Play Example';
   const LIVE_STREAM_EXAMPLE = 'Live Stream Example';
+  const MANUAL_MEDIA_TRACKING = 'Manual Media Tracking';
 
   //const navigation = useNavigation();
   //handling onPress action
@@ -33,12 +34,10 @@ function MediaTrackingView(props: { navigation: any }) {
       case LIVE_STREAM_EXAMPLE:
         livestreamExample();
         break;
+      case MANUAL_MEDIA_TRACKING:
+        manualMediaTracking();
+        break;
     }
-
-    let params = new Map<MediaParam, string>([
-      [MediaParam.media_action, 'true'],
-    ]);
-    MappIntelligencePlugin.trackMedia(params);
   };
 
   const testMedia = async () => {
@@ -140,6 +139,10 @@ function MediaTrackingView(props: { navigation: any }) {
     await MappIntelligencePlugin.trackMedia(mediaEvent);
   };
 
+  const manualMediaTracking = async () => {
+    props.navigation.navigate('ManualMediaTracking');
+  };
+
   return (
     <SafeAreaView>
       <View style={DefaultStyles.sectionContainer}>
@@ -148,6 +151,7 @@ function MediaTrackingView(props: { navigation: any }) {
             { key: TEST_MEDIA },
             { key: PLAY_EXAMPLE },
             { key: LIVE_STREAM_EXAMPLE },
+            { key: MANUAL_MEDIA_TRACKING },
           ]}
           renderItem={({ item }) => (
             <MappButton
