@@ -16,6 +16,7 @@ import {
   setJSExceptionHandler,
   type JSExceptionHandler,
 } from 'react-native-exception-handler';
+import VideoPlayer from './VideoPlayer';
 
 const Stack = createNativeStackNavigator();
 
@@ -93,6 +94,7 @@ const App = () => {
             name="ConfigurationTracking"
             component={ConfigurationTrackingView}
           />
+          <Stack.Screen name="VideoPlayer" component={VideoPlayer} />
         </Stack.Navigator>
       </NavigationContainer>
     );

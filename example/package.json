@@ -18,6 +18,7 @@
     "react-native-exception-handler": "^2.10.10",
     "react-native-safe-area-context": "^4.9.0",
     "react-native-screens": "^3.29.0",
+    "react-native-video": "beta",
     "react-navigation": "^5.0.0"
   },
   "devDependencies": {
