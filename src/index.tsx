@@ -213,14 +213,14 @@ export function trackUrl(
 ): Promise<number> {
   return MappIntelligencePlugin.trackUrl(url, mediaCode);
 }
+//TODO Semsudin see if you need it?
+//export function trackMedia(params: MediaEvent): Promise<number>;
 
-export function trackMedia(params: MediaEvent): Promise<number>;
-
-export function trackMedia(
-  params: Map<MediaParam, string>,
-  mediaName?: string | null,
-  pageName?: string | null
-): Promise<number>;
+// export function trackMedia(
+//   params: Map<MediaParam, string>,
+//   mediaName?: string | null,
+//   pageName?: string | null
+// ): Promise<number>;
 
 export function trackMedia(
   params: Map<MediaParam, string> | MediaEvent,
