@@ -201,7 +201,7 @@ RCT_EXPORT_METHOD(trackAction:(NSString*)name
 {
     dispatch_async(dispatch_get_main_queue(), ^{
          MIActionEvent* actionEvent = [[MIActionEvent alloc] initWithName:name];
-
+        [actionEvent setEventParameters:[self prepareEventParamters:eventParameters]];
         [actionEvent setUserCategories:[self prepareUserCategories:userCategories]];
         [actionEvent setSessionParameters:[self prepareSessionParameters:sessionParamters]];
         [actionEvent setEcommerceParameters:[self prepareEcommerceParameters:ecommerceParameters]];
@@ -243,7 +243,26 @@ RCT_EXPORT_METHOD(trackCustomMedia:(NSString*)pageName
        MIMediaParameters* mParameters = [self prepareMediaParameters:customParams];
        mParameters.name = name;
        MIMediaEvent* mediaEvent = [[MIMediaEvent alloc] initWithPageName:pageName parameters:mParameters];
-               [[MappIntelligence shared] trackMedia:mediaEvent];
+       [[MappIntelligence shared] trackMedia:mediaEvent];
+   });
+   resolve(@1);
+}
+
+RCT_EXPORT_METHOD(trackMedia:(NSDictionary*)mediaEventDictionary
+                                       resolve:(RCTPromiseResolveBlock)resolve
+                                       reject:(RCTPromiseRejectBlock)reject)
+{
+   dispatch_async(dispatch_get_main_queue(), ^{
+       if(!mediaEventDictionary[@"parameters"]) {
+           NSLog(@"Media event must have page name");
+       }
+       MIMediaParameters* mParameters = [self prepareMediaParameters:mediaEventDictionary[@"parameters"]];
+       MIMediaEvent* mediaEvent = [[MIMediaEvent alloc] initWithPageName:mediaEventDictionary[@"parameters"][@"name"] parameters:mParameters];
+       [mediaEvent setEventParameters:[self prepareEventParamters:mediaEventDictionary[@"eventParameters"]]];
+       [mediaEvent setPageName:mediaEventDictionary[@"pageName"]];
+       [mediaEvent setSessionParameters:[self prepareSessionParameters:mediaEventDictionary[@"sessionParameters"]]];
+       [mediaEvent setEcommerceParameters:[self prepareEcommerceParameters:mediaEventDictionary[@"eCommerceParameters"]]];
+       
        [[MappIntelligence shared] trackMedia:mediaEvent];
    });
    resolve(@1);
@@ -273,6 +292,10 @@ RCT_EXPORT_METHOD(trackCustomMedia:(NSString*)pageName
 -(MIMediaParameters*)prepareMediaParameters:(NSDictionary*) mediaParameters {
     if (mediaParameters == NULL) {
         return NULL;
+    }
+    MIMediaParameters* testparams = [[MIMediaParameters alloc] initWithDictionary:mediaParameters];
+    if(testparams) {
+        return testparams;
     }
     NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
 
@@ -321,8 +344,20 @@ RCT_EXPORT_METHOD(trackCustomMedia:(NSString*)pageName
     }
 }
 
+-(MIEventParameters*)prepareEventParamters:(NSDictionary*) eventParameters {
+    if (eventParameters == NULL || eventParameters == [NSNull null]) {
+        return NULL;
+    }
+    NSDictionary* eParameters = [self clearDictionaryFromNull:[eventParameters mutableCopy]];
+    //this is difference from Android
+    id value = [eParameters objectForKey:@"customParameters"];
+    [eParameters setValue:value forKey:@"parameters"];
+    MIEventParameters* eventParamtersNew = [[MIEventParameters alloc] initWithDictionary:eParameters];
+    return eventParamtersNew;
+}
+
 -(MIUserCategories*)prepareUserCategories:(NSDictionary*) userCategories {
-    if (userCategories == NULL) {
+    if (userCategories == NULL || userCategories == [NSNull null]) {
         return NULL;
     }
     NSDictionary* uCategories = [self clearDictionaryFromNull:[userCategories mutableCopy]];
@@ -331,7 +366,7 @@ RCT_EXPORT_METHOD(trackCustomMedia:(NSString*)pageName
 }
 
 -(MISessionParameters*)prepareSessionParameters:(NSDictionary*) sessionParamters {
-    if (sessionParamters == NULL) {
+    if (sessionParamters == NULL || sessionParamters == [NSNull null]) {
         return NULL;
     }
     NSDictionary* sParameters = [self clearDictionaryFromNull:[sessionParamters mutableCopy]];
@@ -340,7 +375,7 @@ RCT_EXPORT_METHOD(trackCustomMedia:(NSString*)pageName
 }
 
 -(MIEcommerceParameters*)prepareEcommerceParameters:(NSDictionary*) ecommerceParamters {
-    if (ecommerceParamters == NULL) {
+    if (ecommerceParamters == NULL || ecommerceParamters == [NSNull null]) {
         return NULL;
     }
     NSDictionary* eParameters = [self clearDictionaryFromNull:[ecommerceParamters mutableCopy]];
@@ -349,7 +384,7 @@ RCT_EXPORT_METHOD(trackCustomMedia:(NSString*)pageName
 }
 
 -(MICampaignParameters*)prepareCampaignParameters:(NSDictionary*) campaignParamters {
-    if (campaignParamters == NULL) {
+    if (campaignParamters == NULL || campaignParamters == [NSNull null]) {
         return NULL;
     }
     NSDictionary* cParameters = [self clearDictionaryFromNull:[campaignParamters mutableCopy]];

@@ -370,25 +370,6 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   }
 
   @ReactMethod
-  fun trackCustomMedia(
-    pageName: String?,
-    mediaName: String,
-    params: ReadableMap,
-    promise: Promise
-  ) {
-    runOnPlugin(
-      whenInitialized = {
-        val trackParams = params.toMap(keyTransform={it.toString()},valueTransform={it.toString()})
-        if (pageName != null) {
-          instance.trackMedia(pageName, mediaName, trackParams)
-        } else {
-          instance.trackMedia(mediaName, trackParams)
-        }
-      })
-    promise.resolve(true)
-  }
-
-  @ReactMethod
   fun trackMedia(readableMap: ReadableMap?, promise: Promise) {
     runOnPlugin(whenInitialized = {
       MediaEventMapper(readableMap).getData()?.let {

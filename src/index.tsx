@@ -203,36 +203,11 @@ export function trackUrl(
   return MappIntelligencePlugin.trackUrl(url, mediaCode);
 }
 
-export function trackMedia(params: MediaEvent): Promise<number>;
-
-export function trackMedia(
-  params: Map<MediaParam, string>,
-  mediaName?: string | null,
-  pageName?: string | null
-): Promise<number>;
-
-export function trackMedia(
-  params: Map<MediaParam, string> | MediaEvent,
-  mediaName?: string | null,
-  pageName?: string | null
-): Promise<number> {
-  if ('pageName' in params) {
-    console.log('Execute MediaEvent');
-    return MappIntelligencePlugin.trackMedia(
-      convertMediaEvent(params as MediaEvent)
-    );
-  } else {
-    console.log('Execute CustomMediaEvent');
-    const cp = params as Map<MediaParam, string>;
-    const customParams = cp != null ? Object.fromEntries(cp.entries()) : {};
-    const name = mediaName != null ? mediaName : '';
-
-    return MappIntelligencePlugin.trackCustomMedia(
-      pageName,
-      name,
-      customParams
-    );
-  }
+export function trackMedia(mediaEvent: MediaEvent): Promise<number> {
+  console.log('Execute MediaEvent');
+  return MappIntelligencePlugin.trackMedia(
+    convertMediaEvent(mediaEvent as MediaEvent)
+  );
 }
 
 export function trackException(

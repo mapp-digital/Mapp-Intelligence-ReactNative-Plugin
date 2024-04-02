@@ -7,7 +7,6 @@ import { MappSwitch } from './components/MappSwitch';
 import { MappButton } from './components/MappButton';
 import {
   MediaAction,
-  MediaParam,
   type MediaEvent,
   type MediaParameteres,
   type SessionParameters,
@@ -39,23 +38,8 @@ const ManualMediaTracking = () => {
     const dur = parseFloat(duration);
     return dur;
   };
-  const onAction1 = (action: MediaAction) => {
-    console.log('Action: ', action.valueOf());
-    const params = new Map<MediaParam, string>([
-      [MediaParam.media_action, action.valueOf()],
-      [MediaParam.media_position, getPosition().toString()],
-      [MediaParam.media_duration, getDuration().toString()],
-      [MediaParam.name, mediaName.toString()],
-    ]);
 
-    MappIntelligencePlugin.trackMedia(
-      params,
-      mediaName,
-      'Manual Media Tracking'
-    );
-  };
-
-  const onAction2 = (action: MediaAction) => {
+  const onAction = (action: MediaAction) => {
     console.log('Action: ', action.valueOf());
     const customMediaCategories = new Map<number, string>([[20, 'mediaCat']]);
     const mediaParams: MediaParameteres = {
@@ -181,43 +165,43 @@ const ManualMediaTracking = () => {
           <MappButton
             buttonTitle={'INIT'}
             buttonOnPress={() => {
-              onAction1(MediaAction.init);
+              onAction(MediaAction.init);
             }}
           />
           <MappButton
             buttonTitle={'PLAY'}
             buttonOnPress={() => {
-              onAction2(MediaAction.play);
+              onAction(MediaAction.play);
             }}
           />
           <MappButton
             buttonTitle={'PAUSE'}
             buttonOnPress={() => {
-              onAction1(MediaAction.pause);
+              onAction(MediaAction.pause);
             }}
           />
           <MappButton
             buttonTitle={'STOP'}
             buttonOnPress={() => {
-              onAction2(MediaAction.stop);
+              onAction(MediaAction.stop);
             }}
           />
           <MappButton
             buttonTitle={'POSITION'}
             buttonOnPress={() => {
-              onAction1(MediaAction.pos);
+              onAction(MediaAction.pos);
             }}
           />
           <MappButton
             buttonTitle={'SEEK'}
             buttonOnPress={() => {
-              onAction2(MediaAction.seek);
+              onAction(MediaAction.seek);
             }}
           />
           <MappButton
             buttonTitle={'EOF'}
             buttonOnPress={() => {
-              onAction1(MediaAction.eof);
+              onAction(MediaAction.eof);
             }}
           />
         </ScrollView>
