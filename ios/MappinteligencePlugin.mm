@@ -46,6 +46,16 @@ RCT_EXPORT_METHOD(setLogLevel:(NSInteger)level
     resolve(@1);
 }
 
+RCT_EXPORT_METHOD(setExceptionLogLevel:(NSInteger)level
+                                        resolve:(RCTPromiseResolveBlock)resolve
+                                        reject:(RCTPromiseRejectBlock)reject)
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[MappIntelligence shared] enableCrashTracking:(exceptionType)(level + 1)];
+    });
+    resolve(@1);
+}
+
 RCT_EXPORT_METHOD(setRequestInterval:(NSInteger)interval
                                         resolve:(RCTPromiseResolveBlock)resolve
                                         reject:(RCTPromiseRejectBlock)reject)
@@ -262,8 +272,33 @@ RCT_EXPORT_METHOD(trackMedia:(NSDictionary*)mediaEventDictionary
        [mediaEvent setPageName:mediaEventDictionary[@"pageName"]];
        [mediaEvent setSessionParameters:[self prepareSessionParameters:mediaEventDictionary[@"sessionParameters"]]];
        [mediaEvent setEcommerceParameters:[self prepareEcommerceParameters:mediaEventDictionary[@"eCommerceParameters"]]];
-       
+
        [[MappIntelligence shared] trackMedia:mediaEvent];
+   });
+   resolve(@1);
+}
+
+RCT_EXPORT_METHOD(trackException:(NSString*)name
+                                       message:(NSString*)message
+                                       stackTrace:(NSString*)stackTrace
+                                       resolve:(RCTPromiseResolveBlock)resolve
+                                       reject:(RCTPromiseRejectBlock)reject)
+{
+   dispatch_async(dispatch_get_main_queue(), ^{
+
+       if (stackTrace) {
+           NSDictionary *userInfo = @{
+             NSLocalizedDescriptionKey: NSLocalizedString(message, nil),
+             NSLocalizedFailureReasonErrorKey: NSLocalizedString(stackTrace, nil),
+             NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"", nil)
+                                     };
+           NSError *error = [NSError errorWithDomain:name
+                                                code:-57
+                                            userInfo:userInfo];
+           [[MappIntelligence shared] trackExceptionWith:error];
+       } else {
+           [[MappIntelligence shared] trackExceptionWithName:name andWithMessage:message];
+       }
    });
    resolve(@1);
 }
@@ -302,7 +337,7 @@ RCT_EXPORT_METHOD(trackMedia:(NSDictionary*)mediaEventDictionary
     for (NSString *paramKey in mediaParameters.allKeys) {
          id paramValue = mediaParameters[paramKey];
          NSString *key = nil;
-        
+
          if ([paramKey isEqualToString:@"mk"]) {
              key = key_action;
          } else if ([paramKey isEqualToString:@"mt1"]) {
@@ -334,7 +369,7 @@ RCT_EXPORT_METHOD(trackMedia:(NSDictionary*)mediaEventDictionary
     NSScanner *scanner = [NSScanner scannerWithString:inputString];
     NSCharacterSet *numbers = [NSCharacterSet decimalDigitCharacterSet];
     BOOL found = [scanner scanCharactersFromSet:numbers intoString:nil];
-    
+
     if (found) {
         NSInteger extractedNumber;
         [scanner scanInteger:&extractedNumber];
