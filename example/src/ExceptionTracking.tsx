@@ -3,10 +3,13 @@ import { FlatList, View } from 'react-native';
 import { DefaultStyles } from './components/Styles';
 import { MappButton } from './components/MappButton';
 import * as MappIntelligencePlugin from 'react-native-mappinteligence-plugin';
+import CrashTester from 'react-native-crash-tester';
 
 const ExceptionTrackingView = () => {
   const TRACK_EXCEPTION_WITH_NAME = 'Track Exception With Name';
   const TRACK_ERROR = 'Track Error';
+  const CRASH_APP = 'Crash App';
+  const CRASH_APP_JS_LEVEL = 'Crash App JS Level';
 
   //handling onPress action
   const getListViewItem = (item: any) => {
@@ -16,6 +19,12 @@ const ExceptionTrackingView = () => {
         break;
       case TRACK_ERROR:
         trackError();
+        break;
+      case CRASH_APP:
+        CrashTester.nativeCrash();
+        break;
+      case CRASH_APP_JS_LEVEL:
+        CrashTester.jsCrash();
         break;
     }
   };
@@ -47,7 +56,12 @@ const ExceptionTrackingView = () => {
   return (
     <View style={DefaultStyles.sectionContainer}>
       <FlatList
-        data={[{ key: TRACK_EXCEPTION_WITH_NAME }, { key: TRACK_ERROR }]}
+        data={[
+          { key: TRACK_EXCEPTION_WITH_NAME },
+          { key: TRACK_ERROR },
+          { key: CRASH_APP },
+          { key: CRASH_APP_JS_LEVEL },
+        ]}
         renderItem={({ item }) => (
           <MappButton
             buttonTitle={item.key}
