@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Video, { type VideoRef } from 'react-native-video';
 import * as MappIntelligencePlugin from 'react-native-mappinteligence-plugin';
@@ -37,7 +37,6 @@ const VideoExample = () => {
   const [busy, setBusy] = useState(false);
 
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>();
-
   /**
    * Method to create and send EOF media event
    */
@@ -211,11 +210,11 @@ const VideoExample = () => {
   // send EOF media event
   React.useEffect(() => {
     const unsubscribe: any = navigation.addListener('blur', async () => {
-      if (timeoutId) clearTimeout(timeoutId);
       await onEof();
 
       return unsubscribe;
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigation]);
 
   return (

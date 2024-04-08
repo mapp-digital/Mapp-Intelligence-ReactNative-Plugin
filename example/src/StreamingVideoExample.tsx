@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Video, { type VideoRef } from 'react-native-video';
 import * as MappIntelligencePlugin from 'react-native-mappinteligence-plugin';
@@ -211,11 +211,11 @@ const StreamingVideoExample = () => {
   // send EOF media event
   React.useEffect(() => {
     const unsubscribe: any = navigation.addListener('blur', async () => {
-      if (timeoutId) clearTimeout(timeoutId);
       await onEof();
 
       return unsubscribe;
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigation]);
 
   return (
