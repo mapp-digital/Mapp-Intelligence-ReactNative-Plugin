@@ -5,8 +5,9 @@ import { View, Button } from 'react-native';
 export const MappButton = (props: {
   buttonTitle: string;
   buttonOnPress?: () => void | null;
+  enabled?: boolean | true;
 }) => {
-  const [buttonEnabled, setButtonEnabled] = useState(true);
+  const [buttonEnabled, setButtonEnabled] = useState(props.enabled ?? true);
   const setTimer = async () => {
     const func = setTimeout(() => {
       setButtonEnabled(true);
