@@ -3,7 +3,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import * as MappIntelligence from 'react-native-mappinteligence-plugin';
-import FlatListBasics from './HomeScreen';
 import PageTrackingView from './PageTracking';
 import ActionTrackingView from './ActionTracking';
 import CampaignTrackingView from './CampaignTracking';
@@ -22,8 +21,8 @@ const Stack = createNativeStackNavigator();
 
 const App = () => {
   function Home({ navigation }: { navigation: any }) {
-    const home = HomeScreen({ navigation });
     initMappTracking();
+    const home = HomeScreen({ navigation });
     return home;
   }
 

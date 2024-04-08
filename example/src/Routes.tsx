@@ -1,6 +1,6 @@
 export enum Routes {
   HOME = 'Home',
-  CONFIG_TRACKING = "Configuration Tracking'",
+  CONFIG_TRACKING = 'Configuration Tracking',
   PAGE_TRACKING = 'Page Tracking',
   ACTION_TRACKING = 'Action Tracking',
   CAMPAIGN_TRACKING = 'Campaign Tracking',
