@@ -5,7 +5,6 @@ import type {
   EventParameters,
   ExceptionType,
   MediaEvent,
-  MediaParam,
   PageParameters,
   SessionParameters,
   UserCategories,

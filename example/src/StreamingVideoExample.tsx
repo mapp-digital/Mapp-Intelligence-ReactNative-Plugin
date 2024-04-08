@@ -1,11 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Video, { type VideoRef } from 'react-native-video';
 import * as MappIntelligencePlugin from 'react-native-mappinteligence-plugin';
-import { MediaAction, MediaParam } from '../../src/DataTypes';
+import {
+  MediaAction,
+  type EventParameters,
+  type MediaEvent,
+  type MediaParameteres,
+  type SessionParameters,
+  MIStatus,
+  type EcommerceParameters,
+  type MIProduct,
+} from '../../src/DataTypes';
 import { useNavigation } from '@react-navigation/native';
 
-const VideoPlayer = () => {
+const StreamingVideoExample = () => {
   const navigation = useNavigation();
 
   const sources: MediaSource[] = [
@@ -13,21 +22,11 @@ const VideoPlayer = () => {
       title: 'Stream',
       url: 'https://live-par-2-cdn-alt.livepush.io/live/bigbuckbunnyclip/index.m3u8',
     },
-    {
-      title: 'BigBuckBunny',
-      url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-    },
-    {
-      title: 'ElephantDream',
-      url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-    },
   ];
 
   const REPEAT_TIME_MS = 5000;
 
   const videoRef = useRef<VideoRef>(null);
-
-  const [videoIndex, setVideoIndex] = useState(2);
 
   const [videoProgress, setVideoProgress] = useState<{
     currentTime: number;
@@ -44,18 +43,25 @@ const VideoPlayer = () => {
    */
   const onEof = async () => {
     console.log('onEof - started!');
-    const params = new Map([
-      [MediaParam.media_action, MediaAction.eof.valueOf()],
-      [MediaParam.media_position, videoProgress.currentTime.toString()],
-      [MediaParam.media_duration, videoProgress.duration.toString()],
-    ]);
 
-    await MappIntelligencePlugin.trackMedia(
-      params,
-      'BigBuckBunny',
-      'Video Player'
-    );
-    console.log('onEof - finished!: ' + [...params.entries()]);
+    const customCategories: Map<number, string> = new Map([
+      [1, 'CustomParam1'],
+      [2, 'CustomParam2'],
+    ]);
+    const mediaParams: MediaParameteres = {
+      name: 'Big Bunny',
+      action: MediaAction.eof.valueOf(),
+      position: videoProgress.currentTime,
+      duration: 0, // for streaming video set duration to 0
+      customCategories: customCategories,
+    };
+    const mediaEvent: MediaEvent = {
+      pageName: 'Streaming Video Sample',
+      parameters: mediaParams,
+    };
+
+    await MappIntelligencePlugin.trackMedia(mediaEvent);
+    console.log('onEof - finished!');
   };
 
   const onProgressEvent = async (
@@ -72,16 +78,75 @@ const VideoPlayer = () => {
         seekableDuration
     );
 
-    const params = new Map([
-      [MediaParam.media_action, MediaAction.pos.valueOf()],
-      [MediaParam.media_position, current.toString()],
-      [MediaParam.media_duration, playableDuration.toString()],
-    ]);
-    await MappIntelligencePlugin.trackMedia(
-      params,
-      'BigBuckBunny',
-      'Video Player'
+    const product: MIProduct = {
+      name: 'Product 1',
+      cost: 13,
+      quantity: 4,
+      productSoldOut: false,
+      categories: new Map<number, string>([
+        [1, 'ProductCat1'],
+        [2, 'ProductCat2'],
+      ]),
+    };
+    const ecommerceParam: EcommerceParameters = {
+      products: [product],
+      status: MIStatus.noneStatus,
+      currency: 'EUR',
+      orderID: 'ud679adn',
+      orderValue: 456,
+      returningOrNewCustomer: 'new customer',
+      returnValue: 3,
+      cancellationValue: 2,
+      couponValue: 33,
+      paymentMethod: 'cash',
+      shippingServiceProvider: 'DHL',
+      shippingSpeed: 'highest',
+      shippingCost: 35,
+      markUp: 1,
+      orderStatus: 'order received',
+      customParameters: new Map<number, string>([
+        [1, 'ProductParam1'],
+        [2, 'ProductParam2'],
+      ]),
+    };
+
+    const customSessionParams = new Map<number, string>().set(
+      10,
+      'sessionParam1'
     );
+    const sessionParameters: SessionParameters = {
+      parameters: customSessionParams,
+    };
+
+    const customCategories: Map<number, string> = new Map([
+      [1, 'CustomCat1'],
+      [2, 'CustomCat2'],
+    ]);
+
+    const mediaParams: MediaParameteres = {
+      name: 'Big Bunny',
+      action: MediaAction.pos.valueOf(),
+      position: current,
+      duration: 0, // for streaming video set duration to 0
+      customCategories: customCategories,
+    };
+
+    const customParams = new Map<number, string>([[1, 'CustomParam1']]);
+
+    const eventParameters: EventParameters = {
+      customParameters: new Map<number, string>([[1, 'MediaEventParam1']]),
+    };
+
+    const mediaEvent: MediaEvent = {
+      pageName: 'Streaming Video Sample',
+      parameters: mediaParams,
+      sessionParameters: sessionParameters,
+      eCommerceParameters: ecommerceParam,
+      customParameters: customParams,
+      eventParameters: eventParameters,
+    };
+
+    await MappIntelligencePlugin.trackMedia(mediaEvent);
   };
 
   /**
@@ -95,17 +160,24 @@ const VideoPlayer = () => {
     if (isPlaying) action = MediaAction.play.valueOf();
     else action = MediaAction.pause.valueOf();
 
-    const params = new Map([
-      [MediaParam.media_action, action],
-      [MediaParam.media_position, videoProgress.currentTime.toString()],
-      [MediaParam.media_duration, videoProgress.duration.toString()],
+    const customCategories: Map<number, string> = new Map([
+      [1, 'CustomParam1'],
+      [2, 'CustomParam2'],
     ]);
 
-    await MappIntelligencePlugin.trackMedia(
-      params,
-      'BigBuckBunny',
-      'Video Player'
-    );
+    const mediaParams: MediaParameteres = {
+      name: 'Big Bunny',
+      action: action,
+      position: videoProgress.currentTime,
+      duration: 0, // for streaming video set duration to 0
+      customCategories: customCategories,
+    };
+    const mediaEvent: MediaEvent = {
+      pageName: 'Streaming Video Sample',
+      parameters: mediaParams,
+    };
+
+    await MappIntelligencePlugin.trackMedia(mediaEvent);
   };
 
   /**
@@ -116,17 +188,23 @@ const VideoPlayer = () => {
   const onLoadEvent = async (currentTime: number, duration: number) => {
     console.log('OnLoad: ');
 
-    const params = new Map([
-      [MediaParam.media_position, currentTime.toString()],
-      [MediaParam.media_duration, duration.toString()],
-      [MediaParam.media_action, MediaAction.init.valueOf()],
+    const customCategories: Map<number, string> = new Map([
+      [1, 'CustomParam1'],
+      [2, 'CustomParam2'],
     ]);
+    const mediaParams: MediaParameteres = {
+      name: 'Big Buck Bunny',
+      action: MediaAction.init.valueOf(),
+      position: currentTime,
+      duration: duration,
+      customCategories: customCategories,
+    };
+    const mediaEvent: MediaEvent = {
+      pageName: 'Streaming Video Sample',
+      parameters: mediaParams,
+    };
 
-    await MappIntelligencePlugin.trackMedia(
-      params,
-      sources[videoIndex]?.title,
-      'Video Player'
-    );
+    await MappIntelligencePlugin.trackMedia(mediaEvent);
   };
 
   // subscribe navigation event when screen is about to unmount
@@ -144,7 +222,7 @@ const VideoPlayer = () => {
     <View style={styles.container}>
       <Video
         // Can be a URL or a local file.
-        source={{ uri: sources[videoIndex]?.url }}
+        source={{ uri: sources[0]?.url }}
         // Store reference
         ref={videoRef}
         // Callback when video cannot be loaded
@@ -218,4 +296,4 @@ interface IMediaSource {
 }
 type MediaSource = Required<IMediaSource>;
 
-export default VideoPlayer;
+export default StreamingVideoExample;
