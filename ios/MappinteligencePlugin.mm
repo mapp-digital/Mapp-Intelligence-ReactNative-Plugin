@@ -64,12 +64,14 @@ RCT_EXPORT_METHOD(optIn:(BOOL)sendData
     [[MappIntelligence shared] optIn];
     resolve(@1);
 }
-//reset
+
 RCT_EXPORT_METHOD(reset:
                   (RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject)
 {
-    [[MappIntelligence shared] reset];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[MappIntelligence shared] reset];
+    });
     resolve(@1);
 }
 

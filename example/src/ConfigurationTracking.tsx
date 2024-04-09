@@ -98,11 +98,27 @@ const ConfigurationTrackingView = () => {
               MappIntelligencePlugin.optIn(true);
             }}
           />
-          <MappButton buttonTitle="Reset" buttonOnPress={() => {}} />
-          <MappButton buttonTitle="Init at Runtime" buttonOnPress={() => {}} />
+          <MappButton
+            buttonTitle="Reset"
+            buttonOnPress={() => {
+              MappIntelligencePlugin.reset();
+            }}
+          />
+          <MappButton
+            buttonTitle="Init at Runtime"
+            buttonOnPress={() => {
+              MappIntelligencePlugin.initWithConfiguration(
+                [1, 2, 3, 4],
+                'www.testDomain.com'
+              );
+              MappIntelligencePlugin.setLogLevel(1);
+            }}
+          />
           <MappButton
             buttonTitle="User matching set to true"
-            buttonOnPress={() => {}}
+            buttonOnPress={() => {
+              MappIntelligencePlugin.setEnableUserMatching(true);
+            }}
           />
         </View>
       </ScrollView>
