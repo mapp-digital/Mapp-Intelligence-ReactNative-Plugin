@@ -25,6 +25,54 @@ RCT_EXPORT_METHOD(build:
     resolve(@1);
 }
 
+RCT_EXPORT_METHOD(isInitialized:
+                  (RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+{
+    BOOL status = [MappIntelligence getId] != NULL && [MappIntelligence getUrl] != NULL;
+    resolve((status ? @1 : @0) );
+}
+
+RCT_EXPORT_METHOD(getEverId:
+                  (RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+{
+    resolve([[MappIntelligence shared] getEverId]);
+}
+
+RCT_EXPORT_METHOD(setEverId:(NSString*)everId
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+{
+    [[MappIntelligence shared] initWithConfiguration:@[[MappIntelligence getId]] onTrackdomain:[MappIntelligence getUrl] andWithEverID:everId];
+    [[MappIntelligence shared] setLogLevel:all];
+    resolve(@1);
+}
+
+RCT_EXPORT_METHOD(optOut:(BOOL)sendData
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+{
+    [[MappIntelligence shared] optOutAndSendCurrentData:sendData];
+    resolve(@1);
+}
+
+RCT_EXPORT_METHOD(optIn:(BOOL)sendData
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+{
+    [[MappIntelligence shared] optIn];
+    resolve(@1);
+}
+//reset
+RCT_EXPORT_METHOD(reset:
+                  (RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+{
+    [[MappIntelligence shared] reset];
+    resolve(@1);
+}
+
 RCT_EXPORT_METHOD(initWithConfiguration:(NSArray*)trackIDs
                                         domain:(NSString*)domain
                                         resolve:(RCTPromiseResolveBlock)resolve
