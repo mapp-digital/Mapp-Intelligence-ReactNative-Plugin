@@ -5,7 +5,6 @@ import type {
   EventParameters,
   ExceptionType,
   MediaEvent,
-  MediaParam,
   PageParameters,
   SessionParameters,
   UserCategories,
@@ -101,35 +100,61 @@ export function setBatchSupportEnabled(enabled: boolean): Promise<number> {
 }
 
 /**
- *
+ * iOS Only - Enable sending data while application is in a background state
  * @param enabled
- * @returns
+ * @returns result if method executed succesfully or not
  */
 export function setEnableBackgroundSendout(enabled: boolean): Promise<number> {
   console.log('setEnableBackgroundSendout');
   return MappIntelligencePlugin.setEnableBackgroundSendout(enabled);
 }
 
+/**
+ * Set number of track records to send in a sigle batch request
+ * @param size number of track records
+ * @returns result if method executed succesfully or not
+ */
 export function setBatchSupportSize(size: number): Promise<number> {
   console.log('setBatchSupportSize');
   return MappIntelligencePlugin.setBatchSupportSize(size);
 }
 
+/**
+ * Requests are buffered in a queue before sending. This option set size of the queue.
+ * @param numberOfRequsts size of a queue for buffering requests
+ * @returns result if method executed succesfully or not
+ */
 export function setRequestPerQueue(numberOfRequsts: number): Promise<number> {
   console.log('setRequestPerQueue');
   return MappIntelligencePlugin.setRequestPerQueue(numberOfRequsts);
 }
 
+/**
+ * Control if migration should be applied from a previos SDK version.
+ * @param migrate true to apply migration on the initialization process; otherwise false
+ * @returns result if method executed succesfully or not
+ */
 export function setShouldMigrate(migrate: boolean): Promise<number> {
   console.log('setShouldMigrate');
   return MappIntelligencePlugin.setShouldMigrate(migrate);
 }
 
+/**
+ * Based on the result of the user's conset to allow personalized tracking or not,
+ * enable anonymous tracking when no consent. If enabled, everId will be deleted (and not generated until anonymous tracking is enabled)
+ * @param anonymous true to enable anonymous tracking; false to disable it.
+ * @returns result if method executed succesfully or not
+ */
 export function setAnonymousTracking(anonymous: boolean): Promise<number> {
   console.log('setAnonymousTracking');
   return MappIntelligencePlugin.setAnonymousTracking(anonymous);
 }
 
+/**
+ * Send application version as parameter in every request
+ * @param flag - true to set sending application version in every request; otherwise false.
+ * @returns result if method executed succesfully or not
+ */
 export function setSendAppVersionInEveryRequest(
   flag: boolean
 ): Promise<number> {
@@ -137,17 +162,36 @@ export function setSendAppVersionInEveryRequest(
   return MappIntelligencePlugin.setSendAppVersionInEveryRequest(flag);
 }
 
+/**
+ * To enable user matching between Engage and Intelligence system
+ * @param enabled true to enable user matching; false to disable it.
+ * @returns result if method executed succesfully or not
+ */
 export function setEnableUserMatching(enabled: boolean): Promise<number> {
   console.log('setEnableUserMatching');
   return MappIntelligencePlugin.setEnableUserMatching(enabled);
 }
 
-//TODO: parameterless function??
+/**
+ * Track single page by page name
+ * @param pageTitle page name for tracking
+ * @returns result if method executed succesfully or not
+ */
 export function trackPage(pageTitle: string): Promise<number> {
   console.log('trackPage');
   return MappIntelligencePlugin.trackPage(pageTitle);
 }
 
+/**
+ * Detailed page tracking with additional parameters that can be set to track
+ * @param pageTitle - name of the page
+ * @param pageParameters - parameters for the page
+ * @param sessionParamters - parameters for the current session
+ * @param userCategories - predefined user categories
+ * @param ecommerceParameters - predefined eCommerce parameters
+ * @param campaignParameters - predefined campaign parameters
+ * @returns result if method executed succesfully or not
+ */
 export function trackCustomPage(
   pageTitle: string,
   pageParameters?: PageParameters | null,
@@ -167,6 +211,12 @@ export function trackCustomPage(
   );
 }
 
+/**
+ * Custom page tracking with option to track some custom parameters
+ * @param pageTitle - name of the page
+ * @param pageParameters - custom parameters that can be tracked
+ * @returns result if method executed succesfully or not
+ */
 export function trackPageWithCustomData(
   pageTitle: string,
   pageParameters: Map<string, string> | null
@@ -177,6 +227,16 @@ export function trackPageWithCustomData(
   return MappIntelligencePlugin.trackPageWithCustomData(data, pageTitle);
 }
 
+/**
+ * Track user action
+ * @param name - action name
+ * @param eventParameters - predefined event parameters
+ * @param sessionParamters - predefined session parameters
+ * @param userCategories - predefined user categories
+ * @param ecommerceParameters - predefined ecommerce parameters
+ * @param campaignParameters - predefined campaign parameters
+ * @returns result if method executed succesfully or not
+ */
 export function trackAction(
   name: string,
   eventParameters?: EventParameters | null,
@@ -196,6 +256,12 @@ export function trackAction(
   );
 }
 
+/**
+ * Track URL's with included deeplinks, media parameters
+ * @param url single url that can contain some query parameters for tracking
+ * @param mediaCode media code to track
+ * @returns result if method executed succesfully or not
+ */
 export function trackUrl(
   url: string,
   mediaCode?: string | null
@@ -203,6 +269,11 @@ export function trackUrl(
   return MappIntelligencePlugin.trackUrl(url, mediaCode);
 }
 
+/**
+ * Track video or audio events - starting, playing, pausing/stoping, ending of playing
+ * @param mediaEvent predefined events to track
+ * @returns result if method executed succesfully or not
+ */
 export function trackMedia(mediaEvent: MediaEvent): Promise<number> {
   console.log('Execute MediaEvent');
   return MappIntelligencePlugin.trackMedia(
@@ -210,6 +281,12 @@ export function trackMedia(mediaEvent: MediaEvent): Promise<number> {
   );
 }
 
+/**
+ * Record data about handled exceptions
+ * @param e caught exception
+ * @param stackTrace stack trace of the caught exception
+ * @returns result if method executed succesfully or not
+ */
 export function trackException(
   e: Error,
   stackTrace?: string | null
@@ -221,6 +298,13 @@ export function trackException(
   );
 }
 
+/**
+ * Record data about handled exception
+ * @param name name or type of the exception if can be obtained
+ * @param message message of the current caught exception
+ * @param stackTrace stack trace of the caught exception
+ * @returns result if method executed succesfully or not
+ */
 export function trackExceptionWithName(
   name: string,
   message: string,
@@ -233,19 +317,38 @@ export function trackExceptionWithName(
   );
 }
 
+/**
+ * Set unique everId as identifier for a single device/user
+ * @param everId unique identifier in the tracking system
+ * @returns result if method executed succesfully or not
+ */
 export function setEverId(everId?: String | null): Promise<number> {
   console.log('setEverId');
   return MappIntelligencePlugin.setEverId(everId);
 }
 
+/**
+ * Returns current everId of a device
+ * @returns everId
+ */
 export function getEverId(): Promise<string> {
   return MappIntelligencePlugin.getEverId();
 }
 
+/**
+ * Check if plugin is initialized and ready to use
+ * @returns true if plugin is ready to use; false otherwise.
+ */
 export function isInitialized(): Promise<boolean> {
   return MappIntelligencePlugin.isInitialized();
 }
 
+/**
+ * Temporary sessionId is used when anonymous tracking is enabled to provide
+ * anonymous tracking of a single session
+ * @param sessionId unique session identifier
+ * @returns result if method executed succesfully or not
+ */
 export function setTemporarySessionId(
   sessionId?: String | null
 ): Promise<number> {
@@ -253,18 +356,40 @@ export function setTemporarySessionId(
   return MappIntelligencePlugin.setTemporarySessionId(sessionId);
 }
 
+/**
+ * In some cases, it is necessary to exclude users completely from tracking.
+ * For this purpose, the SDK provides an opt-out option.
+ * Internally, calling this method will delete all current tracking data cached in the database (if sendCurrentData is set to false), cancel the sending of requests, terminate the WorkManager, and disable all incoming tracking requests.
+ * @param sendData true to send recorded data before opt-out
+ * @returns result if method executed succesfully or not
+ */
 export function optOut(sendData: boolean): Promise<number> {
   return MappIntelligencePlugin.optOut(sendData);
 }
 
+/**
+ * Disables opt-out, and resets tracking to enabled.
+ * @param sendData true to send recorded data before opt-in
+ * @returns result if method executed succesfully or not
+ */
 export function optIn(sendData: boolean): Promise<number> {
   return MappIntelligencePlugin.optIn(sendData);
 }
 
+/**
+ * Reset all webtrekk configuration. After this, new init with settings must be called before using plugin.
+ * @returns result if method executed succesfully or not
+ */
 export function reset(): Promise<number> {
   return MappIntelligencePlugin.reset();
 }
 
+/**
+ * When called, data will be immediately sent.
+ * The request will then be deleted from the database, cleaning it.
+ * Please note that the application must be started and visible to use this method.
+ * @returns result if method executed succesfully or not
+ */
 export function sendRequestsAndClean(): Promise<number> {
   return MappIntelligencePlugin.sendRequestsAndClean();
 }

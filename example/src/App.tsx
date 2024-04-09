@@ -3,7 +3,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import * as MappIntelligence from 'react-native-mappinteligence-plugin';
-import FlatListBasics from './mainView';
 import PageTrackingView from './PageTracking';
 import ActionTrackingView from './ActionTracking';
 import CampaignTrackingView from './CampaignTracking';
@@ -12,27 +11,19 @@ import MediaTrackingView from './MediaTracking';
 import ExceptionTrackingView from './ExceptionTracking';
 import ConfigurationTrackingView from './ConfigurationTracking';
 import { ExceptionType } from '../../src/DataTypes';
-import {
-  setJSExceptionHandler,
-  type JSExceptionHandler,
-} from 'react-native-exception-handler';
-import VideoPlayer from './VideoPlayer';
+import StreamingVideoExample from './StreamingVideoExample';
 import ManualMediaTracking from './ManualMediaTracking';
+import VideoExample from './VideoExample';
+import HomeScreen from './HomeScreen';
+import { Routes } from './Routes';
 
 const Stack = createNativeStackNavigator();
 
-const errorHandler = (error: Error, isFatal: boolean) => {
-  console.log('Error thrown: ', error, error.stack);
-  MappIntelligence.trackException(error, error.stack);
-};
-
 const App = () => {
   function Home({ navigation }: { navigation: any }) {
-    setJSExceptionHandler(errorHandler, true);
-    var home = new FlatListBasics({});
     initMappTracking();
-    home.navigation = navigation;
-    return home.render();
+    const home = HomeScreen({ navigation });
+    return home;
   }
 
   async function initMappTracking() {
@@ -75,29 +66,45 @@ const App = () => {
             },
           }}
         >
-          <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen name="PageTracking" component={PageTracking} />
-          <Stack.Screen name="ActionTracking" component={ActionTrackingView} />
+          <Stack.Screen name={Routes.HOME.valueOf()} component={Home} />
           <Stack.Screen
-            name="CampaignTracking"
+            name={Routes.PAGE_TRACKING.valueOf()}
+            component={PageTracking}
+          />
+          <Stack.Screen
+            name={Routes.ACTION_TRACKING.valueOf()}
+            component={ActionTrackingView}
+          />
+          <Stack.Screen
+            name={Routes.CAMPAIGN_TRACKING.valueOf()}
             component={CampaignTrackingView}
           />
           <Stack.Screen
-            name="EcommerceTracking"
+            name={Routes.ECOMMERCE_TRACKING.valueOf()}
             component={EcommerceTrackingView}
           />
-          <Stack.Screen name="MediaTracking" component={MediaTrackingView} />
           <Stack.Screen
-            name="ExceptionTracking"
+            name={Routes.MEDIA_TRACKING.valueOf()}
+            component={MediaTrackingView}
+          />
+          <Stack.Screen
+            name={Routes.EXCEPTION_TRACKING.valueOf()}
             component={ExceptionTrackingView}
           />
           <Stack.Screen
-            name="ConfigurationTracking"
+            name={Routes.CONFIG_TRACKING.valueOf()}
             component={ConfigurationTrackingView}
           />
-          <Stack.Screen name="VideoPlayer" component={VideoPlayer} />
           <Stack.Screen
-            name="ManualMediaTracking"
+            name={Routes.STREAMING_VIDEO_EXAMPLE.valueOf()}
+            component={StreamingVideoExample}
+          />
+          <Stack.Screen
+            name={Routes.VIDEO_EXAMPLE.valueOf()}
+            component={VideoExample}
+          />
+          <Stack.Screen
+            name={Routes.MANUAL_MEDIA_TRACKING.valueOf()}
             component={ManualMediaTracking}
           />
         </Stack.Navigator>
