@@ -57,6 +57,14 @@ RCT_EXPORT_METHOD(optOut:(BOOL)sendData
     resolve(@1);
 }
 
+RCT_EXPORT_METHOD(sendRequestsAndClean:
+                  (RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+{
+    //TODO: will be done in next plugin version
+    resolve(@1);
+}
+
 RCT_EXPORT_METHOD(optIn:(BOOL)sendData
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject)
