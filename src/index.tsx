@@ -393,3 +393,7 @@ export function reset(): Promise<number> {
 export function sendRequestsAndClean(): Promise<number> {
   return MappIntelligencePlugin.sendRequestsAndClean();
 }
+
+export function printCurrentConfig(): Promise<string> {
+  return MappIntelligencePlugin.getCurrentConfig();
+}
