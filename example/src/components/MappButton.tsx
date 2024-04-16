@@ -4,7 +4,7 @@ import { View, Button } from 'react-native';
 
 export const MappButton = (props: {
   buttonTitle: string;
-  buttonOnPress?: () => void | null;
+  buttonOnPress?: () => void | Promise<any> | null;
   enabled?: boolean | true;
 }) => {
   const [buttonEnabled, setButtonEnabled] = useState(props.enabled ?? true);

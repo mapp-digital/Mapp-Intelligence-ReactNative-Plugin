@@ -85,33 +85,47 @@ const ConfigurationTrackingView = () => {
               MappIntelligencePlugin.sendRequestsAndClean();
             }}
           />
-          <MappButton buttonTitle="Init with everID" buttonOnPress={() => {}} />
           <MappButton
             buttonTitle="Opt out"
-            buttonOnPress={() => {
+            buttonOnPress={async () => {
               MappIntelligencePlugin.optOut(true);
+              const everId = await MappIntelligencePlugin.getEverId();
+              updateEverId(everId);
             }}
           />
           <MappButton
             buttonTitle="Opt in"
-            buttonOnPress={() => {
+            buttonOnPress={async () => {
               MappIntelligencePlugin.optIn(true);
+              const everId = await MappIntelligencePlugin.getEverId();
+              updateEverId(everId);
             }}
           />
           <MappButton
             buttonTitle="Reset"
-            buttonOnPress={() => {
+            buttonOnPress={async () => {
               MappIntelligencePlugin.reset();
+              const everId = await MappIntelligencePlugin.getEverId();
+              updateEverId(everId);
             }}
           />
           <MappButton
             buttonTitle="Init at Runtime"
-            buttonOnPress={() => {
+            buttonOnPress={async () => {
               MappIntelligencePlugin.initWithConfiguration(
                 [1, 2, 3, 4],
                 'www.testDomain.com'
               );
               MappIntelligencePlugin.setLogLevel(1);
+              const everId = await MappIntelligencePlugin.getEverId();
+              updateEverId(everId);
+            }}
+          />
+          <MappButton
+            buttonTitle="Print current config"
+            buttonOnPress={async () => {
+              const config = await MappIntelligencePlugin.printCurrentConfig();
+              console.log(config);
             }}
           />
           <MappButton
