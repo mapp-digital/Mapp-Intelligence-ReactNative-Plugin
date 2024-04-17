@@ -25,7 +25,7 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
-const MappIntelligencePlugin = NativeModules.MappinteligencePlugin
+export const MappIntelligencePlugin = NativeModules.MappinteligencePlugin
   ? NativeModules.MappinteligencePlugin
   : new Proxy(
       {},
