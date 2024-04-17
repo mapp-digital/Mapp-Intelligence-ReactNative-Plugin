@@ -307,7 +307,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   @ReactMethod
   fun trackPageWithCustomData(params: ReadableMap?, pageTitle: String, promise: Promise) {
     runOnPlugin(whenInitialized = {
-      instance.trackCustomPage(pageTitle, params.toMap(keyTransform = {it.toString()}))
+      instance.trackCustomPage(pageTitle, params.toMap(keyTransform = { it.toString() }))
     })
     promise.resolve(true)
   }
@@ -389,7 +389,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   }
 
   @ReactMethod
-  fun trackException(name: String, message: String, stacktrace: String?=null, promise: Promise) {
+  fun trackException(name: String, message: String, stacktrace: String? = null, promise: Promise) {
     runOnPlugin(whenInitialized = {
       Log.d("MappIntelligencePlugin", "trackException")
       if (stacktrace.isNullOrEmpty()) {
@@ -457,15 +457,26 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
    */
   private fun reset(presetAction: (WebtrekkConfiguration.Builder) -> Unit) {
     Webtrekk.reset(reactContext.applicationContext)
-    val trackIds = instance.getTrackIds()
-    val domain = instance.getTrackDomain()
+    val trackIds = configAdapter.trackIds
+    val domain = configAdapter.trackDomain
 
-    instance = Webtrekk.getInstance().apply {
-      val builder = WebtrekkConfiguration.Builder(trackIds, domain)
-      presetAction.invoke(builder)
-      val config = builder.build()
-      init(reactContext.applicationContext, config)
-    }
+    instance.setIdsAndDomain(trackIds,domain)
+//    This requires some changes on native SDK
+//    val builder = WebtrekkConfiguration.Builder(trackIds, domain)
+//    presetAction.invoke(builder)
+//    val config = builder.build()
+//    Webtrekk.getInstance().init(reactContext.applicationContext, config = config)
+//    instance = Webtrekk.getInstance()
+  }
+
+  @ReactMethod
+  fun getCurrentConfig(promise: Promise) {
+    runOnPlugin(whenInitialized = {
+      val config = Webtrekk.getInstance().getCurrentConfiguration()
+      promise.resolve(config.toString())
+    }, whenNotInitialized = {
+      promise.resolve("")
+    })
   }
 
   override fun getName(): String {
