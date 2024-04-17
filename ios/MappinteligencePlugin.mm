@@ -83,6 +83,16 @@ RCT_EXPORT_METHOD(reset:
     resolve(@1);
 }
 
+RCT_EXPORT_METHOD(getCurrentConfig:
+                  (RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[MappIntelligence shared] setBatchSupportEnabled:[[MappIntelligence shared] batchSupportEnabled]];
+    });
+    resolve(@"print configuration:");
+}
+
 RCT_EXPORT_METHOD(initWithConfiguration:(NSArray*)trackIDs
                                         domain:(NSString*)domain
                                         resolve:(RCTPromiseResolveBlock)resolve
