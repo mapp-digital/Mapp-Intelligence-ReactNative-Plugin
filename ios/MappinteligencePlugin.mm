@@ -1,6 +1,7 @@
 #import "MappinteligencePlugin.h"
 #import "MappIntelligence.h"
 #import "MappIntelligenceLogger.h"
+#import "MIDefaultTracker.h"
 #import <Foundation/Foundation.h>
 
 @implementation MappinteligencePlugin
@@ -69,7 +70,11 @@ RCT_EXPORT_METHOD(sendRequestsAndClean:
                   (RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject)
 {
-    //TODO: will be done in next plugin version
+    [[MIDefaultTracker sharedInstance] sendRequestFromDatabaseWithCompletionHandler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"error: %@", error);
+        }
+    }];
     resolve(@1);
 }
 
