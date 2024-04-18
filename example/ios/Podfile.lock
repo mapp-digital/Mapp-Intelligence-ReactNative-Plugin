@@ -72,7 +72,7 @@ PODS:
     - hermes-engine/Pre-built (= 0.73.5)
   - hermes-engine/Pre-built (0.73.5)
   - libevent (2.1.12)
-  - MappIntelligence (5.0.8)
+  - MappIntelligence (5.0.9)
   - OpenSSL-Universal (1.1.1100)
   - PromisesObjC (2.4.0)
   - PromisesSwift (2.4.0):
@@ -951,7 +951,7 @@ PODS:
   - react-native-crash-tester (0.2.3):
     - React-Core
   - react-native-mappinteligence-plugin (0.1.0):
-    - MappIntelligence (= 5.0.8)
+    - MappIntelligence (= 5.0.9)
     - RCT-Folly
     - RCTRequired
     - RCTTypeSafety
@@ -1371,7 +1371,7 @@ SPEC CHECKSUMS:
   glog: c5d68082e772fa1c511173d6b30a9de2c05a69a2
   hermes-engine: 1d1835b2cc54c381909d94d1b3c8e0a2f1a94a0e
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  MappIntelligence: 3701c6e07b7ef973f9688c07d0ff7f5489a9de86
+  MappIntelligence: d449878420a68897cc83751a0fe178c7b544f110
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
@@ -1397,7 +1397,7 @@ SPEC CHECKSUMS:
   React-logger: 0331362115f0f5b392bd7ed14636d1a3ea612479
   React-Mapbuffer: 7c35cd53a22d0be04d3f26f7881c7fb7dd230216
   react-native-crash-tester: 3ffaa64141427ca362079cb53559fe9a532487ae
-  react-native-mappinteligence-plugin: d328f8e57a8e1e8fd1e205a67cb37ff4086c9466
+  react-native-mappinteligence-plugin: a7a6256cc003fb105b5a8ac221679ef30eddeeab
   react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
   react-native-video: dc3118548cf8864a83f57df4345cf6c692402e8f
   React-nativeconfig: 1166714a4f7ea57a0df5c2cb44fbc70f98d580f9

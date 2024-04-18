@@ -1,6 +1,7 @@
 #import "MappinteligencePlugin.h"
 #import "MappIntelligence.h"
 #import "MappIntelligenceLogger.h"
+#import "MIDefaultTracker.h"
 #import <Foundation/Foundation.h>
 
 @implementation MappinteligencePlugin
@@ -33,6 +34,14 @@ RCT_EXPORT_METHOD(isInitialized:
     resolve((status ? @1 : @0) );
 }
 
+RCT_EXPORT_METHOD(setTemporarySessionId:(NSString*)sessionId
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+{
+    [[MappIntelligence shared] setTemporarySessionId:sessionId];
+    resolve(@1);
+}
+
 RCT_EXPORT_METHOD(getEverId:
                   (RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject)
@@ -61,7 +70,11 @@ RCT_EXPORT_METHOD(sendRequestsAndClean:
                   (RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject)
 {
-    //TODO: will be done in next plugin version
+    [[MIDefaultTracker sharedInstance] sendRequestFromDatabaseWithCompletionHandler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"error: %@", error);
+        }
+    }];
     resolve(@1);
 }
 
@@ -81,6 +94,16 @@ RCT_EXPORT_METHOD(reset:
         [[MappIntelligence shared] reset];
     });
     resolve(@1);
+}
+
+RCT_EXPORT_METHOD(getCurrentConfig:
+                  (RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[MappIntelligence shared] setBatchSupportEnabled:[[MappIntelligence shared] batchSupportEnabled]];
+    });
+    resolve(@"print configuration:");
 }
 
 RCT_EXPORT_METHOD(initWithConfiguration:(NSArray*)trackIDs
