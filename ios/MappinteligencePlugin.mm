@@ -33,6 +33,14 @@ RCT_EXPORT_METHOD(isInitialized:
     resolve((status ? @1 : @0) );
 }
 
+RCT_EXPORT_METHOD(setTemporarySessionId:(NSString*)sessionId
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+{
+    [[MappIntelligence shared] setTemporarySessionId:sessionId];
+    resolve(@1);
+}
+
 RCT_EXPORT_METHOD(getEverId:
                   (RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject)
