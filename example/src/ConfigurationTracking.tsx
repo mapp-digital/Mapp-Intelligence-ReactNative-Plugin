@@ -70,7 +70,7 @@ const ConfigurationTrackingView = () => {
             buttonBackgroundColor={'#06A806'}
             onValueChanged={(value: string) => {
               setNewEverId(value);
-              MappIntelligencePlugin.setEverId(value);
+              //MappIntelligencePlugin.setEverId(value);
             }}
             onClick={async (value) => {
               updateEverId(value);

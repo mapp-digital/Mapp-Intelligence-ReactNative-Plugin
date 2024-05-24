@@ -21,19 +21,19 @@ export const MappInputText = (props: {
   disableWhenEmpty?: boolean | false;
   keyboardMode?: InputModeOptions | 'text' | null;
 }) => {
-  //const [inputValue, setInputValue] = useState(props.textValue);
+  const [inputValue, setInputValue] = useState(props.textValue);
   return (
     <View style={DefaultStyles.sectionTextRow}>
       <TextInput
         style={{ flex: 1 }}
         onChangeText={(value) => {
-          //setInputValue(value);
+          setInputValue(value);
           if (props.onValueChanged) {
             props.onValueChanged(value);
           }
         }}
         placeholder={props.hintValue}
-        value={props.textValue}
+        value={inputValue}
         inputMode={props.keyboardMode ?? 'text'}
       />
       <View style={{ margin: 0 }}>
