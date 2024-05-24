@@ -405,3 +405,5 @@ export const sendRequestsAndClean = (): Promise<number> => {
 export const printCurrentConfig = (): Promise<string> => {
   return MappIntelligencePlugin.getCurrentConfig();
 };
+
+export * from './GlobalErrorHandler';

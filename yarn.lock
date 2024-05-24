@@ -4837,7 +4837,7 @@ react-native-exception-handler@^2.10.10:
     react-native-exception-handler "^2.10.10"
     react-native-safe-area-context "^4.9.0"
     react-native-screens "^3.29.0"
-    react-native-video "6.0.0-beta.6"
+    react-native-video "^6.1.1"
     react-navigation "^5.0.0"
 
 react-native-safe-area-context@^4.9.0, "react-native-safe-area-context@>= 3.0.0":
@@ -4849,10 +4849,10 @@ react-native-screens@^3.29.0, "react-native-screens@>= 3.0.0":
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
 
-react-native-video@6.0.0-beta.6:
-  version "6.0.0-beta.6"
-  resolved "https://registry.npmjs.org/react-native-video/-/react-native-video-6.0.0-beta.6.tgz"
-  integrity sha512-uVfDfZ8N7mL1wdeN7/6GTSYhVXk3k2LLBlKaSJznwxtLx+yDxfGuNNRsYzkjHyvtz9XUswy+16pdHPaebV4hHA==
+react-native-video@^6.1.1:
+  version "6.1.1"
+  resolved "https://registry.npmjs.org/react-native-video/-/react-native-video-6.1.1.tgz"
+  integrity sha512-Cf5A+48QYmOdEK/C77FVakJTees7AGORYgAt9LLKraFqgYMZY8dahVlvjyqWrMKEn+OiA/hIC2ga+XfeCPmexQ==
 
 react-native@*, react-native@>=0.59, react-native@0.73.5:
   version "0.73.5"
