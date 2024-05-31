@@ -408,7 +408,8 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   fun build(promise: Promise) {
     runOnPlugin(whenNotInitialized = {
       val builder = WebtrekkConfiguration.Builder(configAdapter.trackIds, configAdapter.trackDomain)
-        .logLevel(configAdapter.logLevel).enableCrashTracking(configAdapter.exceptionLogLevel)
+        .logLevel(configAdapter.logLevel)
+        .enableCrashTracking(configAdapter.exceptionLogLevel)
         .setBatchSupport(configAdapter.batchSupport, configAdapter.requestPerBatch)
         .requestsInterval(TimeUnit.MINUTES, configAdapter.requestsIntervalMinutes.toLong())
         .setEverId(configAdapter.everId)
@@ -427,7 +428,6 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
       instance = Webtrekk.getInstance().apply {
         this.anonymousTracking(configAdapter.anonymousTracking)
         this.setTemporarySessionId(configAdapter.temporarySessionId)
-        this.setExceptionLogLevel(configAdapter.exceptionLogLevel)
       }
     }, whenInitialized = {})
     promise.resolve(true)

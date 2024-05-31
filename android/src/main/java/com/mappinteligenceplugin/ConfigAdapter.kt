@@ -11,7 +11,7 @@ data class ConfigAdapter(
   var logLevel: Logger.Level = Logger.Level.NONE,
   var requestsIntervalMinutes: Int = 15,
   var autoTracking: Boolean = true,
-  var fragmentsAutoTracking: Boolean = true,
+  var fragmentsAutoTracking: Boolean = false,
   var requestPerBatch: Int = 1000,
   var batchSupport: Boolean = false,
   var activityAutoTracking: Boolean = true,
