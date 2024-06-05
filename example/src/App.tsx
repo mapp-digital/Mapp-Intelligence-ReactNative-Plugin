@@ -10,7 +10,7 @@ import EcommerceTrackingView from './EcommerceTracking';
 import MediaTrackingView from './MediaTracking';
 import ExceptionTrackingView from './ExceptionTracking';
 import ConfigurationTrackingView from './ConfigurationTracking';
-import { ExceptionType } from '../../src/DataTypes';
+import { ExceptionType, LogLevel } from '../../src/DataTypes';
 import StreamingVideoExample from './StreamingVideoExample';
 import ManualMediaTracking from './ManualMediaTracking';
 import VideoExample from './VideoExample';
@@ -32,7 +32,7 @@ const App = () => {
       [794940687426749],
       'http://tracker-int-01.webtrekk.net'
     );
-    await MappIntelligence.setLogLevel(1);
+    await MappIntelligence.setLogLevel(LogLevel.all);
     await MappIntelligence.setBatchSupportEnabled(false);
     await MappIntelligence.setBatchSupportSize(150);
     await MappIntelligence.setRequestInterval(1);

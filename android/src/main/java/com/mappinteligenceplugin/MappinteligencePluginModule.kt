@@ -172,10 +172,10 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
    */
   @ReactMethod
   fun setLogLevel(level: Int, promise: Promise) {
-    val nativeLevel = if (level == Logger.Level.BASIC.ordinal) {
-      Logger.Level.BASIC
-    } else {
+    val nativeLevel = if (level == 7) {
       Logger.Level.NONE
+    } else {
+      Logger.Level.BASIC
     }
     runOnPlugin(whenInitialized = {
       instance.setLogLevel(nativeLevel)

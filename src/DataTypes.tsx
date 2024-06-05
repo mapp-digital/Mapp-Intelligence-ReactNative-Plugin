@@ -154,3 +154,15 @@ export enum MediaAction {
   pos = 'pos',
   eof = 'eof',
 }
+
+export enum LogLevel {
+  all = 1, // All logs of the above.
+  debug = 2, // The lowest priority that you would normally log, and purely
+  // informational in nature.
+  warning = 3, // Something is missing and might fail if not corrected
+  error = 4, // Something has failed.
+  fault = 5, // A failure in a key system.
+  info = 6, // Informational logs for updating configuration or migrating from
+  // older versions of the library.
+  none = 7, // None of the logs.
+}

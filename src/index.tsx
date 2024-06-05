@@ -4,6 +4,7 @@ import type {
   EcommerceParameters,
   EventParameters,
   ExceptionType,
+  LogLevel,
   MediaEvent,
   PageParameters,
   SessionParameters,
@@ -64,9 +65,9 @@ export const initWithConfiguration = (
  * @param level log level
  * @returns result if method executed succesfully or not
  */
-export const setLogLevel = (level: number): Promise<number> => {
-  console.log('setLogLevel');
-  return MappIntelligencePlugin.setLogLevel(level);
+export const setLogLevel = (level: LogLevel): Promise<number> => {
+  console.log('setLogLevel - ' + level.valueOf());
+  return MappIntelligencePlugin.setLogLevel(level.valueOf());
 };
 
 /**
