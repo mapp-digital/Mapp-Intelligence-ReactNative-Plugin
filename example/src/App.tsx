@@ -10,6 +10,7 @@ import EcommerceTrackingView from './EcommerceTracking';
 import MediaTrackingView from './MediaTracking';
 import ExceptionTrackingView from './ExceptionTracking';
 import ConfigurationTrackingView from './ConfigurationTracking';
+import WebViewTracking from './WebViewTracking';
 import { ExceptionType, LogLevel } from '../../src/DataTypes';
 import StreamingVideoExample from './StreamingVideoExample';
 import ManualMediaTracking from './ManualMediaTracking';
@@ -107,6 +108,10 @@ const App = () => {
             name={Routes.MANUAL_MEDIA_TRACKING.valueOf()}
             component={ManualMediaTracking}
           />
+          {/* <Stack.Screen
+            name={Routes.WEBVIEW_TRACKING.valueOf()}
+            component={WebViewTracking}
+          /> */}
         </Stack.Navigator>
       </NavigationContainer>
     );

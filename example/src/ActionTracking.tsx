@@ -56,7 +56,7 @@ export default class ActionTrackingView extends Component {
     };
     let customCategoriesDict = new Map<number, string>().set(
       20,
-      "( $', /:?@=&+ !.;()-_*"
+      'Some Category Dict'
     );
     let userCategories: UserCategories = {
       birthday: bithday,
