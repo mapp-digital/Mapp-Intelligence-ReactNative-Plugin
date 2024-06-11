@@ -108,10 +108,12 @@ const App = () => {
             name={Routes.MANUAL_MEDIA_TRACKING.valueOf()}
             component={ManualMediaTracking}
           />
-          {/* <Stack.Screen
-            name={Routes.WEBVIEW_TRACKING.valueOf()}
-            component={WebViewTracking}
-          /> */}
+          {
+            <Stack.Screen
+              name={Routes.WEBVIEW_TRACKING.valueOf()}
+              component={WebViewTracking}
+            />
+          }
         </Stack.Navigator>
       </NavigationContainer>
     );
