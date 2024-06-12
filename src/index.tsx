@@ -224,12 +224,16 @@ export const trackCustomPage = (
  */
 export const trackPageWithCustomData = (
   pageTitle: string,
-  pageParameters: Map<string, string> | null
+  pageParameters?: Map<string, string> | string | null
 ): Promise<number> => {
   console.log('trackPageWithCustomData');
-  const params = pageParameters?.entries();
-  const data = params != null ? Object.fromEntries(params) : {};
-  return MappIntelligencePlugin.trackPageWithCustomData(data, pageTitle);
+  if (pageParameters!==null && pageParameters instanceof Map){
+      const params = pageParameters?.entries();
+      const data = params != null ? Object.fromEntries(params) : {};
+      return MappIntelligencePlugin.trackPageWithCustomData(data, pageTitle);
+  } else {
+    return MappIntelligencePlugin.trackPageWithCustomData(null, pageTitle);
+  }
 };
 
 /**
