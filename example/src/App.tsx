@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import * as MappIntelligence from 'react-native-mappinteligence-plugin';
+import {Mapp} from 'react-native-mapp-plugin';
 import PageTrackingView from './PageTracking';
 import ActionTrackingView from './ActionTracking';
 import CampaignTrackingView from './CampaignTracking';
@@ -42,9 +43,11 @@ const App = () => {
     await MappIntelligence.setSendAppVersionInEveryRequest(true);
     await MappIntelligence.setEnableBackgroundSendout(true);
     await MappIntelligence.setExceptionLogLevel(ExceptionType.all);
-    await MappIntelligence.setEnableUserMatching(false);
+    await MappIntelligence.setEnableUserMatching(true);
 
     await MappIntelligence.build();
+
+    Mapp.engage('183408d0cd3632.83592719', '785651527831', 'L3', '206974', '5963');
   }
 
   function PageTracking() {

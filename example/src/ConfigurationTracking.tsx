@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, ScrollView, SafeAreaView } from 'react-native';
+import { View, ScrollView, SafeAreaView, Platform } from 'react-native';
 import { MappButton } from './components/MappButton';
 import { DefaultStyles } from './components/Styles';
 import { MappInputText } from './components/MappInputText';
@@ -7,6 +7,7 @@ import { MappSwitch } from './components/MappSwitch';
 import * as MappIntelligencePlugin from 'react-native-mappinteligence-plugin';
 import TextWithLabel from './components/TextWithLabel';
 import { Dialog } from './components/Dialog';
+import { ExceptionType, LogLevel } from '../../src/DataTypes';
 
 const ConfigurationTrackingView = () => {
   const [readySwitchEnabled] = useState(false);
@@ -105,6 +106,23 @@ const ConfigurationTrackingView = () => {
             buttonTitle="Reset"
             buttonOnPress={async () => {
               MappIntelligencePlugin.reset();
+              if (Platform.OS = 'ios') {
+                await MappIntelligencePlugin.setAnonymousTracking(false);
+                await MappIntelligencePlugin.initWithConfiguration(
+                    [794940687426749],
+                    'http://tracker-int-01.webtrekk.net'
+                 );
+                await MappIntelligencePlugin.setLogLevel(LogLevel.all);
+                await MappIntelligencePlugin.setBatchSupportEnabled(false);
+                await MappIntelligencePlugin.setBatchSupportSize(150);
+                await MappIntelligencePlugin.setRequestInterval(1);
+                await MappIntelligencePlugin.setRequestPerQueue(300);
+                await MappIntelligencePlugin.setShouldMigrate(true);
+                await MappIntelligencePlugin.setSendAppVersionInEveryRequest(true);
+                await MappIntelligencePlugin.setEnableBackgroundSendout(true);
+                await MappIntelligencePlugin.setExceptionLogLevel(ExceptionType.all);
+                await MappIntelligencePlugin.setEnableUserMatching(false);
+              }
               const everId = await MappIntelligencePlugin.getEverId();
               updateEverId(everId);
             }}

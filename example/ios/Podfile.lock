@@ -73,10 +73,11 @@ PODS:
   - hermes-engine/Pre-built (0.73.5)
   - libevent (2.1.12)
   - MappIntelligence (5.0.9)
+  - MappSDK (6.0.7)
+  - MappSDKGeotargeting (6.0.5):
+    - MappSDK (~> 6.0.0)
+  - MappSDKInapp (6.0.6.10)
   - OpenSSL-Universal (1.1.1100)
-  - PromisesObjC (2.4.0)
-  - PromisesSwift (2.4.0):
-    - PromisesObjC (= 2.4.0)
   - RCT-Folly (2022.05.16.00):
     - boost
     - DoubleConversion
@@ -960,11 +961,18 @@ PODS:
     - ReactCommon/turbomodule/core
   - react-native-safe-area-context (4.9.0):
     - React-Core
-  - react-native-video (6.0.0-beta.6):
+  - react-native-video (6.1.1):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
     - React-Core
-    - react-native-video/Video (= 6.0.0-beta.6)
-  - react-native-video/Video (6.0.0-beta.6):
-    - PromisesSwift
+    - react-native-video/Video (= 6.1.1)
+  - react-native-video/Video (6.1.1):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
+  - react-native-webview (13.10.3):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
     - React-Core
   - React-nativeconfig (0.73.5)
   - React-NativeModulesApple (0.73.5):
@@ -1135,7 +1143,12 @@ PODS:
     - React-perflogger (= 0.73.5)
   - ReactNativeExceptionHandler (2.10.10):
     - React-Core
-  - RNScreens (3.30.1):
+  - RNMappPlugin (1.1.3):
+    - MappSDK (~> 6.0.6)
+    - MappSDKGeotargeting
+    - MappSDKInapp
+    - React
+  - RNScreens (3.29.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1195,10 +1208,11 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector-modern`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
-  - react-native-crash-tester (from `../node_modules/react-native-crash-tester`)
+  - react-native-crash-tester (from `../../node_modules/react-native-crash-tester`)
   - react-native-mappinteligence-plugin (from `../..`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
-  - react-native-video (from `../node_modules/react-native-video`)
+  - react-native-video (from `../../node_modules/react-native-video`)
+  - react-native-webview (from `../../node_modules/react-native-webview`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -1219,7 +1233,8 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - ReactNativeExceptionHandler (from `../node_modules/react-native-exception-handler`)
+  - ReactNativeExceptionHandler (from `../../node_modules/react-native-exception-handler`)
+  - RNMappPlugin (from `../../node_modules/react-native-mapp-plugin`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -1237,9 +1252,10 @@ SPEC REPOS:
     - fmt
     - libevent
     - MappIntelligence
+    - MappSDK
+    - MappSDKGeotargeting
+    - MappSDKInapp
     - OpenSSL-Universal
-    - PromisesObjC
-    - PromisesSwift
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -1299,13 +1315,15 @@ EXTERNAL SOURCES:
   React-Mapbuffer:
     :path: "../node_modules/react-native/ReactCommon"
   react-native-crash-tester:
-    :path: "../node_modules/react-native-crash-tester"
+    :path: "../../node_modules/react-native-crash-tester"
   react-native-mappinteligence-plugin:
     :path: "../.."
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-video:
-    :path: "../node_modules/react-native-video"
+    :path: "../../node_modules/react-native-video"
+  react-native-webview:
+    :path: "../../node_modules/react-native-webview"
   React-nativeconfig:
     :path: "../node_modules/react-native/ReactCommon"
   React-NativeModulesApple:
@@ -1347,7 +1365,9 @@ EXTERNAL SOURCES:
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
   ReactNativeExceptionHandler:
-    :path: "../node_modules/react-native-exception-handler"
+    :path: "../../node_modules/react-native-exception-handler"
+  RNMappPlugin:
+    :path: "../../node_modules/react-native-mapp-plugin"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   Yoga:
@@ -1372,9 +1392,10 @@ SPEC CHECKSUMS:
   hermes-engine: 1d1835b2cc54c381909d94d1b3c8e0a2f1a94a0e
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   MappIntelligence: d449878420a68897cc83751a0fe178c7b544f110
+  MappSDK: a30dd8a800f0cfde05c9f0bf19b0cdcb2d0aef0a
+  MappSDKGeotargeting: 7c42a2f919cea81357f6d11ec5a6bf727d0c7770
+  MappSDKInapp: 22f4fc98c3c95824e77e1b6e15a67723e687038e
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
-  PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
-  PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
   RCT-Folly: 7169b2b1c44399c76a47b5deaaba715eeeb476c0
   RCTRequired: 2544c0f1081a5fa12e108bb8cb40e5f4581ccd87
   RCTTypeSafety: 50efabe2b115c11ed03fbf3fd79e2f163ddb5d7c
@@ -1399,7 +1420,8 @@ SPEC CHECKSUMS:
   react-native-crash-tester: 3ffaa64141427ca362079cb53559fe9a532487ae
   react-native-mappinteligence-plugin: a7a6256cc003fb105b5a8ac221679ef30eddeeab
   react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
-  react-native-video: dc3118548cf8864a83f57df4345cf6c692402e8f
+  react-native-video: e5b2bc7631f3189d0ae3c3ec5bfc1a3d5b0b3632
+  react-native-webview: d2116987f3a75ba677a9f49565bae6834d0e12c4
   React-nativeconfig: 1166714a4f7ea57a0df5c2cb44fbc70f98d580f9
   React-NativeModulesApple: 726664e9829eb5eed8170241000e46ead269a05f
   React-perflogger: 0dd9f1725d55f8264b81efadd373fe1d9cca7dc2
@@ -1421,10 +1443,11 @@ SPEC CHECKSUMS:
   React-utils: 987a4526a2fc0acdfaf87888adfe0bf9d0452066
   ReactCommon: 2947b0bffd82ea0e58ca7928881152d4c6dae9af
   ReactNativeExceptionHandler: b11ff67c78802b2f62eed0e10e75cb1ef7947c60
-  RNScreens: b6b64d956af3715adbfe84808694ae82d3fec74f
+  RNMappPlugin: 4e7c66193ffa1a7dfe66a8f0f92b20c042e20d86
+  RNScreens: 17e2f657f1b09a71ec3c821368a04acbb7ebcb46
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 9e6a04eacbd94f97d94577017e9f23b3ab41cf6c
 
 PODFILE CHECKSUM: fce41f1968082deae60f282383c85770e2a21dee
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.15.2
