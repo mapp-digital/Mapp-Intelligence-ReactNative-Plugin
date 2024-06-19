@@ -4835,7 +4835,12 @@ react-native-exception-handler@^2.10.10:
   resolved "https://registry.npmjs.org/react-native-exception-handler/-/react-native-exception-handler-2.10.10.tgz"
   integrity sha512-otAXGoZDl1689OoUJWN/rXxVbdoZ3xcmyF1uq/CsizdLwwyZqVGd6d+p/vbYvnF996FfEyAEBnHrdFxulTn51w==
 
-"react-native-mappinteligence-plugin-example@file:/Users/semsudin.tafilovic/VisualCodeProjects/react-native-mappinteligence-plugin/example":
+react-native-mapp-plugin@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.npmjs.org/react-native-mapp-plugin/-/react-native-mapp-plugin-1.1.3.tgz"
+  integrity sha512-iFEfbW199azd3dgIzVkCenZ4Yj71kKzappT5Dy7N7wnDQxOKrPiKpGOknBZKfx4ox0PwBwNIvPdF/785GISjog==
+
+"react-native-mappinteligence-plugin-example@file:/Users/stefan.stevanovic/Documents/react-native-mappinteligence-plugin/example":
   version "0.0.1"
   resolved "file:example"
   dependencies:
@@ -4874,7 +4879,7 @@ react-native-webview@^13.10.3:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"
 
-react-native@*, react-native@>=0.59, react-native@0.73.5:
+react-native@*, react-native@>=0.59, "react-native@>=0.60.0-rc.0 <1.0.x", react-native@0.73.5:
   version "0.73.5"
   dependencies:
     "@jest/create-cache-key-function" "^29.6.3"
@@ -4937,7 +4942,7 @@ react-test-renderer@^18.2.0, react-test-renderer@>=16.0.0, react-test-renderer@>
     react-shallow-renderer "^16.15.0"
     scheduler "^0.23.0"
 
-react@*, "react@^16.0.0 || ^17.0.0 || ^18.0.0", react@^18.2.0, react@>=16.0.0, react@>=16.8, react@>=16.8.0, react@>=17.0.0, react@18.2.0:
+react@*, "react@^16.0.0 || ^17.0.0 || ^18.0.0", react@^18.0.0, react@^18.2.0, react@>=16.0.0, react@>=16.8, react@>=16.8.0, react@>=17.0.0, react@18.2.0:
   version "18.2.0"
   dependencies:
     loose-envify "^1.1.0"

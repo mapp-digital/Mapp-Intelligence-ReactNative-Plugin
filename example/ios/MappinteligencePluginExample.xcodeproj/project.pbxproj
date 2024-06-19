@@ -13,6 +13,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		760C831D9E835BF1DA3CFF2A /* libPods-MappinteligencePluginExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81912B5B629B8E7180D88B05 /* libPods-MappinteligencePluginExample.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		A390BE612C19CD5300844D44 /* AppoxeeConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = A390BE602C19CD5300844D44 /* AppoxeeConfig.plist */; };
 		DC89877AFAC36ECA35F3CD70 /* libPods-MappinteligencePluginExample-MappinteligencePluginExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F9377B390C94D61E0CB067F2 /* libPods-MappinteligencePluginExample-MappinteligencePluginExampleTests.a */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +43,7 @@
 		8123544A6D683261F3D33768 /* Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests.release.xcconfig"; path = "Target Support Files/Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests/Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		81912B5B629B8E7180D88B05 /* libPods-MappinteligencePluginExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MappinteligencePluginExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MappinteligencePluginExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A390BE602C19CD5300844D44 /* AppoxeeConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AppoxeeConfig.plist; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F9377B390C94D61E0CB067F2 /* libPods-MappinteligencePluginExample-MappinteligencePluginExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MappinteligencePluginExample-MappinteligencePluginExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -86,6 +88,7 @@
 		13B07FAE1A68108700A75B9A /* MappinteligencePluginExample */ = {
 			isa = PBXGroup;
 			children = (
+				A390BE602C19CD5300844D44 /* AppoxeeConfig.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -242,6 +245,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				A390BE612C19CD5300844D44 /* AppoxeeConfig.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -465,7 +469,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = LERY366S7C;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = MappinteligencePluginExample/Info.plist;
@@ -493,7 +497,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = LERY366S7C;
 				INFOPLIST_FILE = MappinteligencePluginExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
