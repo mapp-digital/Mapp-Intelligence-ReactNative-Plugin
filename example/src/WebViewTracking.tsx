@@ -1,16 +1,23 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useRef } from 'react';
-import { ActivityIndicator, SafeAreaView, View } from 'react-native';
-import { Alert, Platform, StyleSheet, useWindowDimensions } from 'react-native';
+import React from 'react';
+import { ActivityIndicator, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview';
-import type {
-  BasicAuthCredential,
-  WebViewMessageEvent,
-} from 'react-native-webview/lib/WebViewTypes';
-import * as MappIntelligencePlugin from 'react-native-mappinteligence-plugin';
+import type { BasicAuthCredential } from 'react-native-webview/lib/WebViewTypes';
+import useWebTracking from '../../src/UseWebTracking';
 
 const WebViewTracking = () => {
-  const webviewRef = useRef<WebView>(null);
+  // init custom hook for webview tracking
+  const { webViewRef, handleMessage, handleLoad, getInjectedJavaScript } =
+    useWebTracking(
+      (data) => {
+        // register callback when onMessage received to execute some additional logic
+        console.log('On Message', data);
+      },
+      () => {
+        // register callback when web page onLoad event triggers to execute some additional logic
+        console.log('On Load');
+      }
+    );
 
   const basicAuthCredential: BasicAuthCredential = {
     username: 'demo',
@@ -18,121 +25,18 @@ const WebViewTracking = () => {
   };
 
   const demoUri = 'https://demoshop.webtrekk.com/media/web2app/index.html';
-  const html = `
-      <html>
-      <head></head>
-      <body>
-        <script>
-          setTimeout(function () {
-            window.ReactNativeWebView.postMessage("Hello!")
-          }, 2000)
-        </script>
-      </body>
-      </html>
-    `;
-
-  const runOnce = `
-        var meta = document.createElement('meta');
-        meta.setAttribute('name', 'viewport');
-        meta.setAttribute('content', 'width=device-width, height=device-height, initial-scale=0.85, maximum-scale=1.0, user-scalable=no');
-        document.getElementsByTagName('head')[0].appendChild(meta);
-        
-        window.WebtrekkAndroidWebViewCallback = {};
-
-        window.WebtrekkAndroidWebViewCallback.trackCustomPage = function(pageName,param){
-            window.ReactNativeWebView.postMessage(JSON.stringify({ method: 'trackCustomPage', 'name':pageName, 'params':param }));
-        }
-
-        window.WebtrekkAndroidWebViewCallback.trackCustomEvent = function(eventName, param){
-            window.ReactNativeWebView.postMessage(JSON.stringify({ method: 'trackCustomEvent', 'name':eventName, 'params':param }));
-        }
-
-        window.WebtrekkAndroidWebViewCallback.getEverId = function(){
-            window.ReactNativeWebView.postMessage(JSON.stringify({ method: 'getEverId' }));
-        }
-    `;
-  const injectEverIdScript = `wtSmart.utils.identifier.everId('%everId%'); true; `;
-
-  const onMessage = (event: WebViewMessageEvent) => {
-    const json = JSON.parse(event.nativeEvent.data);
-    const method = json.method;
-    const name = json.name;
-    const params = json.params;
-
-    console.log(method, name, params);
-
-    if (method === 'trackCustomPage') {
-      trackCustomPage(name, params);
-    } else if (method === 'trackCustomEvent') {
-      trackCustomEvent(name, params);
-    } else if (method === 'getEverId') {
-      injectEverId();
-    }
-
-    Alert.alert(method, name + ': ' + JSON.stringify(params));
-  };
-
-  const trackCustomPage = (name: string, params: string) => {
-    try {
-      const parameters = getJson(params);
-      console.log('Page Name: ', name, '; Params: ', parameters);
-      MappIntelligencePlugin.trackPageWithCustomData(name, parameters);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const trackCustomEvent = (name: string, params: any) => {
-    try {
-      const parameters = getJson(params);
-      console.log('Event Name: ', name, '; Params: ', parameters);
-      MappIntelligencePlugin.trackAction(
-        name,
-        parameters,
-        null,
-        null,
-        null,
-        null
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const injectEverId = () => {
-    MappIntelligencePlugin.getEverId()
-      .then((everId) => {
-        let webView = webviewRef.current;
-        if (webView != null) {
-          const script = injectEverIdScript.replace('%everId%', everId);
-          webView.injectJavaScript(script);
-          console.log('SCRIPT TO INJECT: ', script);
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
-
-  const getJson = (data: any): any => {
-    try {
-      return JSON.parse(JSON.stringify(data));
-    } catch (error) {
-      return null;
-    }
-  };
 
   return (
     <View style={{ flex: 1.0 }}>
       <WebView
-        ref={webviewRef}
+        ref={webViewRef}
         source={{
           uri: demoUri,
         }}
         basicAuthCredential={basicAuthCredential}
         useWebView2={true}
         javaScriptEnabled={true}
-        onMessage={onMessage}
+        onMessage={handleMessage}
         cacheEnabled={false}
         cacheMode={'LOAD_NO_CACHE'}
         bounces={false}
@@ -143,8 +47,11 @@ const WebViewTracking = () => {
             <ActivityIndicator size="large" color="#0000ff" />
           </View>
         )}
-        injectedJavaScript={runOnce}
-        onLoad={injectEverId}
+        injectedJavaScript={getInjectedJavaScript(
+          `document.body.style.backgroundColor = '#A9A9A9';
+          true;`
+        )}
+        onLoad={handleLoad}
       ></WebView>
     </View>
   );

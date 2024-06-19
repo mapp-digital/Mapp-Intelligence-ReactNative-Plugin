@@ -122,17 +122,8 @@ export default class PageTrackingView extends Component {
   trackPageWithCustomData(): void {
     console.log('trackPageWithCustomData()');
     var customParameters = new Map<string, string>();
-    customParameters.set('cp10', 'cp10Override');
+    customParameters.set('cp10', 'Override');
     customParameters.set('cg10', 'test');
-    const customObj = {
-      key1: 'value1',
-      key2: 'value2',
-      customParams: JSON.stringify(
-        Object.fromEntries(customParameters.entries())
-      ),
-    };
-    const json = JSON.stringify(customObj);
-    console.log(json);
     MappIntelligence.trackPageWithCustomData('testTitle1', customParameters);
   }
 

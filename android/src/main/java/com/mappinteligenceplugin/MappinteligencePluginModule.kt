@@ -307,8 +307,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   @ReactMethod
   fun trackPageWithCustomData(params: ReadableMap?, pageTitle: String, promise: Promise) {
     runOnPlugin(whenInitialized = {
-      val customParams=params?.toMap<String, String>(keyTransform = { it.toString() }) ?: emptyMap()
-      instance.trackCustomPage(pageTitle, customParams)
+      instance.trackCustomPage(pageTitle, params.toMap(keyTransform = {it.toString()}))
     })
     promise.resolve(true)
   }
