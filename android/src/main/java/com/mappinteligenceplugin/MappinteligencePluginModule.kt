@@ -78,6 +78,19 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
     promise.resolve(true)
   }
 
+  @ReactMethod
+  fun isAnonymousTracking(promise: Promise) {
+    runOnPlugin(
+      whenInitialized = {
+        val enabled = instance.isAnonymousTracking()
+        promise.resolve(enabled)
+      },
+      whenNotInitialized = {
+        promise.reject(Throwable("Plugin Not Initialized!"))
+      }
+    )
+  }
+
   /**
    * Enable or disable sending appVersion parameter with a every request
    */
@@ -126,7 +139,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
       val everId = instance.getEverId()
       promise.resolve(everId)
     }, whenNotInitialized = {
-      promise.reject("", "SDK not initialized yet!")
+      promise.reject(Throwable("Plugin Not Initialized!"))
     })
   }
 
@@ -154,6 +167,19 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
       instance.optOut(false, sendData)
     })
     promise.resolve(true)
+  }
+
+  @ReactMethod
+  fun isOptedIn(promise: Promise) {
+    runOnPlugin(
+      whenInitialized = {
+        val optOut = !instance.hasOptOut()
+        promise.resolve(optOut)
+      },
+      whenNotInitialized = {
+        promise.reject(Throwable("Plugin Not Initialized!"))
+      }
+    )
   }
 
   @ReactMethod
@@ -307,7 +333,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   @ReactMethod
   fun trackPageWithCustomData(params: ReadableMap?, pageTitle: String, promise: Promise) {
     runOnPlugin(whenInitialized = {
-      instance.trackCustomPage(pageTitle, params.toMap(keyTransform = {it.toString()}))
+      instance.trackCustomPage(pageTitle, params.toMap(keyTransform = { it.toString() }))
     })
     promise.resolve(true)
   }
@@ -460,7 +486,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
     val trackIds = configAdapter.trackIds
     val domain = configAdapter.trackDomain
 
-    instance.setIdsAndDomain(trackIds,domain)
+    instance.setIdsAndDomain(trackIds, domain)
 //    This requires some changes on native SDK
 //    val builder = WebtrekkConfiguration.Builder(trackIds, domain)
 //    presetAction.invoke(builder)

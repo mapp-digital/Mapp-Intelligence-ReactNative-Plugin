@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { View, ScrollView, SafeAreaView, Platform } from 'react-native';
 import { MappButton } from './components/MappButton';
 import { DefaultStyles } from './components/Styles';
@@ -14,6 +14,8 @@ const ConfigurationTrackingView = () => {
   const [everId, setEverId] = useState('');
   const [isReady, setIsReady] = useState(false);
   const [newEverId, setNewEverId] = useState('');
+  const [optedIn, setOptedIn] = useState(true);
+  const [anonymousTracking, setAnonymousTracking] = useState(false);
 
   const updateEverId = async (value?: string | null) => {
     if (!value) {
@@ -46,12 +48,27 @@ const ConfigurationTrackingView = () => {
     let isInitialized = await MappIntelligencePlugin.isInitialized();
     setIsReady(+isInitialized === 1 ? true : false);
     if (isInitialized) {
-      let everId = await MappIntelligencePlugin.getEverId();
-      setEverId(everId);
+      const eId = await MappIntelligencePlugin.getEverId();
+      setEverId(eId);
+
+      let opted = await MappIntelligencePlugin.isOptedIn();
+      setOptedIn(opted);
+
+      let anonymous = await MappIntelligencePlugin.isAnonymousTracking();
+      setAnonymousTracking(anonymous);
     }
   };
 
-  init();
+  useLayoutEffect(() => {
+    init();
+  }, []);
+
+  const updateAnonymousTracking = async (enabled: boolean) => {
+    setAnonymousTracking(enabled);
+    await MappIntelligencePlugin.setAnonymousTracking(enabled);
+    const eId = await MappIntelligencePlugin.getEverId();
+    setEverId(eId);
+  };
   return (
     <SafeAreaView>
       <ScrollView>
@@ -62,7 +79,35 @@ const ConfigurationTrackingView = () => {
             text={'Is Ready'}
             isEnabled={readySwitchEnabled}
           />
-
+          <MappSwitch
+            text={
+              optedIn
+                ? 'Opt In - (tracking enabled)'
+                : 'Opt Out - (tracking disabled)'
+            }
+            isChecked={optedIn}
+            onCheckedChanged={function (checked: boolean): void {
+              setOptedIn(checked);
+              if (checked) {
+                MappIntelligencePlugin.optOut(true);
+              } else {
+                MappIntelligencePlugin.optIn(true);
+              }
+            }}
+            isEnabled={true}
+          />
+          <MappSwitch
+            text={
+              anonymousTracking
+                ? 'Anonymous Tracking - (enabled)'
+                : 'Anonymous Tracking - (disabled)'
+            }
+            isChecked={anonymousTracking}
+            onCheckedChanged={function (checked: boolean): void {
+              updateAnonymousTracking(checked);
+            }}
+            isEnabled={true}
+          />
           <TextWithLabel label="Current Ever ID" content={everId} />
           <MappInputText
             disableWhenEmpty={false}
@@ -79,48 +124,36 @@ const ConfigurationTrackingView = () => {
             textValue={newEverId}
             hintValue="Ever ID"
           />
-
           <MappButton
             buttonTitle="Send requests and clean"
             buttonOnPress={() => {
               MappIntelligencePlugin.sendRequestsAndClean();
             }}
           />
-          <MappButton
-            buttonTitle="Opt out"
-            buttonOnPress={async () => {
-              MappIntelligencePlugin.optOut(true);
-              const everId = await MappIntelligencePlugin.getEverId();
-              updateEverId(everId);
-            }}
-          />
-          <MappButton
-            buttonTitle="Opt in"
-            buttonOnPress={async () => {
-              MappIntelligencePlugin.optIn(true);
-              const everId = await MappIntelligencePlugin.getEverId();
-              updateEverId(everId);
-            }}
-          />
+
           <MappButton
             buttonTitle="Reset"
             buttonOnPress={async () => {
               MappIntelligencePlugin.reset();
-              if (Platform.OS = 'ios') {
+              if ((Platform.OS = 'ios')) {
                 await MappIntelligencePlugin.setAnonymousTracking(false);
                 await MappIntelligencePlugin.initWithConfiguration(
-                    [794940687426749],
-                    'http://tracker-int-01.webtrekk.net'
-                 );
+                  [794940687426749],
+                  'http://tracker-int-01.webtrekk.net'
+                );
                 await MappIntelligencePlugin.setLogLevel(LogLevel.all);
                 await MappIntelligencePlugin.setBatchSupportEnabled(false);
                 await MappIntelligencePlugin.setBatchSupportSize(150);
                 await MappIntelligencePlugin.setRequestInterval(1);
                 await MappIntelligencePlugin.setRequestPerQueue(300);
                 await MappIntelligencePlugin.setShouldMigrate(true);
-                await MappIntelligencePlugin.setSendAppVersionInEveryRequest(true);
+                await MappIntelligencePlugin.setSendAppVersionInEveryRequest(
+                  true
+                );
                 await MappIntelligencePlugin.setEnableBackgroundSendout(true);
-                await MappIntelligencePlugin.setExceptionLogLevel(ExceptionType.all);
+                await MappIntelligencePlugin.setExceptionLogLevel(
+                  ExceptionType.all
+                );
                 await MappIntelligencePlugin.setEnableUserMatching(false);
               }
               const everId = await MappIntelligencePlugin.getEverId();
@@ -135,8 +168,8 @@ const ConfigurationTrackingView = () => {
                 'www.testDomain.com'
               );
               MappIntelligencePlugin.setLogLevel(1);
-              const everId = await MappIntelligencePlugin.getEverId();
-              updateEverId(everId);
+              const eId = await MappIntelligencePlugin.getEverId();
+              updateEverId(eId);
             }}
           />
           <MappButton

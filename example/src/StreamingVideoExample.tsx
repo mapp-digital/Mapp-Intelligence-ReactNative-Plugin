@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Video, { type VideoRef } from 'react-native-video';
 import * as MappIntelligencePlugin from 'react-native-mappinteligence-plugin';
@@ -13,6 +13,7 @@ import {
   type MIProduct,
 } from '../../src/DataTypes';
 import { useNavigation } from '@react-navigation/native';
+import { Dialog } from './components/Dialog';
 
 const StreamingVideoExample = () => {
   const navigation = useNavigation();
@@ -20,7 +21,11 @@ const StreamingVideoExample = () => {
   const sources: MediaSource[] = [
     {
       title: 'Stream',
-      url: 'https://live-par-2-cdn-alt.livepush.io/live/bigbuckbunnyclip/index.m3u8',
+      url: 'https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8',
+    },
+    {
+      title: 'Stream 2',
+      url: 'https://stream-akamai.castr.com/5b9352dbda7b8c769937e459/live_2361c920455111ea85db6911fe397b9e/index.fmp4.m3u8',
     },
   ];
 
@@ -222,12 +227,18 @@ const StreamingVideoExample = () => {
     <View style={styles.container}>
       <Video
         // Can be a URL or a local file.
-        source={{ uri: sources[0]?.url }}
+        source={{ uri: sources[sources.length - 1]?.url }}
         // Store reference
         ref={videoRef}
         // Callback when video cannot be loaded
         onError={(e) => {
           console.log(e);
+          const errorMessage = e.error.errorString ?? 'Unknown error';
+          Dialog.show({
+            title: 'Error Playing Video',
+            message: errorMessage,
+            positiveButtonText: 'OK',
+          });
         }}
         resizeMode="none"
         style={styles.backgroundVideo}

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Video, { type VideoRef } from 'react-native-video';
 import * as MappIntelligencePlugin from 'react-native-mappinteligence-plugin';
@@ -37,6 +37,29 @@ const VideoExample = () => {
   const [busy, setBusy] = useState(false);
 
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>();
+
+  const onSeek = async (currentTime: number, seekTime: number) => {
+    console.debug(
+      'onSeek - currentTime: ',
+      currentTime,
+      ' - seekTime: ',
+      seekTime
+    );
+    const mediaParameters: MediaParameteres = {
+      name: 'Big Bunny',
+      action: MediaAction.seek.valueOf(),
+      position: videoProgress.currentTime,
+      duration: videoProgress.duration,
+      customCategories: new Map<number, string>(),
+    };
+
+    const mediaEvent: MediaEvent = {
+      pageName: 'Video Sample',
+      parameters: mediaParameters,
+    };
+    MappIntelligencePlugin.trackMedia(mediaEvent);
+  };
+
   /**
    * Method to create and send EOF media event
    */
@@ -55,7 +78,7 @@ const VideoExample = () => {
       customCategories: customCategories,
     };
     const mediaEvent: MediaEvent = {
-      pageName: 'Streaming Video Sample',
+      pageName: 'Video Sample',
       parameters: mediaParams,
     };
 
@@ -235,6 +258,9 @@ const VideoExample = () => {
           console.log(e);
         }}
         collapsable={false}
+        onSeek={(e) => {
+          onSeek(e.currentTime, e.seekTime);
+        }}
         onProgress={(e) => {
           setVideoProgress({
             currentTime: e.currentTime,
@@ -246,7 +272,10 @@ const VideoExample = () => {
           videoProgress.seekable = e.seekableDuration;
           if (!busy) {
             setBusy(true);
+            // clear previous timer with stored timoutId
             clearTimeout(timeoutId);
+
+            // create new timer for exection, and save timerId
             const timeId = setTimeout(() => {
               if (navigation.isFocused()) {
                 onProgressEvent(
@@ -257,6 +286,8 @@ const VideoExample = () => {
                 setBusy(false);
               }
             }, REPEAT_TIME_MS);
+
+            //update timeoutId with a new timer id
             setTimeoutId(timeId);
           }
         }}
