@@ -6,6 +6,7 @@ buildscript {
       dirs 'libs'
     }
     google()
+    mavenLocal()
     mavenCentral()
     maven {
       // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
@@ -96,8 +97,9 @@ android {
 }
 
 repositories {
-  mavenCentral()
   google()
+  mavenLocal()
+  mavenCentral()
 }
 
 
@@ -109,8 +111,8 @@ dependencies {
   implementation("androidx.annotation:annotation:1.8.0")
   implementation("androidx.core:core-ktx:1.13.1")
 
-  implementation("androidx.appcompat:appcompat:1.6.1")
-  implementation("com.mapp.sdk:intelligence-android:5.1.9")
+  implementation("androidx.appcompat:appcompat:1.7.0")
+  implementation("com.mapp.sdk:intelligence-android:5.1.9.1")
 }
 
 configurations.configureEach {

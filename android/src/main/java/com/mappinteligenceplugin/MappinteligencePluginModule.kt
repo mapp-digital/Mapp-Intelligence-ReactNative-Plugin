@@ -439,6 +439,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
         .setBatchSupport(configAdapter.batchSupport, configAdapter.requestPerBatch)
         .requestsInterval(TimeUnit.MINUTES, configAdapter.requestsIntervalMinutes.toLong())
         .setEverId(configAdapter.everId)
+        .setUserMatchingEnabled(configAdapter.userMatchingEnabled)
         .sendAppVersionInEveryRequest(configAdapter.versionInEachRequest)
 
       if (configAdapter.shouldMigrate) builder.enableMigration()
