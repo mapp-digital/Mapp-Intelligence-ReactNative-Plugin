@@ -16,6 +16,7 @@ const ConfigurationTrackingView = () => {
   const [newEverId, setNewEverId] = useState('');
   const [optedIn, setOptedIn] = useState(true);
   const [anonymousTracking, setAnonymousTracking] = useState(false);
+  const [userMatching, setUserMatching] = useState(false);
 
   const updateEverId = async (value?: string | null) => {
     if (!value) {
@@ -56,6 +57,9 @@ const ConfigurationTrackingView = () => {
 
       let anonymous = await MappIntelligencePlugin.isAnonymousTracking();
       setAnonymousTracking(anonymous);
+
+      let uMatching = await MappIntelligencePlugin.isUserMatchingEnabled();
+      setUserMatching(uMatching);
     }
   };
 
@@ -69,6 +73,12 @@ const ConfigurationTrackingView = () => {
     const eId = await MappIntelligencePlugin.getEverId();
     setEverId(eId);
   };
+
+  const updateUserMatching = async (enabled: boolean) => {
+    await MappIntelligencePlugin.setEnableUserMatching(enabled);
+    setUserMatching(enabled);
+  };
+
   return (
     <SafeAreaView>
       <ScrollView>
@@ -105,6 +115,18 @@ const ConfigurationTrackingView = () => {
             isChecked={anonymousTracking}
             onCheckedChanged={function (checked: boolean): void {
               updateAnonymousTracking(checked);
+            }}
+            isEnabled={true}
+          />
+          <MappSwitch
+            text={
+              userMatching
+                ? 'User matching - (enabled)'
+                : 'User matching - (disabled)'
+            }
+            isChecked={userMatching}
+            onCheckedChanged={function (checked: boolean): void {
+              updateUserMatching(checked);
             }}
             isEnabled={true}
           />
@@ -146,7 +168,6 @@ const ConfigurationTrackingView = () => {
                 await MappIntelligencePlugin.setBatchSupportSize(150);
                 await MappIntelligencePlugin.setRequestInterval(1);
                 await MappIntelligencePlugin.setRequestPerQueue(300);
-                await MappIntelligencePlugin.setShouldMigrate(true);
                 await MappIntelligencePlugin.setSendAppVersionInEveryRequest(
                   true
                 );
@@ -176,13 +197,13 @@ const ConfigurationTrackingView = () => {
             buttonTitle="Print current config"
             buttonOnPress={async () => {
               const config = await MappIntelligencePlugin.printCurrentConfig();
-              console.log(config);
-            }}
-          />
-          <MappButton
-            buttonTitle="User matching set to true"
-            buttonOnPress={() => {
-              MappIntelligencePlugin.setEnableUserMatching(true);
+              const configFormatted = config.replace(',', '\n');
+              console.log(configFormatted);
+              Dialog.show({
+                title: 'Config',
+                message: configFormatted,
+                positiveButtonText: 'OK',
+              });
             }}
           />
         </View>

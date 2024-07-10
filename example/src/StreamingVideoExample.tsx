@@ -227,7 +227,7 @@ const StreamingVideoExample = () => {
     <View style={styles.container}>
       <Video
         // Can be a URL or a local file.
-        source={{ uri: sources[sources.length - 1]?.url }}
+        source={{ uri: sources[0]?.url }}
         // Store reference
         ref={videoRef}
         // Callback when video cannot be loaded

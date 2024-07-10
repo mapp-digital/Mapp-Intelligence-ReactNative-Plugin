@@ -4101,6 +4101,25 @@ kleur@^3.0.3:
 kleur@^4.1.4:
   version "4.1.5"
 
+lefthook-darwin-arm64@1.7.1:
+  version "1.7.1"
+  resolved "https://registry.npmjs.org/lefthook-darwin-arm64/-/lefthook-darwin-arm64-1.7.1.tgz"
+  integrity sha512-WNM92Ix2rKmDKXzjlkVGCdzSkzzj3Z9D7yKi22KeOZ1iCXG1EtXEWmXO5M2g28FNb4cZI0r2DACNH5hz8JsfgA==
+
+lefthook@^1.7.1:
+  version "1.7.1"
+  resolved "https://registry.npmjs.org/lefthook/-/lefthook-1.7.1.tgz"
+  integrity sha512-WNgjrPH4bYZyAYsiK7y7roQCQFIgqdCFxVCVe7ylAFD+QvW8tMceG19mR3GS2if1fGHC/cs+Z0r6PI52b/G1eA==
+  optionalDependencies:
+    lefthook-darwin-arm64 "1.7.1"
+    lefthook-darwin-x64 "1.7.1"
+    lefthook-freebsd-arm64 "1.7.1"
+    lefthook-freebsd-x64 "1.7.1"
+    lefthook-linux-arm64 "1.7.1"
+    lefthook-linux-x64 "1.7.1"
+    lefthook-windows-arm64 "1.7.1"
+    lefthook-windows-x64 "1.7.1"
+
 leven@^3.1.0:
   version "3.1.0"
 

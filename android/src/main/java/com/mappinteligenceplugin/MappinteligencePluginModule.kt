@@ -105,6 +105,19 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   }
 
   /**
+   * Returns if user matching is enabled or disabled
+   */
+  @ReactMethod
+  fun isUserMatchingEnabled(promise: Promise) {
+    runOnPlugin(whenInitialized = {
+      val enabled = instance.isUserMatchingEnabled()
+      promise.resolve(enabled)
+    }, whenNotInitialized = {
+      promise.reject(Throwable("Plugin Not Initialized!"))
+    })
+  }
+
+  /**
    * Enable or disable user matching option
    * User matching provides connection between users on Engage and Intelligence systems
    */

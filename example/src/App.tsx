@@ -122,7 +122,6 @@ const initMappTracking = async (anonymous: boolean) => {
   await MappIntelligence.setBatchSupportSize(150);
   await MappIntelligence.setRequestInterval(1);
   await MappIntelligence.setRequestPerQueue(300);
-  await MappIntelligence.setShouldMigrate(true);
   await MappIntelligence.setSendAppVersionInEveryRequest(true);
   await MappIntelligence.setEnableBackgroundSendout(true);
   await MappIntelligence.setExceptionLogLevel(ExceptionType.all);

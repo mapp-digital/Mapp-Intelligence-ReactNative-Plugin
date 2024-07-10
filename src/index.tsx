@@ -135,16 +135,6 @@ export const setRequestPerQueue = (
 };
 
 /**
- * Control if migration should be applied from a previos SDK version.
- * @param migrate true to apply migration on the initialization process; otherwise false
- * @returns result if method executed succesfully or not
- */
-export const setShouldMigrate = (migrate: boolean): Promise<number> => {
-  console.debug('setShouldMigrate');
-  return MappIntelligencePlugin.setShouldMigrate(migrate);
-};
-
-/**
  * Based on the result of the user's conset to allow personalized tracking or not,
  * enable anonymous tracking when no consent. If enabled, everId will be deleted (and not generated until anonymous tracking is enabled)
  * @param anonymous true to enable anonymous tracking; false to disable it.
@@ -184,6 +174,15 @@ export const setSendAppVersionInEveryRequest = (
 export const setEnableUserMatching = (enabled: boolean): Promise<number> => {
   console.debug('setEnableUserMatching');
   return MappIntelligencePlugin.setEnableUserMatching(enabled);
+};
+
+/**
+ * Check if user matching is enabled or disabled
+ * @returns true if user matching is enabled, otherwise returns false. If plugin not initilized, throws exception.
+ */
+export const isUserMatchingEnabled = (): Promise<boolean> => {
+  console.debug('isUserMatchingEnabled');
+  return MappIntelligencePlugin.isUserMatchingEnabled();
 };
 
 /**
