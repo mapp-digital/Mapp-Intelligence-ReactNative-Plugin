@@ -19,6 +19,7 @@ import VideoExample from './VideoExample';
 import HomeScreen from './HomeScreen';
 import { Routes } from './Routes';
 import { Dialog } from './components/Dialog';
+import StreamingVideoSetup from './StreamingVideoSetup';
 
 const Stack = createNativeStackNavigator();
 const PageTracking = () => {
@@ -73,6 +74,10 @@ const DefaultPage = () => {
         <Stack.Screen
           name={Routes.STREAMING_VIDEO_EXAMPLE.valueOf()}
           component={StreamingVideoExample}
+        />
+        <Stack.Screen
+          name={Routes.STREAMING_VIDEO_SETUP.valueOf()}
+          component={StreamingVideoSetup}
         />
         <Stack.Screen
           name={Routes.VIDEO_EXAMPLE.valueOf()}

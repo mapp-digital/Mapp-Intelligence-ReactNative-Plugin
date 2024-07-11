@@ -8,7 +8,8 @@ import {
   type InputModeOptions,
 } from 'react-native';
 import { DefaultStyles } from './Styles';
-export const MappInputText = (props: {
+
+export const MappInputBox = (props: {
   textValue: string;
   hintValue: string;
   buttonTitle: string;
@@ -16,13 +17,14 @@ export const MappInputText = (props: {
   buttonBackgroundColor?: ColorValue | '#06A806';
   onValueChanged: (newValue: string) => void | null;
   onClick?: (value: string) => void;
-  disableWhenEmpty?: boolean | false;
+  disableWhenEmpty?: boolean;
   keyboardMode?: InputModeOptions | 'text' | null;
 }) => {
   const [inputValue, setInputValue] = useState(props.textValue);
   return (
     <View style={DefaultStyles.sectionTextRow}>
       <TextInput
+        multiline={true}
         style={{ flex: 1 }}
         onChangeText={(value) => {
           setInputValue(value);

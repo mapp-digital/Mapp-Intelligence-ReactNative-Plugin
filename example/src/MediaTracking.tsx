@@ -11,7 +11,7 @@ function MediaTrackingView(props: { navigation: any }) {
         <FlatList
           data={[
             Routes.VIDEO_EXAMPLE,
-            Routes.STREAMING_VIDEO_EXAMPLE,
+            Routes.STREAMING_VIDEO_SETUP,
             Routes.MANUAL_MEDIA_TRACKING,
           ]}
           renderItem={({ item }) => (
