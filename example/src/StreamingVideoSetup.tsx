@@ -6,6 +6,23 @@ import { MappInputBox } from './components/MappInputBox';
 import { StyleSheet } from 'react-native';
 import { Dialog } from './components/Dialog';
 
+const urlPattern = new RegExp(
+  '^(https?:\\/\\/)' + // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|' + // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+    '(\\#[-a-z\\d_]*)?$',
+  'i' // fragment locator
+);
+
+const isValidUrl = (url?: string | null) => {
+  const nonEmptyUrl = String(url ?? '').toLowerCase();
+  const valid = urlPattern.test(nonEmptyUrl);
+  console.log('Is URL Valid: ', nonEmptyUrl, valid);
+  return valid;
+};
+
 const StreamingVideoSetup = (props: { navigation: any }) => {
   const navigation = props.navigation;
   const [videoUrl, setVideoUrl] = useState<string | undefined | null>(
@@ -31,7 +48,7 @@ const StreamingVideoSetup = (props: { navigation: any }) => {
       />
       <View style={{ paddingVertical: 10 }} />
       <MappButton
-        enabled={videoUrl != ''}
+        enabled={isValidUrl(videoUrl)}
         buttonTitle={'Open video'}
         buttonOnPress={() => {
           if (videoUrl == '') {

@@ -1,16 +1,17 @@
-import React from 'react';
 import { useState } from 'react';
 import { View, Button } from 'react-native';
 
 export const MappButton = (props: {
   buttonTitle: string;
   buttonOnPress?: () => void;
-  enabled?: boolean | true;
+  enabled?: boolean;
 }) => {
-  const [buttonEnabled, setButtonEnabled] = useState(props.enabled ?? true);
+  const buttonEnabled = props.enabled ?? true;
+
+  const [buttonLocked, setButtonLocked] = useState(false);
   const setTimer = async () => {
     const func = setTimeout(() => {
-      setButtonEnabled(true);
+      setButtonLocked(false);
     }, 100);
     return func;
   };
@@ -20,7 +21,7 @@ export const MappButton = (props: {
       <Button
         title={props.buttonTitle}
         onPress={() => {
-          setButtonEnabled(false);
+          setButtonLocked(true);
           try {
             if (props.buttonOnPress) {
               props.buttonOnPress();
@@ -29,7 +30,7 @@ export const MappButton = (props: {
             setTimer();
           }
         }}
-        disabled={!buttonEnabled}
+        disabled={!buttonEnabled || buttonLocked}
         color="#06A806"
       />
     </View>
