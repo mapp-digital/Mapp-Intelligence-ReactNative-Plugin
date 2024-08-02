@@ -233,7 +233,7 @@ const StreamingVideoExample = (props: { route: any; navigation: any }) => {
           console.log(e);
           const errorMessage = e.error.errorString ?? 'Unknown error';
           Dialog.show({
-            title: 'Error Playing Video',
+            title: 'Video Player Error',
             message: errorMessage,
             positiveButtonText: 'OK',
           });
