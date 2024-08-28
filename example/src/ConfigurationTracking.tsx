@@ -13,6 +13,7 @@ const ConfigurationTrackingView = () => {
   const [readySwitchEnabled] = useState(false);
   const [everId, setEverId] = useState('');
   const [isReady, setIsReady] = useState(false);
+  const [isAnonymus, setIsAnonymus] = useState(MappIntelligencePlugin.getEverId.toString() == "");
   const [newEverId, setNewEverId] = useState('');
 
   const updateEverId = async (value?: string | null) => {
@@ -61,6 +62,22 @@ const ConfigurationTrackingView = () => {
             isChecked={isReady}
             text={'Is Ready'}
             isEnabled={readySwitchEnabled}
+          />
+          <MappSwitch
+            onCheckedChanged={(_) => {
+              const newStatus = !isAnonymus
+              MappIntelligencePlugin.setAnonymousTracking(newStatus)
+              if (newStatus == true) {
+                setNewEverId("")
+                setIsAnonymus(true)
+              } else {
+                setNewEverId(MappIntelligencePlugin.getEverId.toString())
+                setIsAnonymus(false)
+              }
+            }}
+            isChecked={isAnonymus}
+            text={'Is Anonymous Enabled'}
+            isEnabled={true}
           />
 
           <TextWithLabel label="Current Ever ID" content={everId} />
