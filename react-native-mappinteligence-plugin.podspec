@@ -21,5 +21,5 @@ Pod::Spec.new do |s|
   s.dependency "RCTRequired"
   s.dependency "RCTTypeSafety"
   s.dependency "ReactCommon/turbomodule/core"
-  s.dependency "MappIntelligence", '5.0.10-rc2'
+  s.dependency "MappIntelligence", '5.0.11'
 end
