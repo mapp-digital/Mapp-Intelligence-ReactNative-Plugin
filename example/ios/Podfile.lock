@@ -72,7 +72,7 @@ PODS:
     - hermes-engine/Pre-built (= 0.73.5)
   - hermes-engine/Pre-built (0.73.5)
   - libevent (2.1.12)
-  - MappIntelligence (5.0.10-rc2)
+  - MappIntelligence (5.0.11)
   - MappSDK (6.0.7)
   - MappSDKGeotargeting (6.0.5):
     - MappSDK (~> 6.0.0)
@@ -952,7 +952,7 @@ PODS:
   - react-native-crash-tester (0.2.3):
     - React-Core
   - react-native-mappinteligence-plugin (0.1.0):
-    - MappIntelligence (= 5.0.10-rc2)
+    - MappIntelligence (= 5.0.11)
     - RCT-Folly
     - RCTRequired
     - RCTTypeSafety
@@ -1392,7 +1392,7 @@ SPEC CHECKSUMS:
   glog: c5d68082e772fa1c511173d6b30a9de2c05a69a2
   hermes-engine: 1d1835b2cc54c381909d94d1b3c8e0a2f1a94a0e
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  MappIntelligence: d207e5b2f8dbec3b7226f609c15fe7ac2f8c4369
+  MappIntelligence: b84b3edf10d69b2400b6e31f08a78622bf14cdfa
   MappSDK: a30dd8a800f0cfde05c9f0bf19b0cdcb2d0aef0a
   MappSDKGeotargeting: 7c42a2f919cea81357f6d11ec5a6bf727d0c7770
   MappSDKInapp: 22f4fc98c3c95824e77e1b6e15a67723e687038e
@@ -1419,7 +1419,7 @@ SPEC CHECKSUMS:
   React-logger: 0331362115f0f5b392bd7ed14636d1a3ea612479
   React-Mapbuffer: 7c35cd53a22d0be04d3f26f7881c7fb7dd230216
   react-native-crash-tester: 3ffaa64141427ca362079cb53559fe9a532487ae
-  react-native-mappinteligence-plugin: 692b9621214778229481e7ccb43c65e5b3fa2867
+  react-native-mappinteligence-plugin: 5f6082776c5d72e3886eb8da1148c78726c31b55
   react-native-safe-area-context: b7daa1a8df36095a032dff095a1ea8963cb48371
   react-native-video: e5b2bc7631f3189d0ae3c3ec5bfc1a3d5b0b3632
   react-native-webview: d2116987f3a75ba677a9f49565bae6834d0e12c4

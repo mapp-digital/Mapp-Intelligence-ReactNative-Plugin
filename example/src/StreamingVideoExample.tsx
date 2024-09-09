@@ -20,7 +20,7 @@ const StreamingVideoExample = () => {
   const sources: MediaSource[] = [
     {
       title: 'Stream',
-      url: 'https://live-par-2-cdn-alt.livepush.io/live/bigbuckbunnyclip/index.m3u8',
+      url: 'http://playertest.longtailvideo.com/adaptive/wowzaid3/playlist.m3u8',
     },
   ];
 
