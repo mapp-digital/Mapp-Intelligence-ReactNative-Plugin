@@ -84,3 +84,6 @@ lib/
 # npm & yarn .lock files
 package-lock.json
 yarn.lock
+
+*.lock
+*-lock.json
