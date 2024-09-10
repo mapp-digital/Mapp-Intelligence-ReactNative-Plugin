@@ -1,7 +1,7 @@
 import { AppRegistry, Alert, LogBox, YellowBox } from 'react-native';
 import App from './src/App';
 import { name as appName } from './app.json';
-import { setGlobalErrorHandler } from 'react-native-mappinteligence-plugin';
+import { setGlobalErrorHandler } from 'react-native-mappinteligence';
 
 const showError = (error, isFatal) => {
   Alert.alert(

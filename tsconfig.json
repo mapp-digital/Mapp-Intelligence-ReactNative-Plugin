@@ -2,7 +2,7 @@
   "compilerOptions": {
     "rootDir": ".",
     "paths": {
-      "react-native-mappinteligence-plugin": ["./src/index"]
+      "react-native-mappinteligence": ["./src/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
