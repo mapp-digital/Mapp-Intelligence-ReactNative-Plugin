@@ -2,7 +2,7 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import * as MappIntelligence from 'react-native-mappinteligence-plugin';
+import * as MappIntelligence from 'react-native-mappinteligence';
 import { Mapp } from 'react-native-mapp-plugin';
 import PageTrackingView from './PageTracking';
 import ActionTrackingView from './ActionTracking';
