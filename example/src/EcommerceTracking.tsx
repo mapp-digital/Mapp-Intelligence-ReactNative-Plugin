@@ -71,7 +71,7 @@ export default class EcommerceTrackingView extends Component {
   async viewProduct() {
     let ecommerceParam: EcommerceParameters = {
       products: [product],
-      status: MIStatus.noneStatus,
+      status: MIStatus.viewed,
       currency: 'EUR',
       orderID: 'ud679adn',
       orderValue: 456,
