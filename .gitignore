@@ -80,3 +80,6 @@ lib/
 
 # APK files
 *.apk
+
+yarn.lock
+package-lock.json

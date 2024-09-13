@@ -14,6 +14,7 @@ const ConfigurationTrackingView = () => {
   const [everId, setEverId] = useState('');
   const [isReady, setIsReady] = useState(false);
   const [newEverId, setNewEverId] = useState('');
+  const [resetReady, setResetReady] = useState(true);
 
   const updateEverId = async (value?: string | null) => {
     if (!value) {
@@ -104,27 +105,34 @@ const ConfigurationTrackingView = () => {
           />
           <MappButton
             buttonTitle="Reset"
+            enabled={resetReady}
+            lockDelay={1000}
             buttonOnPress={async () => {
-              MappIntelligencePlugin.reset();
-              if (Platform.OS = 'ios') {
+              setResetReady(false);
+              await MappIntelligencePlugin.reset();
+              if (Platform.OS === 'ios') {
                 await MappIntelligencePlugin.setAnonymousTracking(false);
                 await MappIntelligencePlugin.initWithConfiguration(
-                    [794940687426749],
-                    'http://tracker-int-01.webtrekk.net'
-                 );
+                  [794940687426749],
+                  'http://tracker-int-01.webtrekk.net'
+                );
                 await MappIntelligencePlugin.setLogLevel(LogLevel.all);
                 await MappIntelligencePlugin.setBatchSupportEnabled(false);
                 await MappIntelligencePlugin.setBatchSupportSize(150);
                 await MappIntelligencePlugin.setRequestInterval(1);
                 await MappIntelligencePlugin.setRequestPerQueue(300);
                 await MappIntelligencePlugin.setShouldMigrate(true);
-                await MappIntelligencePlugin.setSendAppVersionInEveryRequest(true);
+                await MappIntelligencePlugin.setSendAppVersionInEveryRequest(
+                  true
+                );
                 await MappIntelligencePlugin.setEnableBackgroundSendout(true);
-                await MappIntelligencePlugin.setExceptionLogLevel(ExceptionType.all);
+                await MappIntelligencePlugin.setExceptionLogLevel(
+                  ExceptionType.all
+                );
                 await MappIntelligencePlugin.setEnableUserMatching(false);
               }
               const everId = await MappIntelligencePlugin.getEverId();
-              updateEverId(everId);
+              await updateEverId(everId);
             }}
           />
           <MappButton

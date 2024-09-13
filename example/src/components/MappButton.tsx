@@ -6,12 +6,13 @@ export const MappButton = (props: {
   buttonTitle: string;
   buttonOnPress?: () => void;
   enabled?: boolean | true;
+  lockDelay?: number | 100;
 }) => {
   const [buttonEnabled, setButtonEnabled] = useState(props.enabled ?? true);
   const setTimer = async () => {
     const func = setTimeout(() => {
       setButtonEnabled(true);
-    }, 100);
+    }, props.lockDelay);
     return func;
   };
 
