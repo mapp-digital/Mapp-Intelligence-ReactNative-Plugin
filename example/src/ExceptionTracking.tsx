@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, FlatList, View } from 'react-native';
 import { DefaultStyles } from './components/Styles';
 import { MappButton } from './components/MappButton';
-import * as MappIntelligencePlugin from 'react-native-mappinteligence-plugin';
+import * as MappIntelligencePlugin from 'mapp-intelligence-reactnative-plugin';
 import CrashTester from 'react-native-crash-tester';
 
 const ExceptionTrackingView = () => {

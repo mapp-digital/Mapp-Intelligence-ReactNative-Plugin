@@ -1,17 +1,17 @@
-# react-native-mappinteligence-plugin
+# mapp-intelligence-reactnative-plugin
 
 The MappIntelligence SDK allows you to track user activities, screen flow and media usage for an App. All data is send to the MappIntelligence tracking system for further analysis.
 
 ## Installation
 
 ```sh
-npm install react-native-mappinteligence-plugin
+npm install mapp-intelligence-reactnative-plugin
 ```
 
 ## Usage
 
 ```js
-import { multiply } from 'react-native-mappinteligence-plugin';
+import { multiply } from 'mapp-intelligence-reactnative-plugin';
 
 // ...
 
