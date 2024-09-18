@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Video, { type VideoRef } from 'react-native-video';
-import * as MappIntelligencePlugin from 'react-native-mappinteligence-plugin';
+import * as MappIntelligencePlugin from 'mapp-intelligence-reactnative-plugin';
 import {
   MediaAction,
   type EventParameters,

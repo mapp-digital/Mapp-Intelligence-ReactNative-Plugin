@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as MappIntelligence from 'react-native-mappinteligence-plugin';
+import * as MappIntelligence from 'mapp-intelligence-reactnative-plugin';
 import { AppRegistry, FlatList, View } from 'react-native';
 import {
   MIGender,

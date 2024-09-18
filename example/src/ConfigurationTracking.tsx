@@ -4,7 +4,7 @@ import { MappButton } from './components/MappButton';
 import { DefaultStyles } from './components/Styles';
 import { MappInputText } from './components/MappInputText';
 import { MappSwitch } from './components/MappSwitch';
-import * as MappIntelligencePlugin from 'react-native-mappinteligence-plugin';
+import * as MappIntelligencePlugin from 'mapp-intelligence-reactnative-plugin';
 import TextWithLabel from './components/TextWithLabel';
 import { Dialog } from './components/Dialog';
 import { ExceptionType, LogLevel } from '../../src/DataTypes';

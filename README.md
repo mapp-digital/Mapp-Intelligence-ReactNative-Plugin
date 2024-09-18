@@ -1,22 +1,43 @@
-# react-native-mappinteligence-plugin
+# mapp-intelligence-reactnative-plugin
 
 The MappIntelligence SDK allows you to track user activities, screen flow and media usage for an App. All data is send to the MappIntelligence tracking system for further analysis.
 
 ## Installation
 
 ```sh
-npm install react-native-mappinteligence-plugin
+npm install mapp-intelligence-reactnative-plugin
 ```
 
 ## Usage
 
 ```js
-import { multiply } from 'react-native-mappinteligence-plugin';
+import * as MappIntelligence from 'mapp-intelligence-reactnative-plugin';
 
+const App = () => {
+  async function initMappTracking() {
+    await MappIntelligence.setAnonymousTracking(false);
+    await MappIntelligence.initWithConfiguration(
+      [794940687426749],
+      'http://tracker-int-01.webtrekk.net'
+    );
+    await MappIntelligence.setLogLevel(LogLevel.all);
+    await MappIntelligence.setBatchSupportEnabled(false);
+    await MappIntelligence.setBatchSupportSize(150);
+    await MappIntelligence.setRequestInterval(1);
+    await MappIntelligence.setRequestPerQueue(300);
+    await MappIntelligence.setShouldMigrate(true);
+    await MappIntelligence.setSendAppVersionInEveryRequest(true);
+    await MappIntelligence.setEnableBackgroundSendout(true);
+    await MappIntelligence.setExceptionLogLevel(ExceptionType.all);
+    await MappIntelligence.setEnableUserMatching(true);
+
+    await MappIntelligence.build();
+  }
+};
 // ...
-
-const result = await multiply(3, 7);
 ```
+
+[Read documentation](https://mapp.atlassian.net/wiki/external/OWE1ZGE0YWIxOTc4NDliOWFhN2EzMzg4MDZkZWY1MTQ)
 
 ## Contributing
 

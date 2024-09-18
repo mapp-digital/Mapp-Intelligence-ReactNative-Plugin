@@ -8,7 +8,7 @@ import {
   type MIProduct,
 } from '../../src/DataTypes';
 
-import * as MappIntelligencePlugin from 'react-native-mappinteligence-plugin';
+import * as MappIntelligencePlugin from 'mapp-intelligence-reactnative-plugin';
 
 const VIEW_PRODUCT = 'View Product';
 const ADD_TO_BASKET = 'Add to Basket';

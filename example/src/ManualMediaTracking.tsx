@@ -15,7 +15,7 @@ import {
   type MIProduct,
   type EventParameters,
 } from '../../src/DataTypes';
-import * as MappIntelligencePlugin from 'react-native-mappinteligence-plugin';
+import * as MappIntelligencePlugin from 'mapp-intelligence-reactnative-plugin';
 
 const ManualMediaTracking = () => {
   const [incrementOnClick, setIncrementOnClick] = useState(false);
