@@ -407,4 +407,8 @@ export const printCurrentConfig = (): Promise<string> => {
   return MappIntelligencePlugin.getCurrentConfig();
 };
 
+export * from './Converters';
+export * from './DataTypes';
 export * from './GlobalErrorHandler';
+export * from './UseWebTracking';
+export * from './promiseRejectionHandler';

@@ -36,7 +36,7 @@ type OnMessage = (data: any) => void;
 
 type OnLoad = () => void;
 
-const useWebTracking = (
+export const useWebTracking = (
   onMessage?: OnMessage | null,
   onLoad?: OnLoad | null
 ) => {
@@ -131,5 +131,3 @@ const useWebTracking = (
 
   return { webViewRef, handleMessage, handleLoad, getInjectedJavaScript };
 };
-
-export default useWebTracking;

@@ -1,12 +1,12 @@
 import type {
-  CampaignParameters,
-  EcommerceParameters,
-  EventParameters,
-  MediaEvent,
-  MediaParameteres,
+  UserCategories,
   PageParameters,
   SessionParameters,
-  UserCategories,
+  EcommerceParameters,
+  CampaignParameters,
+  EventParameters,
+  MediaParameteres,
+  MediaEvent,
 } from './DataTypes';
 
 //MARK: methods for converting objects
