@@ -3,12 +3,11 @@ import { AppRegistry, FlatList, View } from 'react-native';
 import { MappButton } from './components/MappButton';
 import { DefaultStyles } from './components/Styles';
 import {
-  MIStatus,
-  type EcommerceParameters,
   type MIProduct,
-} from '../../src/DataTypes';
-
-import * as MappIntelligencePlugin from 'mapp-intelligence-reactnative-plugin';
+  type EcommerceParameters,
+  MIStatus,
+  MappIntelligencePlugin,
+} from 'mapp-intelligence-reactnative-plugin';
 
 const VIEW_PRODUCT = 'View Product';
 const ADD_TO_BASKET = 'Add to Basket';

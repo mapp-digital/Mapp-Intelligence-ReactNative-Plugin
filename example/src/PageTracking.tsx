@@ -1,18 +1,5 @@
 import React, { Component } from 'react';
-import * as MappIntelligence from 'mapp-intelligence-reactnative-plugin';
 
-import {
-  MIGender,
-  type MIBirthday,
-  type PageParameters,
-  type UserCategories,
-  type SessionParameters,
-  type EcommerceParameters,
-  type CampaignParameters,
-  MIStatus,
-  type MIProduct,
-  MIAction,
-} from '../../src/DataTypes';
 import {
   AppRegistry,
   StyleSheet,
@@ -23,6 +10,19 @@ import {
 } from 'react-native';
 import { MappButton } from './components/MappButton';
 import { DefaultStyles } from './components/Styles';
+import {
+  MappIntelligencePlugin,
+  type PageParameters,
+  type MIBirthday,
+  type UserCategories,
+  MIGender,
+  type SessionParameters,
+  type MIProduct,
+  type EcommerceParameters,
+  MIStatus,
+  type CampaignParameters,
+  MIAction,
+} from 'mapp-intelligence-reactnative-plugin';
 
 export default class PageTrackingView extends Component {
   renderSeparator = () => {
@@ -36,7 +36,7 @@ export default class PageTrackingView extends Component {
 
   trackPage(): void {
     console.log('trackPage()');
-    MappIntelligence.trackPage('Page 1');
+    MappIntelligencePlugin.trackPage('Page 1');
   }
 
   trackCustomPage(): void {
@@ -109,7 +109,7 @@ export default class PageTrackingView extends Component {
       oncePerSession: true,
       customParameters: new Map<number, string>([[12, 'camParam1']]),
     };
-    MappIntelligence.trackCustomPage(
+    MappIntelligencePlugin.trackCustomPage(
       'Page Tracking Example 1',
       pageParameters,
       sessionParameters,
@@ -124,7 +124,10 @@ export default class PageTrackingView extends Component {
     var customParameters = new Map<string, string>();
     customParameters.set('cp10', 'Override');
     customParameters.set('cg10', 'test');
-    MappIntelligence.trackPageWithCustomData('testTitle1', customParameters);
+    MappIntelligencePlugin.trackPageWithCustomData(
+      'testTitle1',
+      customParameters
+    );
   }
 
   render() {

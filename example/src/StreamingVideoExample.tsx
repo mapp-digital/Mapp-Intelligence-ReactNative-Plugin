@@ -1,18 +1,19 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Video, { type VideoRef } from 'react-native-video';
-import * as MappIntelligencePlugin from 'mapp-intelligence-reactnative-plugin';
-import {
-  MediaAction,
-  type EventParameters,
-  type MediaEvent,
-  type MediaParameteres,
-  type SessionParameters,
-  MIStatus,
-  type EcommerceParameters,
-  type MIProduct,
-} from '../../src/DataTypes';
+
 import { useNavigation } from '@react-navigation/native';
+import {
+  type MediaParameteres,
+  MediaAction,
+  type MediaEvent,
+  MappIntelligencePlugin,
+  type MIProduct,
+  type EcommerceParameters,
+  MIStatus,
+  type SessionParameters,
+  type EventParameters,
+} from 'mapp-intelligence-reactnative-plugin';
 
 const StreamingVideoExample = () => {
   const navigation = useNavigation();

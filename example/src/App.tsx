@@ -2,7 +2,6 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import * as MappIntelligence from 'mapp-intelligence-reactnative-plugin';
 import { Mapp } from 'react-native-mapp-plugin';
 import PageTrackingView from './PageTracking';
 import ActionTrackingView from './ActionTracking';
@@ -18,6 +17,7 @@ import ManualMediaTracking from './ManualMediaTracking';
 import VideoExample from './VideoExample';
 import HomeScreen from './HomeScreen';
 import { Routes } from './Routes';
+import { MappIntelligencePlugin } from 'mapp-intelligence-reactnative-plugin';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,23 +29,23 @@ const App = () => {
   }
 
   async function initMappTracking() {
-    await MappIntelligence.setAnonymousTracking(false);
-    await MappIntelligence.initWithConfiguration(
+    await MappIntelligencePlugin.setAnonymousTracking(false);
+    await MappIntelligencePlugin.initWithConfiguration(
       [794940687426749],
       'http://tracker-int-01.webtrekk.net'
     );
-    await MappIntelligence.setLogLevel(LogLevel.all);
-    await MappIntelligence.setBatchSupportEnabled(false);
-    await MappIntelligence.setBatchSupportSize(150);
-    await MappIntelligence.setRequestInterval(1);
-    await MappIntelligence.setRequestPerQueue(300);
-    await MappIntelligence.setShouldMigrate(true);
-    await MappIntelligence.setSendAppVersionInEveryRequest(true);
-    await MappIntelligence.setEnableBackgroundSendout(true);
-    await MappIntelligence.setExceptionLogLevel(ExceptionType.all);
-    await MappIntelligence.setEnableUserMatching(true);
+    await MappIntelligencePlugin.setLogLevel(LogLevel.all);
+    await MappIntelligencePlugin.setBatchSupportEnabled(false);
+    await MappIntelligencePlugin.setBatchSupportSize(150);
+    await MappIntelligencePlugin.setRequestInterval(1);
+    await MappIntelligencePlugin.setRequestPerQueue(300);
+    await MappIntelligencePlugin.setShouldMigrate(true);
+    await MappIntelligencePlugin.setSendAppVersionInEveryRequest(true);
+    await MappIntelligencePlugin.setEnableBackgroundSendout(true);
+    await MappIntelligencePlugin.setExceptionLogLevel(ExceptionType.all);
+    await MappIntelligencePlugin.setEnableUserMatching(true);
 
-    await MappIntelligence.build();
+    await MappIntelligencePlugin.build();
 
     Mapp.engage(
       '183408d0cd3632.83592719',

@@ -2,8 +2,8 @@ import React from 'react';
 import { Button, FlatList, View } from 'react-native';
 import { DefaultStyles } from './components/Styles';
 import { MappButton } from './components/MappButton';
-import * as MappIntelligencePlugin from 'mapp-intelligence-reactnative-plugin';
 import CrashTester from 'react-native-crash-tester';
+import { MappIntelligencePlugin } from 'mapp-intelligence-reactnative-plugin';
 
 const ExceptionTrackingView = () => {
   const TRACK_EXCEPTION_WITH_NAME = 'Track Exception With Name';
@@ -27,8 +27,6 @@ const ExceptionTrackingView = () => {
         break;
       case CRASH_APP_JS_LEVEL:
         CrashTester.jsCrash();
-        //functionWithError();
-        break;
       case TRIGGER_PROMISE_REJECTION:
         triggerUnhandledPromiseRejection();
         break;

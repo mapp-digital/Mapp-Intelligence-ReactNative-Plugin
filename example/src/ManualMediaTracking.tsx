@@ -7,15 +7,15 @@ import { MappSwitch } from './components/MappSwitch';
 import { MappButton } from './components/MappButton';
 import {
   MediaAction,
-  type MediaEvent,
   type MediaParameteres,
-  type SessionParameters,
-  MIStatus,
-  type EcommerceParameters,
-  type MIProduct,
   type EventParameters,
-} from '../../src/DataTypes';
-import * as MappIntelligencePlugin from 'mapp-intelligence-reactnative-plugin';
+  type MIProduct,
+  type EcommerceParameters,
+  MIStatus,
+  type SessionParameters,
+  type MediaEvent,
+  MappIntelligencePlugin,
+} from 'mapp-intelligence-reactnative-plugin';
 
 const ManualMediaTracking = () => {
   const [incrementOnClick, setIncrementOnClick] = useState(false);

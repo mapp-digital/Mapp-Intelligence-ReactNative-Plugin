@@ -41,14 +41,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/StefanMiticon/react-native-mappinteligence-plugin.git"
+    "url": "git+https://github.com/mapp-digital/Mapp-Intelligence-ReactNative-Plugin.git"
   },
   "author": "Mapp Digital <stefan.stevanovic@mapp.com> (https://github.com/StefanMiticon)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/StefanMiticon/react-native-mappinteligence-plugin/issues"
+    "url": "https://github.com/mapp-digital/Mapp-Intelligence-ReactNative-Plugin/issues"
   },
-  "homepage": "https://github.com/StefanMiticon/react-native-mappinteligence-plugin#readme",
+  "homepage": "https://github.com/mapp-digital/Mapp-Intelligence-ReactNative-Plugin#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },

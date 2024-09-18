@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
-import * as MappIntelligence from 'mapp-intelligence-reactnative-plugin';
 import { AppRegistry, FlatList, View } from 'react-native';
+import { MappButton, DefaultStyles } from './components/MappComponents';
 import {
+  MappIntelligencePlugin,
   MIGender,
   type EventParameters,
-  type UserCategories,
   type MIBirthday,
   type SessionParameters,
-} from '../../src/DataTypes';
-
-import { MappButton, DefaultStyles } from './components/MappComponents';
+  type UserCategories,
+} from 'mapp-intelligence-reactnative-plugin';
 
 export default class ActionTrackingView extends Component {
   renderSeparator = () => {
@@ -41,7 +40,7 @@ export default class ActionTrackingView extends Component {
     var eventParamters: EventParameters = {
       customParameters: eventDict,
     };
-    await MappIntelligence.trackAction('TestAction', eventParamters);
+    await MappIntelligencePlugin.trackAction('TestAction', eventParamters);
   }
 
   async trackCustomAction() {
@@ -71,7 +70,7 @@ export default class ActionTrackingView extends Component {
     const sessionParamters: SessionParameters = {
       parameters: customSessionDict,
     };
-    await MappIntelligence.trackAction(
+    await MappIntelligencePlugin.trackAction(
       'TestAction',
       eventParamters,
       sessionParamters,

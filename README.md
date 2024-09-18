@@ -11,7 +11,7 @@ npm install mapp-intelligence-reactnative-plugin
 ## Usage
 
 ```js
-import * as MappIntelligence from 'mapp-intelligence-reactnative-plugin';
+import * as MappIntelligencePlugin from 'mapp-intelligence-reactnative-plugin';
 
 const App = () => {
   async function initMappTracking() {

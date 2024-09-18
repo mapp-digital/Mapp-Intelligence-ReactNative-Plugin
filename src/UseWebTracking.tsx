@@ -6,7 +6,7 @@ import {
   trackException,
   getEverId,
 } from './index';
-//import * as MappIntelligencePlugin from 'react-native-mappinteligence-plugin';
+//import * as MappIntelligencePlugin from 'mapp-intelligence-reactnative-plugin';
 import type { WebViewMessageEvent } from 'react-native-webview';
 import { WebView } from 'react-native-webview';
 
