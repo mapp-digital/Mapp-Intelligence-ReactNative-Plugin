@@ -11,27 +11,30 @@ npm install mapp-intelligence-reactnative-plugin
 ## Usage
 
 ```js
-import * as MappIntelligencePlugin from 'mapp-intelligence-reactnative-plugin';
+import { MappIntelligencePlugin } from 'mapp-intelligence-reactnative-plugin';
 
 const App = () => {
-  async function initMappTracking() {
-    await MappIntelligence.setAnonymousTracking(false);
-    await MappIntelligence.initWithConfiguration(
-      [794940687426749],
-      'http://tracker-int-01.webtrekk.net'
-    );
-    await MappIntelligence.setLogLevel(LogLevel.all);
-    await MappIntelligence.setBatchSupportEnabled(false);
-    await MappIntelligence.setBatchSupportSize(150);
-    await MappIntelligence.setRequestInterval(1);
-    await MappIntelligence.setRequestPerQueue(300);
-    await MappIntelligence.setShouldMigrate(true);
-    await MappIntelligence.setSendAppVersionInEveryRequest(true);
-    await MappIntelligence.setEnableBackgroundSendout(true);
-    await MappIntelligence.setExceptionLogLevel(ExceptionType.all);
-    await MappIntelligence.setEnableUserMatching(true);
+  const TRACKING_IDS_ARRAY = ... ;
+  const TRACKING_DOMAIN = ... ;
 
-    await MappIntelligence.build();
+  async function initMappTracking() {
+    await MappIntelligencePlugin.setAnonymousTracking(false);
+    await MappIntelligencePlugin.initWithConfiguration(
+      TRACKING_IDS_ARRAY,
+      TRACKING_DOMAIN
+    );
+    await MappIntelligencePlugin.setLogLevel(LogLevel.all);
+    await MappIntelligencePlugin.setBatchSupportEnabled(false);
+    await MappIntelligencePlugin.setBatchSupportSize(150);
+    await MappIntelligencePlugin.setRequestInterval(1);
+    await MappIntelligencePlugin.setRequestPerQueue(300);
+    await MappIntelligencePlugin.setShouldMigrate(true);
+    await MappIntelligencePlugin.setSendAppVersionInEveryRequest(true);
+    await MappIntelligencePlugin.setEnableBackgroundSendout(true);
+    await MappIntelligencePlugin.setExceptionLogLevel(ExceptionType.all);
+    await MappIntelligencePlugin.setEnableUserMatching(true);
+
+    await MappIntelligencePlugin.build();
   }
 };
 // ...
