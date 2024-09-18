@@ -40,7 +40,7 @@ const App = () => {
 // ...
 ```
 
-[Read documentation](https://mapp.atlassian.net/wiki/external/OWE1ZGE0YWIxOTc4NDliOWFhN2EzMzg4MDZkZWY1MTQ)
+[Read documentation](https://docs.mapp.com/v1/docs/react-native-sdk)
 
 ## Contributing
 
