@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.authors      = package["author"]
 
   s.platforms    = { :ios => "11.0" }
-  s.source       = { :git => "https://github.com/StefanMiticon/react-native-mappinteligence-plugin.git", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/mapp-digital/Mapp-Intelligence-ReactNative-Plugin.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,mm}"
   s.dependency "React-Core"
