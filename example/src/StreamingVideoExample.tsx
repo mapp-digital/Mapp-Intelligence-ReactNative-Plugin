@@ -1,8 +1,7 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Video, { type VideoRef } from 'react-native-video';
 
-import { useNavigation } from '@react-navigation/native';
 import {
   type MediaParameteres,
   MediaAction,
@@ -14,30 +13,34 @@ import {
   type SessionParameters,
   type EventParameters,
 } from 'mapp-intelligence-reactnative-plugin';
+import { Dialog } from './components/Dialog';
 
-const StreamingVideoExample = () => {
-  const navigation = useNavigation();
+type VideoProgress = {
+  currentTime: number;
+  duration: number;
+  seekable: number;
+};
 
-  const sources: MediaSource[] = [
-    {
-      title: 'Stream',
-      url: 'http://playertest.longtailvideo.com/adaptive/wowzaid3/playlist.m3u8',
-    },
-  ];
+const StreamingVideoExample = (props: { route: any; navigation: any }) => {
+  const params = props.route.params;
+  const navigation = props.navigation;
+  const url = params['url'];
+  console.log('Received URL', url);
+  //const navigation = useNavigation();
 
   const REPEAT_TIME_MS = 5000;
 
   const videoRef = useRef<VideoRef>(null);
 
-  const [videoProgress, setVideoProgress] = useState<{
-    currentTime: number;
-    duration: number;
-    seekable: number;
-  }>({ currentTime: 0, duration: 0, seekable: 0 });
+  var videoProgress: VideoProgress = {
+    currentTime: 0,
+    duration: 0,
+    seekable: 0,
+  };
 
-  const [busy, setBusy] = useState(false);
+  var busy = false;
 
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>();
+  var timeoutId: NodeJS.Timeout | undefined;
 
   /**
    * Method to create and send EOF media event
@@ -223,12 +226,18 @@ const StreamingVideoExample = () => {
     <View style={styles.container}>
       <Video
         // Can be a URL or a local file.
-        source={{ uri: sources[0]?.url }}
+        source={{ uri: url }}
         // Store reference
         ref={videoRef}
         // Callback when video cannot be loaded
         onError={(e) => {
           console.log(e);
+          const errorMessage = e.error.errorString ?? 'Unknown error';
+          Dialog.show({
+            title: 'Video Player Error',
+            message: errorMessage,
+            positiveButtonText: 'OK',
+          });
         }}
         resizeMode="none"
         style={styles.backgroundVideo}
@@ -238,16 +247,14 @@ const StreamingVideoExample = () => {
         }}
         collapsable={false}
         onProgress={(e) => {
-          setVideoProgress({
+          videoProgress = {
             currentTime: e.currentTime,
             duration: e.playableDuration,
             seekable: e.seekableDuration,
-          });
-          videoProgress.currentTime = e.currentTime;
-          videoProgress.duration = e.playableDuration;
-          videoProgress.seekable = e.seekableDuration;
+          };
+
           if (!busy) {
-            setBusy(true);
+            busy = true;
             clearTimeout(timeoutId);
             const timeId = setTimeout(() => {
               if (navigation.isFocused()) {
@@ -256,10 +263,10 @@ const StreamingVideoExample = () => {
                   e.playableDuration,
                   e.seekableDuration
                 );
-                setBusy(false);
+                busy = false;
               }
             }, REPEAT_TIME_MS);
-            setTimeoutId(timeId);
+            timeoutId = timeId;
           }
         }}
         onLoad={(e) => {
@@ -295,6 +302,7 @@ interface IMediaSource {
   title: string;
   url: string;
 }
+//@ts-ignore
 type MediaSource = Required<IMediaSource>;
 
 export default StreamingVideoExample;

@@ -7,7 +7,7 @@ export const Dialog = {
     positiveButtonText: string | 'OK';
     positiveAction?: () => void | Promise<void> | null;
     negativeButtonText?: string | null;
-    negativeAction?: () => void | null;
+    negativeAction?: () => void | Promise<void> | null;
     onDismissCallback?: () => void | null;
   }): void {
     let actions = [];

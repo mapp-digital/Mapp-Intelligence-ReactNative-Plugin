@@ -42,7 +42,7 @@ export const MappIntelligencePlugin = NativeModules.MappinteligencePlugin
  * @returns result if method executed succesfully or not
  */
 export const build = (): Promise<number> => {
-  console.log('build');
+  console.debug('build');
   return MappIntelligencePlugin.build();
 };
 
@@ -56,7 +56,7 @@ export const initWithConfiguration = (
   trackIDs: number[],
   domain: string
 ): Promise<number> => {
-  console.log('initWithConfiguration');
+  console.debug('initWithConfiguration');
   return MappIntelligencePlugin.initWithConfiguration(trackIDs, domain);
 };
 
@@ -66,7 +66,7 @@ export const initWithConfiguration = (
  * @returns result if method executed succesfully or not
  */
 export const setLogLevel = (level: LogLevel): Promise<number> => {
-  console.log('setLogLevel - ' + level.valueOf());
+  console.debug('setLogLevel - ' + level.valueOf());
   return MappIntelligencePlugin.setLogLevel(level.valueOf());
 };
 
@@ -85,7 +85,7 @@ export const setExceptionLogLevel = (level: ExceptionType): Promise<number> => {
  * @returns result if method executed succesfully or not
  */
 export const setRequestInterval = (interval: number): Promise<number> => {
-  console.log('setRequestInterval');
+  console.debug('setRequestInterval');
   return MappIntelligencePlugin.setRequestInterval(interval);
 };
 
@@ -96,7 +96,7 @@ export const setRequestInterval = (interval: number): Promise<number> => {
  * @returns result if method executed succesfully or not
  */
 export const setBatchSupportEnabled = (enabled: boolean): Promise<number> => {
-  console.log('setBatchSupportEnabled');
+  console.debug('setBatchSupportEnabled');
   return MappIntelligencePlugin.setBatchSupportEnabled(enabled);
 };
 
@@ -108,7 +108,7 @@ export const setBatchSupportEnabled = (enabled: boolean): Promise<number> => {
 export const setEnableBackgroundSendout = (
   enabled: boolean
 ): Promise<number> => {
-  console.log('setEnableBackgroundSendout');
+  console.debug('setEnableBackgroundSendout');
   return MappIntelligencePlugin.setEnableBackgroundSendout(enabled);
 };
 
@@ -118,7 +118,7 @@ export const setEnableBackgroundSendout = (
  * @returns result if method executed succesfully or not
  */
 export const setBatchSupportSize = (size: number): Promise<number> => {
-  console.log('setBatchSupportSize');
+  console.debug('setBatchSupportSize');
   return MappIntelligencePlugin.setBatchSupportSize(size);
 };
 
@@ -130,18 +130,8 @@ export const setBatchSupportSize = (size: number): Promise<number> => {
 export const setRequestPerQueue = (
   numberOfRequsts: number
 ): Promise<number> => {
-  console.log('setRequestPerQueue');
+  console.debug('setRequestPerQueue');
   return MappIntelligencePlugin.setRequestPerQueue(numberOfRequsts);
-};
-
-/**
- * Control if migration should be applied from a previos SDK version.
- * @param migrate true to apply migration on the initialization process; otherwise false
- * @returns result if method executed succesfully or not
- */
-export const setShouldMigrate = (migrate: boolean): Promise<number> => {
-  console.log('setShouldMigrate');
-  return MappIntelligencePlugin.setShouldMigrate(migrate);
 };
 
 /**
@@ -151,8 +141,17 @@ export const setShouldMigrate = (migrate: boolean): Promise<number> => {
  * @returns result if method executed succesfully or not
  */
 export const setAnonymousTracking = (anonymous: boolean): Promise<number> => {
-  console.log('setAnonymousTracking');
+  console.debug('setAnonymousTracking', anonymous);
   return MappIntelligencePlugin.setAnonymousTracking(anonymous);
+};
+
+/**
+ * Checks status of anonymous tracking
+ * @returns true if anonymous tracking is enabled; false if anonymous tracking is disabled.
+ */
+export const isAnonymousTracking = (): Promise<boolean> => {
+  console.debug('isAnonymousTracking');
+  return MappIntelligencePlugin.isAnonymousTracking();
 };
 
 /**
@@ -163,7 +162,7 @@ export const setAnonymousTracking = (anonymous: boolean): Promise<number> => {
 export const setSendAppVersionInEveryRequest = (
   flag: boolean
 ): Promise<number> => {
-  console.log('setSendAppVersionInEveryRequest');
+  console.debug('setSendAppVersionInEveryRequest');
   return MappIntelligencePlugin.setSendAppVersionInEveryRequest(flag);
 };
 
@@ -173,8 +172,17 @@ export const setSendAppVersionInEveryRequest = (
  * @returns result if method executed succesfully or not
  */
 export const setEnableUserMatching = (enabled: boolean): Promise<number> => {
-  console.log('setEnableUserMatching');
+  console.debug('setEnableUserMatching');
   return MappIntelligencePlugin.setEnableUserMatching(enabled);
+};
+
+/**
+ * Check if user matching is enabled or disabled
+ * @returns true if user matching is enabled, otherwise returns false. If plugin not initilized, throws exception.
+ */
+export const isUserMatchingEnabled = (): Promise<boolean> => {
+  console.debug('isUserMatchingEnabled');
+  return MappIntelligencePlugin.isUserMatchingEnabled();
 };
 
 /**
@@ -183,7 +191,7 @@ export const setEnableUserMatching = (enabled: boolean): Promise<number> => {
  * @returns result if method executed succesfully or not
  */
 export const trackPage = (pageTitle: string): Promise<number> => {
-  console.log('trackPage');
+  console.debug('trackPage');
   return MappIntelligencePlugin.trackPage(pageTitle);
 };
 
@@ -205,7 +213,7 @@ export const trackCustomPage = (
   ecommerceParameters?: EcommerceParameters | null,
   campaignParameters?: CampaignParameters | null
 ): Promise<number> => {
-  console.log('trackCustomPage');
+  console.debug('trackCustomPage');
   return MappIntelligencePlugin.trackCustomPage(
     pageTitle,
     convertPageParameters(pageParameters),
@@ -226,7 +234,7 @@ export const trackPageWithCustomData = (
   pageTitle: string,
   pageParameters: Map<string, string> | null
 ): Promise<number> => {
-  console.log('trackPageWithCustomData');
+  console.debug('trackPageWithCustomData');
   const params = pageParameters?.entries();
   const data = params != null ? Object.fromEntries(params) : {};
   return MappIntelligencePlugin.trackPageWithCustomData(data, pageTitle);
@@ -250,7 +258,7 @@ export const trackAction = (
   ecommerceParameters?: EcommerceParameters | null,
   campaignParameters?: CampaignParameters | null
 ): Promise<number> => {
-  console.log('trackAction');
+  console.debug('trackAction');
   return MappIntelligencePlugin.trackAction(
     name,
     convertEventParameters(eventParameters),
@@ -280,7 +288,7 @@ export const trackUrl = (
  * @returns result if method executed succesfully or not
  */
 export const trackMedia = (mediaEvent: MediaEvent): Promise<number> => {
-  console.log('Execute MediaEvent');
+  console.debug('Execute MediaEvent');
   return MappIntelligencePlugin.trackMedia(
     convertMediaEvent(mediaEvent as MediaEvent)
   );
@@ -328,7 +336,7 @@ export const trackExceptionWithName = (
  * @returns result if method executed succesfully or not
  */
 export const setEverId = (everId?: String | null): Promise<number> => {
-  console.log('setEverId');
+  console.debug('setEverId');
   return MappIntelligencePlugin.setEverId(everId);
 };
 
@@ -357,7 +365,7 @@ export const isInitialized = (): Promise<boolean> => {
 export const setTemporarySessionId = (
   sessionId?: String | null
 ): Promise<number> => {
-  console.log('setTemporarySessionId');
+  console.debug('setTemporarySessionId');
   return MappIntelligencePlugin.setTemporarySessionId(sessionId);
 };
 
@@ -379,6 +387,15 @@ export const optOut = (sendData: boolean): Promise<number> => {
  */
 export const optIn = (sendData: boolean): Promise<number> => {
   return MappIntelligencePlugin.optIn(sendData);
+};
+
+/**
+ * Checks status of opted-in state
+ * @returns true if opted-in; false if opted-out.
+ */
+export const isOptedIn = (): Promise<boolean> => {
+  console.debug('isOptedIn');
+  return MappIntelligencePlugin.isOptedIn();
 };
 
 /**

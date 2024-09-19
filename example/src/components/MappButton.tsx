@@ -8,10 +8,12 @@ export const MappButton = (props: {
   enabled?: boolean | true;
   lockDelay?: number | 100;
 }) => {
-  const [buttonEnabled, setButtonEnabled] = useState(props.enabled ?? true);
+  const buttonEnabled = props.enabled ?? true;
+
+  const [buttonLocked, setButtonLocked] = useState(false);
   const setTimer = async () => {
     const func = setTimeout(() => {
-      setButtonEnabled(true);
+      setButtonLocked(false);
     }, props.lockDelay);
     return func;
   };
@@ -21,7 +23,7 @@ export const MappButton = (props: {
       <Button
         title={props.buttonTitle}
         onPress={() => {
-          setButtonEnabled(false);
+          setButtonLocked(true);
           try {
             if (props.buttonOnPress) {
               props.buttonOnPress();
@@ -30,7 +32,7 @@ export const MappButton = (props: {
             setTimer();
           }
         }}
-        disabled={!buttonEnabled}
+        disabled={!buttonEnabled || buttonLocked}
         color="#06A806"
       />
     </View>

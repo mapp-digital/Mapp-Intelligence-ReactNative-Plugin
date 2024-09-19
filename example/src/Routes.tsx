@@ -9,6 +9,7 @@ export enum Routes {
   EXCEPTION_TRACKING = 'Exceptions Tracking',
   WEBVIEW_TRACKING = 'Webview Tracking',
   STREAMING_VIDEO_EXAMPLE = 'Streaming Video Example',
+  STREAMING_VIDEO_SETUP = 'Streaming Video Setup',
   VIDEO_EXAMPLE = 'Video Example',
   MANUAL_MEDIA_TRACKING = 'Manual Media Tracking',
 }

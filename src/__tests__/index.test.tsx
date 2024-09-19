@@ -10,7 +10,6 @@ import {
   setEnableBackgroundSendout,
   setBatchSupportSize,
   setRequestPerQueue,
-  setShouldMigrate,
   setAnonymousTracking,
   setSendAppVersionInEveryRequest,
   // setEnableUserMatching,
@@ -135,11 +134,6 @@ describe('MappIntelligencePlugin', () => {
   it('set request per queue', async () => {
     await setRequestPerQueue(10);
     expect(MappIntelligencePlugin.setRequestPerQueue).toBeCalledWith(10);
-  });
-
-  it('set should migrate', async () => {
-    await setShouldMigrate(false);
-    expect(MappIntelligencePlugin.setShouldMigrate).toBeCalledWith(false);
   });
 
   it('set request interval', async () => {
