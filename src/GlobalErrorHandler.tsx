@@ -1,8 +1,5 @@
-import { trackException } from './index';
-// import {
-//   getUnhandledPromiseRejectionTracker,
-//   setUnhandledPromiseRejectionTracker,
-// } from './promiseRejectionHandler';
+import { MappIntelligencePlugin } from 'mapp-intelligence-reactnative-plugin';
+
 const {
   polyfillGlobal,
 } = require('react-native/Libraries/Utilities/PolyfillFunctions');
@@ -19,7 +16,7 @@ var onErrorCallback: ((e: Error, isFatal: Boolean) => {}) | undefined | null =
 
 const defaultErrorHandler: GlobalErrorHandler = (error, isFatal) => {
   try {
-    trackException(error, error.stackTrace);
+    MappIntelligencePlugin.trackException(error, error.stackTrace);
     console.log('GLOBAL ERROR HANDLER: ', isFatal, error);
   } catch (err) {
     console.error(err);

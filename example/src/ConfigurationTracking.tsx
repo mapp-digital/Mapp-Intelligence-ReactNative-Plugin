@@ -7,9 +7,9 @@ import { MappSwitch } from './components/MappSwitch';
 import TextWithLabel from './components/TextWithLabel';
 import { Dialog } from './components/Dialog';
 import {
+  MappIntelligencePlugin,
   ExceptionType,
   LogLevel,
-  MappIntelligencePlugin,
 } from 'mapp-intelligence-reactnative-plugin';
 
 const ConfigurationTrackingView = () => {

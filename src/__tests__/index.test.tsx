@@ -1,36 +1,5 @@
 import { ExceptionType, type MediaEvent } from '../DataTypes';
-import {
-  MappIntelligencePlugin,
-  build,
-  initWithConfiguration,
-  setLogLevel,
-  setExceptionLogLevel,
-  setRequestInterval,
-  setBatchSupportEnabled,
-  setEnableBackgroundSendout,
-  setBatchSupportSize,
-  setRequestPerQueue,
-  setShouldMigrate,
-  setAnonymousTracking,
-  setSendAppVersionInEveryRequest,
-  // setEnableUserMatching,
-  trackPage,
-  trackCustomPage,
-  trackPageWithCustomData,
-  trackAction,
-  trackUrl,
-  trackMedia,
-  trackException,
-  trackExceptionWithName,
-  setEverId,
-  getEverId,
-  isInitialized,
-  setTemporarySessionId,
-  optOut,
-  optIn,
-  reset,
-  sendRequestsAndClean,
-} from '../index';
+import { MappIntelligencePlugin } from '../MappIntelligencePlugin';
 
 // Mock the native module
 jest.mock('react-native', () => ({
@@ -101,7 +70,7 @@ describe('MappIntelligencePlugin', () => {
   });
 
   it('set log level for console output', async () => {
-    await setLogLevel(1);
+    await MappIntelligencePlugin.setLogLevel(1);
     expect(MappIntelligencePlugin.setLogLevel).toBeCalledWith(1);
   });
 
@@ -256,21 +225,21 @@ describe('MappIntelligencePlugin', () => {
 
   it('get EverID', async () => {
     const getEverIdSpy = jest.fn(getEverId);
-    getEverIdSpy.mockResolvedValue('123456');
+    //getEverIdSpy.mockResolvedValue('123');
     const result = await getEverIdSpy();
     expect(result).toBe('123456');
   });
 
   it('Check if plugin initialized', async () => {
     const isInitializedSpy = jest.fn(isInitialized);
-    isInitializedSpy.mockResolvedValue(true);
+    //isInitializedSpy.mockResolvedValue(true);
     const result = await isInitializedSpy();
     expect(result).toBe(true);
   });
 
   it('Set temporarySessionId', async () => {
     const spy = jest.fn(setTemporarySessionId);
-    spy.mockResolvedValue(1);
+    //spy.mockResolvedValue(1);
 
     const result = await spy('1234');
     expect(result).toBe(1);
@@ -278,14 +247,16 @@ describe('MappIntelligencePlugin', () => {
   });
 
   it('Opt out', async () => {
-    const spy = jest.fn(optOut).mockResolvedValue(1);
+    const spy = jest.fn(optOut);
+    // spy.mockResolvedValue(1);
     const result = await spy(true);
     expect(result).toBe(1);
     expect(spy).toBeCalledWith(true);
   });
 
   it('Opt in', async () => {
-    const spy = jest.fn(optIn).mockResolvedValue(1);
+    const spy = jest.fn(optIn);
+    //spy.mockResolvedValue(1);
     const result = await spy(true);
     expect(result).toBe(1);
     expect(spy).toBeCalledWith(true);
@@ -301,3 +272,113 @@ describe('MappIntelligencePlugin', () => {
     expect(MappIntelligencePlugin.sendRequestsAndClean).toBeCalled();
   });
 });
+function build() {
+  throw new Error('Function not implemented.');
+}
+
+function initWithConfiguration(_trackIDs: number[], _domain: string) {
+  throw new Error('Function not implemented.');
+}
+
+function setExceptionLogLevel(_all: ExceptionType) {
+  throw new Error('Function not implemented.');
+}
+
+function setRequestInterval(_arg0: number) {
+  throw new Error('Function not implemented.');
+}
+
+function setBatchSupportEnabled(_arg0: boolean) {
+  throw new Error('Function not implemented.');
+}
+
+function setEnableBackgroundSendout(_arg0: boolean) {
+  throw new Error('Function not implemented.');
+}
+
+function setBatchSupportSize(_arg0: number) {
+  throw new Error('Function not implemented.');
+}
+
+function setRequestPerQueue(_arg0: number) {
+  throw new Error('Function not implemented.');
+}
+
+function setShouldMigrate(_arg0: boolean) {
+  throw new Error('Function not implemented.');
+}
+
+function setAnonymousTracking(_arg0: boolean) {
+  throw new Error('Function not implemented.');
+}
+
+function setSendAppVersionInEveryRequest(_arg0: boolean) {
+  throw new Error('Function not implemented.');
+}
+
+function trackPage(_arg0: string) {
+  throw new Error('Function not implemented.');
+}
+
+function trackCustomPage(_arg0: string) {
+  throw new Error('Function not implemented.');
+}
+
+function trackPageWithCustomData(
+  _arg0: string,
+  _pageParams: Map<string, string>
+) {
+  throw new Error('Function not implemented.');
+}
+
+function trackAction(_arg0: string) {
+  throw new Error('Function not implemented.');
+}
+
+function trackUrl(_arg0: string, _arg1: string) {
+  throw new Error('Function not implemented.');
+}
+
+function trackMedia(_mediaEvent: MediaEvent) {
+  throw new Error('Function not implemented.');
+}
+
+function trackException(_e: Error, _arg1: string) {
+  throw new Error('Function not implemented.');
+}
+
+function trackExceptionWithName(_arg0: string, _arg1: string, _arg2: string) {
+  throw new Error('Function not implemented.');
+}
+
+function setEverId(_arg0: string) {
+  throw new Error('Function not implemented.');
+}
+
+function getEverId(..._args: any[]): unknown {
+  throw new Error('Function not implemented.');
+}
+
+function isInitialized(..._args: any[]): unknown {
+  throw new Error('Function not implemented.');
+}
+
+function setTemporarySessionId(..._args: any[]): unknown {
+  throw new Error('Function not implemented.');
+}
+
+function optOut(..._args: any[]): unknown {
+  throw new Error('Function not implemented.');
+}
+
+function optIn(..._args: any[]): unknown {
+  throw new Error('Function not implemented.');
+}
+
+function reset() {
+  throw new Error('Function not implemented.');
+}
+
+function sendRequestsAndClean() {
+  throw new Error('Function not implemented.');
+}

@@ -11,13 +11,16 @@ import MediaTrackingView from './MediaTracking';
 import ExceptionTrackingView from './ExceptionTracking';
 import ConfigurationTrackingView from './ConfigurationTracking';
 import WebViewTracking from './WebViewTracking';
-import { ExceptionType, LogLevel } from '../../src/DataTypes';
 import StreamingVideoExample from './StreamingVideoExample';
 import ManualMediaTracking from './ManualMediaTracking';
 import VideoExample from './VideoExample';
 import HomeScreen from './HomeScreen';
 import { Routes } from './Routes';
-import { MappIntelligencePlugin } from 'mapp-intelligence-reactnative-plugin';
+import {
+  MappIntelligencePlugin,
+  ExceptionType,
+  LogLevel,
+} from 'mapp-intelligence-reactnative-plugin';
 
 const Stack = createNativeStackNavigator();
 

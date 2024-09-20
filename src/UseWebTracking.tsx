@@ -1,12 +1,5 @@
-// useWebTracking.tsx
+import { MappIntelligencePlugin } from './MappIntelligencePlugin';
 import { useRef, useCallback } from 'react';
-import {
-  trackPageWithCustomData,
-  trackAction,
-  trackException,
-  getEverId,
-} from './index';
-//import * as MappIntelligencePlugin from 'mapp-intelligence-reactnative-plugin';
 import type { WebViewMessageEvent } from 'react-native-webview';
 import { WebView } from 'react-native-webview';
 
@@ -69,7 +62,7 @@ export const useWebTracking = (
     try {
       const parameters = getJson(params) ?? new Map();
       console.log('Page Name: ', name, '; Params: ', parameters);
-      trackPageWithCustomData(name, parameters);
+      MappIntelligencePlugin.trackPageWithCustomData(name, parameters);
     } catch (error) {
       console.error(error);
     }
@@ -79,7 +72,14 @@ export const useWebTracking = (
     try {
       const parameters = getJson(params);
       console.log('Event Name: ', name, '; Params: ', parameters);
-      trackAction(name, parameters, null, null, null, null);
+      MappIntelligencePlugin.trackAction(
+        name,
+        parameters,
+        null,
+        null,
+        null,
+        null
+      );
     } catch (error) {
       console.error(error);
     }
@@ -98,7 +98,7 @@ export const useWebTracking = (
   };
 
   const handleLoad = useCallback(() => {
-    getEverId()
+    MappIntelligencePlugin.getEverId()
       .then((everId: string) => {
         if (webViewRef.current) {
           const scripts = injectEverIdScript.replace('%everId%', everId);
@@ -114,7 +114,7 @@ export const useWebTracking = (
       })
       .catch((error: Error) => {
         console.error(error);
-        trackException(error);
+        MappIntelligencePlugin.trackException(error);
       });
 
     if (onLoad) {

@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import { AppRegistry, FlatList, View } from 'react-native';
 import { MappButton } from './components/MappButton';
 import { DefaultStyles } from './components/Styles';
-import * as MappIntelligencePlugin from 'mapp-intelligence-reactnative-plugin';
-import { MIAction, type CampaignParameters } from '../../src/DataTypes';
+import {
+  MappIntelligencePlugin,
+  MIAction,
+  type CampaignParameters,
+} from 'mapp-intelligence-reactnative-plugin';
 
 export default class CampaignTrackingView extends Component {
   renderSeparator = () => {
