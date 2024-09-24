@@ -38,7 +38,11 @@ object Util {
   fun ReadableMap?.optDouble(key: String?): Double? {
     if (this == null || key == null || !this.hasKey(key)) return null
     return try {
-      this.getString(key)?.toDoubleOrNull()
+      if (getType(key).name == Number::class.simpleName) {
+        this.getDouble(key)
+      } else {
+        this.getString(key)?.toDoubleOrNull()
+      }
     } catch (e: Exception) {
       null
     }
@@ -57,7 +61,11 @@ object Util {
   fun ReadableMap?.optInt(key: String?): Int {
     if (this == null || key == null || !this.hasKey(key)) return 0
     return try {
-      this.getString(key)?.toBigDecimal()?.toInt() ?: 0
+      if (getType(key).name == Number::class.simpleName) {
+        this.getDouble(key).toInt()
+      } else {
+        this.getString(key)?.toIntOrNull() ?: 0
+      }
     } catch (e: Exception) {
       0
     }
