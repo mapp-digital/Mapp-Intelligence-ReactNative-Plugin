@@ -44,6 +44,10 @@ android.iml
 # Cocoapods
 #
 example/ios/Pods
+**/Pods/
+
+# XCode
+**/.xcode.env.local
 
 # Ruby
 example/vendor/

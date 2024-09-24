@@ -6,6 +6,7 @@ import { DefaultStyles } from './components/Styles';
 import { MappSwitch } from './components/MappSwitch';
 import { MappButton } from './components/MappButton';
 import {
+  MappIntelligencePlugin,
   MediaAction,
   type MediaParameteres,
   type EventParameters,
@@ -14,7 +15,6 @@ import {
   MIStatus,
   type SessionParameters,
   type MediaEvent,
-  MappIntelligencePlugin,
 } from 'mapp-intelligence-reactnative-plugin';
 
 const ManualMediaTracking = () => {

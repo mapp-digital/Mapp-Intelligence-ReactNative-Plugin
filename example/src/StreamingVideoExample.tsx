@@ -1,13 +1,13 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Video, { type VideoRef } from 'react-native-video';
 
 import { useNavigation } from '@react-navigation/native';
 import {
+  MappIntelligencePlugin,
   type MediaParameteres,
   MediaAction,
   type MediaEvent,
-  MappIntelligencePlugin,
   type MIProduct,
   type EcommerceParameters,
   MIStatus,

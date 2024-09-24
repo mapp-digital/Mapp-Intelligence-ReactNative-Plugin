@@ -129,7 +129,7 @@ export function convertEcommerceParameters(
 export function convertCampaignParameters(
   campaignParameters?: CampaignParameters | null
 ): Object | null {
-  console.log('convertCapaignParameters');
+  console.log('convertCampaignParameters');
   if (campaignParameters == null) {
     return null;
   }

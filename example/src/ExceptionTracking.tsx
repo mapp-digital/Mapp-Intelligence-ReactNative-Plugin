@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, FlatList, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { DefaultStyles } from './components/Styles';
 import { MappButton } from './components/MappButton';
 import CrashTester from 'react-native-crash-tester';

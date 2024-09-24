@@ -1,7 +1,7 @@
+import { useWebTracking } from 'mapp-intelligence-reactnative-plugin';
 import React from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { StyleSheet } from 'react-native';
-import { useWebTracking } from 'mapp-intelligence-reactnative-plugin';
 import { WebView } from 'react-native-webview';
 import type { BasicAuthCredential } from 'react-native-webview/lib/WebViewTypes';
 
