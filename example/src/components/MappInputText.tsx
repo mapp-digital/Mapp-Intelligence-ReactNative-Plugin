@@ -5,7 +5,6 @@ import {
   TextInput,
   Text,
   View,
-  type StyleProp,
   type ColorValue,
   type InputModeOptions,
 } from 'react-native';

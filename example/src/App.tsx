@@ -2,6 +2,7 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+// @ts-ignore
 import { Mapp } from 'react-native-mapp-plugin';
 import PageTrackingView from './PageTracking';
 import ActionTrackingView from './ActionTracking';
