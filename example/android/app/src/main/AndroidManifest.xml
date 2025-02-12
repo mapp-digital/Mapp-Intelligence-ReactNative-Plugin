@@ -12,6 +12,7 @@
       android:usesCleartextTraffic="true"
       android:theme="@style/AppTheme"
       android:supportsRtl="true"
+      android:networkSecurityConfig="@xml/network_security_config"
       tools:targetApi="m">
       <activity
         android:name=".MainActivity"
