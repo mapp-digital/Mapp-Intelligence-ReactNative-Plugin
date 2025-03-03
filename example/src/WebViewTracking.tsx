@@ -7,17 +7,21 @@ import type { BasicAuthCredential } from 'react-native-webview/lib/WebViewTypes'
 
 const WebViewTracking = () => {
   // init custom hook for webview tracking
-  const { webViewRef, handleMessage, handleLoad, getInjectedJavaScript } =
-    useWebTracking(
-      (data) => {
-        // register callback when onMessage received to execute some additional logic
-        console.log('On Message', data);
-      },
-      () => {
-        // register callback when web page onLoad event triggers to execute some additional logic
-        console.log('On Load');
-      }
-    );
+  const {
+    webViewRef,
+    handleMessage,
+    handleLoad,
+    getInjectedJavaScript,
+  } = useWebTracking(
+    (data) => {
+      // register callback when onMessage received to execute some additional logic
+      console.log('On Message', data);
+    },
+    () => {
+      // register callback when web page onLoad event triggers to execute some additional logic
+      console.log('On Load');
+    }
+  );
 
   const basicAuthCredential: BasicAuthCredential = {
     username: 'demo',

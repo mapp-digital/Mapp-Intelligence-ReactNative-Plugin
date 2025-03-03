@@ -40,7 +40,8 @@ const ExceptionTrackingView = () => {
     console.log('trackExceptionWithName');
     try {
       const result = JSON.parse('Invalid JSON String');
-    } catch (e: any) {
+      console.log(result);
+    } catch (e) {
       const error = e as Error;
       await MappIntelligencePlugin.trackExceptionWithName(
         error.name,
@@ -53,15 +54,12 @@ const ExceptionTrackingView = () => {
     console.log('trackError');
     try {
       const result = JSON.parse('Invalid JSON String');
-    } catch (e: any) {
+      console.log(result);
+    } catch (e) {
       console.log('trackError - catch block');
       const error = e as Error;
       await MappIntelligencePlugin.trackException(error);
     }
-  };
-
-  const functionWithError = () => {
-    JSON.parse('invalid');
   };
 
   // Unhandled Promise Rejection

@@ -8,20 +8,6 @@ const runOnce = `
         meta.setAttribute('name', 'viewport');
         meta.setAttribute('content', 'width=device-width, height=device-height, initial-scale=0.85, maximum-scale=1.0, user-scalable=no');
         document.getElementsByTagName('head')[0].appendChild(meta);
-        
-        window.WebtrekkAndroidWebViewCallback = {};
-
-        window.WebtrekkAndroidWebViewCallback.trackCustomPage = function(pageName,param){
-            window.ReactNativeWebView.postMessage(JSON.stringify({ 'method': 'trackCustomPage', 'name':pageName, 'params':param }));
-        }
-
-        window.WebtrekkAndroidWebViewCallback.trackCustomEvent = function(eventName, param){
-            window.ReactNativeWebView.postMessage(JSON.stringify({ 'method': 'trackCustomEvent', 'name':eventName, 'params':param }));
-        }
-
-        window.WebtrekkAndroidWebViewCallback.getEverId = function(){
-            window.ReactNativeWebView.postMessage(JSON.stringify({ 'method': 'getEverId', 'name':'webtrekkApplicationEverId', 'params': window.webtrekkApplicationEverId }));
-        }
     `;
 const injectEverIdScript = `window.webtrekkApplicationEverId = '%everId%' ; true; `;
 
@@ -60,7 +46,7 @@ export const useWebTracking = (
 
   const trackCustomPage = (name: string, params: any) => {
     try {
-      const parameters = getJson(params) ?? new Map();
+      const parameters = getJson(params);
       console.log('Page Name: ', name, '; Params: ', parameters);
       MappIntelligencePlugin.trackPageWithCustomData(name, parameters);
     } catch (error) {

@@ -221,10 +221,8 @@ export const MappIntelligencePlugin = {
     pageTitle: string,
     pageParameters: Map<string, string> | null
   ): Promise<number> => {
-    console.log('trackPageWithCustomData');
-    const params = pageParameters?.entries();
-    const data = params != null ? Object.fromEntries(params) : {};
-    return mappPlugin.trackPageWithCustomData(data, pageTitle);
+    console.log('trackPageWithCustomData', pageParameters);
+    return mappPlugin.trackPageWithCustomData(pageParameters, pageTitle);
   },
 
   /**
