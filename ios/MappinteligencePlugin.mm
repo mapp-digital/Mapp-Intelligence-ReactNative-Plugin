@@ -509,7 +509,7 @@ RCT_EXPORT_METHOD(trackException:(NSString*)name
 }
 
 - (NSMutableDictionary *)clearDictionaryFromNull:(NSMutableDictionary *)dictionary {
-    NSArray *keysToRemove = [NSArray array];
+  NSArray *keysToRemove = [NSMutableArray array];
 
     for (NSString *key in dictionary.allKeys) {
         if ([dictionary[key] isKindOfClass:[NSDictionary class]]) {
@@ -524,8 +524,9 @@ RCT_EXPORT_METHOD(trackException:(NSString*)name
             keysToRemove = [keysToRemove arrayByAddingObject:key];
         }
     }
-
+  if([keysToRemove count] > 0) {
     [dictionary removeObjectsForKeys:keysToRemove];
+  }
 
     return dictionary;
 }
