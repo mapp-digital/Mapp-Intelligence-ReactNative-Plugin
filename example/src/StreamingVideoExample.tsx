@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import Video, { type VideoRef } from 'react-native-video';
 
 import { useNavigation } from '@react-navigation/native';
@@ -187,6 +187,9 @@ const StreamingVideoExample = () => {
    * @param duration
    */
   const onLoadEvent = async (currentTime: number, duration: number) => {
+    if (Platform.OS === 'ios') {
+          videoRef?.current?.presentFullscreenPlayer(); // doesn't work on android yet
+        }
     console.log('OnLoad: ');
 
     const customCategories: Map<number, string> = new Map([
@@ -232,7 +235,7 @@ const StreamingVideoExample = () => {
         }}
         resizeMode="none"
         style={styles.backgroundVideo}
-        controls={true}
+        controls={Platform.OS != 'ios' ? true : false}
         onVolumeChange={(e) => {
           console.log(e);
         }}

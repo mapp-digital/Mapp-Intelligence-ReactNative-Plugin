@@ -1255,7 +1255,7 @@ PODS:
     - React-Core
   - react-native-safe-area-context (4.14.1):
     - React-Core
-  - react-native-video (6.10.0):
+  - react-native-video (6.10.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1268,7 +1268,7 @@ PODS:
     - React-featureflags
     - React-graphics
     - React-ImageManager
-    - react-native-video/Video (= 6.10.0)
+    - react-native-video/Video (= 6.10.2)
     - React-NativeModulesApple
     - React-RCTFabric
     - React-rendererdebug
@@ -1277,7 +1277,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-video/Video (6.10.0):
+  - react-native-video/Video (6.10.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1298,7 +1298,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-webview (13.13.2):
+  - react-native-webview (13.13.4):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1581,8 +1581,8 @@ PODS:
     - React-utils (= 0.75.5)
   - ReactNativeExceptionHandler (2.10.10):
     - React-Core
-  - RNMappPlugin (1.2.0):
-    - MappSDK (~> 6.0.8)
+  - RNMappPlugin (1.2.1):
+    - MappSDK (~> 6.0.10)
     - MappSDKGeotargeting
     - MappSDKInapp
     - React
@@ -1881,8 +1881,8 @@ SPEC CHECKSUMS:
   React-microtasksnativemodule: 2fa1c780087238662ed009d44fe71d19c085fa8b
   react-native-crash-tester: 3ffaa64141427ca362079cb53559fe9a532487ae
   react-native-safe-area-context: 141eca0fd4e4191288dfc8b96a7c7e1c2983447a
-  react-native-video: 25ecb15d6ac0f97e2d863cbe317c70bd6e8f1a6e
-  react-native-webview: c0b91a4598bd54e9fbc70353aebf1e9bab2e5bb9
+  react-native-video: 7f400f4301571ad7ddbee8c92c2ee8d2324fff16
+  react-native-webview: 4cec209f46fca53257d987ac16a6a63974417f8b
   React-nativeconfig: 237c862aab56a7426301fcbbb8dd6988745231e0
   React-NativeModulesApple: 205d3251b2e7fc625b7e6232153d4393bc2d30fe
   React-perflogger: 46ce3b295add69087b7c5ff325b55a6c7af204fc
@@ -1910,7 +1910,7 @@ SPEC CHECKSUMS:
   ReactCodegen: c672218d62eee3026615eeec882d862395e61cd8
   ReactCommon: c5f4dfc5a41d58a8013df370cf733de9782c7659
   ReactNativeExceptionHandler: b11ff67c78802b2f62eed0e10e75cb1ef7947c60
-  RNMappPlugin: 62c781f79d211b97daa6ac58cc7cfad05d702f67
+  RNMappPlugin: 265bcf451ded5111050d6ae06f3338dbc8ddb69e
   RNScreens: e52d2e7e5fa29266d6f8f68e8229452e5b2f4236
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 5acecc29c9413933d57c9a26bc236fd0279bacb4
