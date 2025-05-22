@@ -1,82 +1,40 @@
-import com.android.Version
-
 buildscript {
+  ext.getExtOrDefault = {name ->
+    return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties['MappinteligencePlugin_' + name]
+  }
+
   repositories {
-    flatDir {
-      dirs 'libs'
-    }
     google()
     mavenCentral()
-    maven {
-      // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-      url "$rootDir/../node_modules/react-native/android"
-    }
   }
 
   dependencies {
-    classpath("com.android.tools.build:gradle:8.3.2")
+    classpath "com.android.tools.build:gradle:8.7.2"
     // noinspection DifferentKotlinGradleVersion
-    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22")
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${getExtOrDefault('kotlinVersion')}"
   }
-}
-
-allprojects {
-  repositories {
-    google()
-    mavenLocal()
-    mavenCentral()
-    maven { url "https://maven.google.com/" }
-  }
-}
-
-def isNewArchitectureEnabled() {
-  return rootProject.hasProperty("newArchEnabled") && rootProject.getProperty("newArchEnabled") == "true"
 }
 
 apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
 
-if (isNewArchitectureEnabled()) {
-  apply plugin: "com.facebook.react"
-}
-
-// Buildscript is evaluated before everything else so we can't use getExtOrDefault
-def kotlin_version = rootProject.ext.has("kotlinVersion") ? rootProject.ext.get("kotlinVersion") : project.properties["MappinteligencePlugin_kotlinVersion"]
-
-def getExtOrDefault(name) {
-  return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties["MappinteligencePlugin_" + name]
-}
+apply plugin: "com.facebook.react"
 
 def getExtOrIntegerDefault(name) {
   return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["MappinteligencePlugin_" + name]).toInteger()
 }
 
-static def supportsNamespace() {
-  def parsed = Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')
-  def major = parsed[0].toInteger()
-  def minor = parsed[1].toInteger()
-
-  // Namespace support was added in 7.3.0
-  return (major == 7 && minor >= 3) || major >= 8
-}
-
 android {
-  if (supportsNamespace()) {
-    namespace "com.mappinteligenceplugin"
-
-    sourceSets {
-      main {
-        manifest.srcFile "src/main/AndroidManifestNew.xml"
-      }
-    }
-  }
-
+  namespace "com.mappinteligenceplugin"
   compileSdkVersion getExtOrIntegerDefault("compileSdkVersion")
 
   defaultConfig {
     minSdkVersion getExtOrIntegerDefault("minSdkVersion")
     targetSdkVersion getExtOrIntegerDefault("targetSdkVersion")
+  }
 
+  buildFeatures {
+    buildConfig true
   }
 
   buildTypes {
@@ -90,8 +48,17 @@ android {
   }
 
   compileOptions {
-    sourceCompatibility JavaVersion.VERSION_17
-    targetCompatibility JavaVersion.VERSION_17
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  sourceSets {
+    main {
+      java.srcDirs += [
+        "generated/java",
+        "generated/jni"
+      ]
+    }
   }
 }
 
@@ -100,19 +67,24 @@ repositories {
   google()
 }
 
+def kotlin_version = getExtOrDefault("kotlinVersion")
 
 dependencies {
   // For < 0.71, this will be from the local maven repo
   // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
   //noinspection GradleDynamicVersion
-  implementation('com.facebook.react:react-native:0.20.1')
-  implementation("androidx.annotation:annotation:1.8.2")
-  implementation("androidx.core:core-ktx:1.13.1")
+  implementation "com.facebook.react:react-android"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
+  implementation("androidx.annotation:annotation:1.9.1")
+  implementation("androidx.core:core-ktx:1.16.0")
   implementation("androidx.appcompat:appcompat:1.7.0")
   implementation("com.mapp.sdk:intelligence-android:5.1.11")
 }
 
-configurations.configureEach {
-  exclude(group: "com.android.support", module :"support-v4")
+react {
+  jsRootDir = file("../src/")
+  libraryName = "MappinteligencePlugin"
+  codegenJavaPackageName = "com.mappinteligenceplugin"
 }
+

@@ -389,9 +389,9 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   }
 
   @ReactMethod
-  fun trackException(name: String, message: String, stacktrace: String? = null, promise: Promise) {
+  fun trackExceptionWithName(name: String, message: String, stacktrace: String? = null, promise: Promise) {
     runOnPlugin(whenInitialized = {
-      Log.d("MappIntelligencePlugin", "trackException")
+      Log.d("MappIntelligencePlugin", "trackExceptionWithName")
       if (stacktrace.isNullOrEmpty()) {
         instance.trackException(name, message)
       } else {
@@ -477,6 +477,11 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
     }, whenNotInitialized = {
       promise.resolve("")
     })
+  }
+
+  @ReactMethod
+  fun nativeCrash() {
+    throw Exception("Native crash");
   }
 
   override fun getName(): String {
