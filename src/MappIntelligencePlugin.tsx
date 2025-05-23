@@ -300,7 +300,7 @@ export const MappIntelligencePlugin = {
     message: string,
     stackTrace?: string | null
   ): Promise<number> => {
-    return mappPlugin.trackException(
+    return mappPlugin.trackExceptionWithName(
       name,
       message.slice(0, 1000),
       stackTrace?.slice(0, 1000)
@@ -388,5 +388,19 @@ export const MappIntelligencePlugin = {
    */
   printCurrentConfig: (): Promise<string> => {
     return mappPlugin.getCurrentConfig();
+  },
+
+  /**
+   * Crash the app on native level
+   * @returns result if method executed succesfully or not
+   */
+  nativeCrash: async () => {
+    if (Platform.OS === 'android') {
+      console.log('nativeCrash on Android');
+      await mappPlugin.nativeCrash();
+    } else {
+      console.log('nativeCrash - iOS not supported');
+    }
+    return Promise.resolve(true);
   },
 };

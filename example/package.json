@@ -6,35 +6,37 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
+    "generate-specs": "react-native codegen",
     "build:android": "cd android && ./gradlew assembleDebug --no-daemon --console=plain -PreactNativeArchitectures=arm64-v8a",
     "build:ios": "cd ios && xcodebuild -workspace MappinteligencePluginExample.xcworkspace -scheme MappinteligencePluginExample -configuration Debug -sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO"
   },
   "dependencies": {
-    "@react-native/gradle-plugin": "^0.75.3",
+    "@react-native/gradle-plugin": "^0.79.2",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.17",
-    "mapp-intelligence-reactnative-plugin": "workspace:^",
-    "react": "19.0.0",
     "react-native": "^0.79.2",
-    "react-native-crash-tester": "^0.2.3",
-    "react-native-exception-handler": "^2.10.10",
-    "react-native-mapp-plugin": "^1.2.0",
-    "react-native-safe-area-context": "latest",
+    "react-native-safe-area-context": "^5.4.0",
     "react-native-screens": "^4.10.0",
-    "react-native-video": "^6.0.0",
-    "react-native-webview": "^13.10.3"
+    "react-native-video": "^6.14.0",
+    "react-native-webview": "^13.13.5"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.3",
     "@babel/runtime": "^7.25.0",
-    "@react-native-community/cli": "^18.0.0",
-    "@react-native/babel-preset": "^0.79.2",
+    "@react-native-community/cli": "18.0.0",
+    "@react-native-community/cli-platform-android": "18.0.0",
+    "@react-native-community/cli-platform-ios": "18.0.0",
+    "@react-native/babel-preset": "0.79.2",
+    "@react-native/eslint-config": "0.79.2",
     "@react-native/metro-config": "0.79.2",
     "@react-native/typescript-config": "0.79.2",
+    "@types/react": "^19.0.0",
     "@types/react-navigation": "^3.4.0",
     "babel-plugin-module-resolver": "^5.0.0",
-    "pod-install": "^0.1.0"
+    "pod-install": "^0.1.0",
+    "react-native-builder-bob": "^0.40.8",
+    "react-native-monorepo-config": "^0.1.9"
   },
   "engines": {
     "node": ">=18"
