@@ -393,14 +393,10 @@ export const MappIntelligencePlugin = {
   /**
    * Crash the app on native level
    * @returns result if method executed succesfully or not
+   * ONLY FOR TESTING!!!
    */
   nativeCrash: async () => {
-    if (Platform.OS === 'android') {
-      console.log('nativeCrash on Android');
-      await mappPlugin.nativeCrash();
-    } else {
-      console.log('nativeCrash - iOS not supported');
-    }
+    await mappPlugin.nativeCrash();
     return Promise.resolve(true);
   },
 };

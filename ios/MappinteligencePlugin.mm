@@ -106,6 +106,16 @@ RCT_EXPORT_METHOD(getCurrentConfig:
     resolve(@"print configuration:");
 }
 
+RCT_EXPORT_METHOD(nativeCrash:
+                  (RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+{
+    // Dereference a null pointer (EXC_BAD_ACCESS)
+    int *ptr = NULL;
+    *ptr = 42; // 💥 Crash happens here
+    resolve(@"success");
+}
+
 RCT_EXPORT_METHOD(initWithConfiguration:(NSArray*)trackIDs
                                         domain:(NSString*)domain
                                         resolve:(RCTPromiseResolveBlock)resolve
