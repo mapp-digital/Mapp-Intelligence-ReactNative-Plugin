@@ -249,22 +249,29 @@ RCT_EXPORT_METHOD(trackPage:(NSString*)pageTitle
 }
 
 RCT_EXPORT_METHOD(trackCustomPage:(NSString*)pageTitle
-                                        pageParameters:(NSDictionary*)pageParameters
-                                        sessionParamters:(NSDictionary*)sessionParamters
-                                        userCategories:(NSDictionary*)userCategories
-                                        ecommerceParameters:(NSDictionary*)ecommerceParameters
-                                        campaignParameters:(NSDictionary*)campaignParameters
+                                        pageParameters:(id)pageParameters
+                                        sessionParamters:(id)sessionParamters
+                                        userCategories:(id)userCategories
+                                        ecommerceParameters:(id)ecommerceParameters
+                                        campaignParameters:(id)campaignParameters
                                         resolve:(RCTPromiseResolveBlock)resolve
                                         reject:(RCTPromiseRejectBlock)reject)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         MIPageViewEvent* event = [[MIPageViewEvent alloc] initWithName:pageTitle];
+      
+      NSDictionary* pp = [pageParameters isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)pageParameters;
+      NSDictionary* sp = [sessionParamters isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)sessionParamters;
+      NSDictionary* uc = [userCategories isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)userCategories;
+      NSDictionary* ep = [ecommerceParameters isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)ecommerceParameters;
+      NSDictionary* cp = [campaignParameters isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)campaignParameters;
 
-        [event setPageParameters:[self preparePageParameters:pageParameters]];
-        [event setUserCategories:[self prepareUserCategories:userCategories]];
-        [event setSessionParameters:[self prepareSessionParameters:sessionParamters]];
-        [event setEcommerceParameters:[self prepareEcommerceParameters:ecommerceParameters]];
-        [event setCampaignParameters:[self prepareCampaignParameters:campaignParameters]];
+
+        [event setPageParameters:[self preparePageParameters:pp]];
+        [event setUserCategories:[self prepareUserCategories:uc]];
+        [event setSessionParameters:[self prepareSessionParameters:sp]];
+        [event setEcommerceParameters:[self prepareEcommerceParameters:ep]];
+        [event setCampaignParameters:[self prepareCampaignParameters:cp]];
         [[MappIntelligence shared] trackPage:event];
     });
     resolve(@1);

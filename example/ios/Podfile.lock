@@ -8,7 +8,7 @@ PODS:
   - hermes-engine (0.79.2):
     - hermes-engine/Pre-built (= 0.79.2)
   - hermes-engine/Pre-built (0.79.2)
-  - mapp-intelligence-reactnative-plugin (1.0.3):
+  - mapp-intelligence-reactnative-plugin (1.0.4):
     - MappIntelligence (= 5.0.15)
     - RCT-Folly
     - RCTRequired
@@ -17,10 +17,6 @@ PODS:
     - React-Core
     - ReactCommon/turbomodule/core
   - MappIntelligence (5.0.15)
-  - MappSDK (6.0.11)
-  - MappSDKGeotargeting (6.0.5):
-    - MappSDK (~> 6.0.0)
-  - MappSDKInapp (6.0.6.10)
   - RCT-Folly (2024.11.18.00):
     - boost
     - DoubleConversion
@@ -1346,9 +1342,7 @@ PODS:
     - React-jsiexecutor
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
-  - react-native-crash-tester (0.2.3):
-    - React-Core
-  - react-native-safe-area-context (5.4.0):
+  - react-native-safe-area-context (5.4.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1363,8 +1357,8 @@ PODS:
     - React-hermes
     - React-ImageManager
     - React-jsi
-    - react-native-safe-area-context/common (= 5.4.0)
-    - react-native-safe-area-context/fabric (= 5.4.0)
+    - react-native-safe-area-context/common (= 5.4.1)
+    - react-native-safe-area-context/fabric (= 5.4.1)
     - React-NativeModulesApple
     - React-RCTFabric
     - React-renderercss
@@ -1374,7 +1368,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-safe-area-context/common (5.4.0):
+  - react-native-safe-area-context/common (5.4.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1398,7 +1392,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-safe-area-context/fabric (5.4.0):
+  - react-native-safe-area-context/fabric (5.4.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1843,13 +1837,6 @@ PODS:
     - React-logger (= 0.79.2)
     - React-perflogger (= 0.79.2)
     - React-utils (= 0.79.2)
-  - ReactNativeExceptionHandler (2.10.10):
-    - React-Core
-  - RNMappPlugin (1.2.1):
-    - MappSDK (~> 6.0.10)
-    - MappSDKGeotargeting
-    - MappSDKInapp
-    - React
   - RNScreens (4.10.0):
     - DoubleConversion
     - glog
@@ -1946,7 +1933,6 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
-  - react-native-crash-tester (from `../node_modules/react-native-crash-tester`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-video (from `../node_modules/react-native-video`)
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -1981,17 +1967,12 @@ DEPENDENCIES:
   - ReactAppDependencyProvider (from `build/generated/ios`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - ReactNativeExceptionHandler (from `../node_modules/react-native-exception-handler`)
-  - RNMappPlugin (from `../node_modules/react-native-mapp-plugin`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   trunk:
     - MappIntelligence
-    - MappSDK
-    - MappSDKGeotargeting
-    - MappSDKInapp
     - React-Codegen
     - SocketRocket
 
@@ -2075,8 +2056,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   React-microtasksnativemodule:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
-  react-native-crash-tester:
-    :path: "../node_modules/react-native-crash-tester"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-video:
@@ -2145,10 +2124,6 @@ EXTERNAL SOURCES:
     :path: build/generated/ios
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
-  ReactNativeExceptionHandler:
-    :path: "../node_modules/react-native-exception-handler"
-  RNMappPlugin:
-    :path: "../node_modules/react-native-mapp-plugin"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   Yoga:
@@ -2162,11 +2137,8 @@ SPEC CHECKSUMS:
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: 314be5250afa5692b57b4dd1705959e1973a8ebe
-  mapp-intelligence-reactnative-plugin: f19bc77403faacf1dc64dbc267a9beb389be51f4
+  mapp-intelligence-reactnative-plugin: 1f550e69c08d6154fc759e3b13525de0e118c5e9
   MappIntelligence: 3c9b578bf7a6986b7b4d0ba3d2525070b918e842
-  MappSDK: 10cfdeadd344f9a4250da291221ea1e46bbcae01
-  MappSDKGeotargeting: 7c42a2f919cea81357f6d11ec5a6bf727d0c7770
-  MappSDKInapp: 22f4fc98c3c95824e77e1b6e15a67723e687038e
   RCT-Folly: 36fe2295e44b10d831836cc0d1daec5f8abcf809
   RCTDeprecation: 83ffb90c23ee5cea353bd32008a7bca100908f8c
   RCTRequired: eb7c0aba998009f47a540bec9e9d69a54f68136e
@@ -2199,8 +2171,7 @@ SPEC CHECKSUMS:
   React-logger: 368570a253f00879a1e4fea24ed4047e72e7bbf3
   React-Mapbuffer: c04fcda1c6281fc0a6824c7dcc1633dd217ac1ec
   React-microtasksnativemodule: ca2804a25fdcefffa0aa942aa23ab53b99614a34
-  react-native-crash-tester: 3ffaa64141427ca362079cb53559fe9a532487ae
-  react-native-safe-area-context: 00d03dc688ba86664be66f9e3f203fc7d747d899
+  react-native-safe-area-context: dc279397abf103b0577f48c548630b7e639646a7
   react-native-video: f3cf7f1ca5e012f000249dde195f355eda8d86ac
   react-native-webview: cde150463e7caa49b316b0ed1871e7ef8193bef4
   React-NativeModulesApple: 452b86b29fae99ed0a4015dca3ad9cd222f88abf
@@ -2234,8 +2205,6 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: d5dcc564f129632276bd3184e60f053fcd574d6b
   ReactCodegen: fda99a79c866370190e162083a35602fdc314e5d
   ReactCommon: 4d0da92a5eb8da86c08e3ec34bd23ab439fb2461
-  ReactNativeExceptionHandler: b11ff67c78802b2f62eed0e10e75cb1ef7947c60
-  RNMappPlugin: 265bcf451ded5111050d6ae06f3338dbc8ddb69e
   RNScreens: c5c07a86e4088ce92f0d3854082250dfa9c61f75
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 9f110fc4b7aa538663cba3c14cbb1c335f43c13f
