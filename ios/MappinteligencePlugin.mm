@@ -299,21 +299,28 @@ RCT_EXPORT_METHOD(trackPageWithCustomData:(NSDictionary*)pageParameters
     }
 
 RCT_EXPORT_METHOD(trackAction:(NSString*)name
-                                        eventParameters:(NSDictionary*)eventParameters
-                                        sessionParamters:(NSDictionary*)sessionParamters
-                                        userCategories:(NSDictionary*)userCategories
-                                        ecommerceParameters:(NSDictionary*)ecommerceParameters
-                                        campaignParameters:(NSDictionary*)campaignParameters
+                                        eventParameters:(id)eventParameters
+                                        sessionParamters:(id)sessionParamters
+                                        userCategories:(id)userCategories
+                                        ecommerceParameters:(id)ecommerceParameters
+                                        campaignParameters:(id)campaignParameters
                                         resolve:(RCTPromiseResolveBlock)resolve
                                         reject:(RCTPromiseRejectBlock)reject)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
          MIActionEvent* actionEvent = [[MIActionEvent alloc] initWithName:name];
-        [actionEvent setEventParameters:[self prepareEventParamters:eventParameters]];
-        [actionEvent setUserCategories:[self prepareUserCategories:userCategories]];
-        [actionEvent setSessionParameters:[self prepareSessionParameters:sessionParamters]];
-        [actionEvent setEcommerceParameters:[self prepareEcommerceParameters:ecommerceParameters]];
-        [actionEvent setCampaignParameters:[self prepareCampaignParameters:campaignParameters]];
+
+         NSDictionary* ep = [eventParameters isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)eventParameters;
+         NSDictionary* sp = [sessionParamters isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)sessionParamters;
+         NSDictionary* uc = [userCategories isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)userCategories;
+         NSDictionary* ecp = [ecommerceParameters isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)ecommerceParameters;
+         NSDictionary* cp = [campaignParameters isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)campaignParameters;
+
+        [actionEvent setEventParameters:[self prepareEventParamters:ep]];
+        [actionEvent setUserCategories:[self prepareUserCategories:uc]];
+        [actionEvent setSessionParameters:[self prepareSessionParameters:sp]];
+        [actionEvent setEcommerceParameters:[self prepareEcommerceParameters:ecp]];
+        [actionEvent setCampaignParameters:[self prepareCampaignParameters:cp]];
 
         [[MappIntelligence shared] trackAction:actionEvent];
     });
@@ -343,12 +350,13 @@ RCT_EXPORT_METHOD(trackUrl:(NSString*)url
 
 RCT_EXPORT_METHOD(trackCustomMedia:(NSString*)pageName
                                        name:(NSString*)name
-                                       customParams:(NSDictionary*)customParams
+                                       customParams:(id)customParams
                                        resolve:(RCTPromiseResolveBlock)resolve
                                        reject:(RCTPromiseRejectBlock)reject)
 {
    dispatch_async(dispatch_get_main_queue(), ^{
-       MIMediaParameters* mParameters = [self prepareMediaParameters:customParams];
+     NSDictionary* cp = [customParams isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)customParams;
+       MIMediaParameters* mParameters = [self prepareMediaParameters:cp];
        mParameters.name = name;
        MIMediaEvent* mediaEvent = [[MIMediaEvent alloc] initWithPageName:pageName parameters:mParameters];
        [[MappIntelligence shared] trackMedia:mediaEvent];
@@ -364,7 +372,8 @@ RCT_EXPORT_METHOD(trackMedia:(NSDictionary*)mediaEventDictionary
        if(!mediaEventDictionary[@"parameters"]) {
            NSLog(@"Media event must have page name");
        }
-       MIMediaParameters* mParameters = [self prepareMediaParameters:mediaEventDictionary[@"parameters"]];
+       NSDictionary* mp = [mediaEventDictionary isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)mediaEventDictionary;
+       MIMediaParameters* mParameters = [self prepareMediaParameters:mp[@"parameters"]];
        MIMediaEvent* mediaEvent = [[MIMediaEvent alloc] initWithPageName:mediaEventDictionary[@"parameters"][@"name"] parameters:mParameters];
        [mediaEvent setEventParameters:[self prepareEventParamters:mediaEventDictionary[@"eventParameters"]]];
        [mediaEvent setPageName:mediaEventDictionary[@"pageName"]];
