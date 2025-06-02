@@ -22,6 +22,7 @@ import {
   ExceptionType,
   LogLevel,
 } from 'mapp-intelligence-reactnative-plugin';
+import FetchExample from './FetchExample';
 
 const Stack = createNativeStackNavigator();
 
@@ -125,6 +126,12 @@ const App = () => {
             <Stack.Screen
               name={Routes.WEBVIEW_TRACKING.valueOf()}
               component={WebViewTracking}
+            />
+          }
+                    {
+            <Stack.Screen
+              name={Routes.FETCH_EXAMPLE.valueOf()}
+              component={FetchExample}
             />
           }
         </Stack.Navigator>
