@@ -15,7 +15,6 @@
 		760C831D9E835BF1DA3CFF2A /* libPods-MappinteligencePluginExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81912B5B629B8E7180D88B05 /* libPods-MappinteligencePluginExample.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		A390BE612C19CD5300844D44 /* AppoxeeConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = A390BE602C19CD5300844D44 /* AppoxeeConfig.plist */; };
-		DC89877AFAC36ECA35F3CD70 /* libPods-MappinteligencePluginExample-MappinteligencePluginExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F9377B390C94D61E0CB067F2 /* libPods-MappinteligencePluginExample-MappinteligencePluginExampleTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,16 +37,13 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = MappinteligencePluginExample/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = MappinteligencePluginExample/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = MappinteligencePluginExample/main.m; sourceTree = "<group>"; };
-		2F7A23F1682136D6B8E134F9 /* Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests/Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		57895E39C650A983944A2532 /* Pods-MappinteligencePluginExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MappinteligencePluginExample.release.xcconfig"; path = "Target Support Files/Pods-MappinteligencePluginExample/Pods-MappinteligencePluginExample.release.xcconfig"; sourceTree = "<group>"; };
 		5F51BE80474398FAE6056C5C /* Pods-MappinteligencePluginExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MappinteligencePluginExample.debug.xcconfig"; path = "Target Support Files/Pods-MappinteligencePluginExample/Pods-MappinteligencePluginExample.debug.xcconfig"; sourceTree = "<group>"; };
-		8123544A6D683261F3D33768 /* Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests.release.xcconfig"; path = "Target Support Files/Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests/Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		81912B5B629B8E7180D88B05 /* libPods-MappinteligencePluginExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MappinteligencePluginExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MappinteligencePluginExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A390BE602C19CD5300844D44 /* AppoxeeConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AppoxeeConfig.plist; sourceTree = "<group>"; };
 		CC95FFD576A0DEB741ABCC82 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = MappinteligencePluginExample/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F9377B390C94D61E0CB067F2 /* libPods-MappinteligencePluginExample-MappinteligencePluginExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MappinteligencePluginExample-MappinteligencePluginExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,7 +51,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DC89877AFAC36ECA35F3CD70 /* libPods-MappinteligencePluginExample-MappinteligencePluginExampleTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,7 +102,6 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				81912B5B629B8E7180D88B05 /* libPods-MappinteligencePluginExample.a */,
-				F9377B390C94D61E0CB067F2 /* libPods-MappinteligencePluginExample-MappinteligencePluginExampleTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -148,8 +142,6 @@
 			children = (
 				5F51BE80474398FAE6056C5C /* Pods-MappinteligencePluginExample.debug.xcconfig */,
 				57895E39C650A983944A2532 /* Pods-MappinteligencePluginExample.release.xcconfig */,
-				2F7A23F1682136D6B8E134F9 /* Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests.debug.xcconfig */,
-				8123544A6D683261F3D33768 /* Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -161,12 +153,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "MappinteligencePluginExampleTests" */;
 			buildPhases = (
-				E93E1C4A1E76D581F33A84DE /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				F66174BA89EE7E13E06286BA /* [CP] Embed Pods Frameworks */,
-				F35255A00FEAF435EA419312 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -329,62 +318,6 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MappinteligencePluginExample/Pods-MappinteligencePluginExample-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E93E1C4A1E76D581F33A84DE /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F35255A00FEAF435EA419312 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests/Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests/Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests/Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F66174BA89EE7E13E06286BA /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests/Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests/Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests/Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -418,7 +351,6 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2F7A23F1682136D6B8E134F9 /* Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -445,7 +377,6 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8123544A6D683261F3D33768 /* Pods-MappinteligencePluginExample-MappinteligencePluginExampleTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;

@@ -300,7 +300,7 @@ export const MappIntelligencePlugin = {
     message: string,
     stackTrace?: string | null
   ): Promise<number> => {
-    return mappPlugin.trackException(
+    return mappPlugin.trackExceptionWithName(
       name,
       message.slice(0, 1000),
       stackTrace?.slice(0, 1000)
@@ -388,5 +388,15 @@ export const MappIntelligencePlugin = {
    */
   printCurrentConfig: (): Promise<string> => {
     return mappPlugin.getCurrentConfig();
+  },
+
+  /**
+   * Crash the app on native level
+   * @returns result if method executed succesfully or not
+   * ONLY FOR TESTING!!!
+   */
+  nativeCrash: async () => {
+    await mappPlugin.nativeCrash();
+    return Promise.resolve(true);
   },
 };
