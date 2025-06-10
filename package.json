@@ -85,7 +85,7 @@
   },
   "workspaces": [
     "example",
-    "mapp-intelligence-reactnative-plugin"
+    "."
   ],
   "packageManager": "yarn@3.6.1",
   "engines": {
