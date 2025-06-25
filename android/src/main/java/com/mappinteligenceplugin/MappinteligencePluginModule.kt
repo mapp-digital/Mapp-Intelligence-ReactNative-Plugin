@@ -24,11 +24,12 @@ import webtrekk.android.sdk.WebtrekkConfiguration
 import webtrekk.android.sdk.events.ActionEvent
 import webtrekk.android.sdk.events.PageViewEvent
 import java.util.concurrent.TimeUnit
+import androidx.core.net.toUri
 
 class MappinteligencePluginModule(private val reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext) {
 
-  private lateinit var instance: Webtrekk
+  private var instance: Webtrekk? = null
   private val configAdapter = ConfigAdapter()
 
   /**
@@ -42,7 +43,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
     }
     val ids = trackValues.mapNotNull { it?.toBigDecimal()?.toPlainString() }
     runOnPlugin(whenInitialized = {
-      instance.setIdsAndDomain(ids, trackDomain)
+      instance?.setIdsAndDomain(ids, trackDomain)
     }, whenNotInitialized = {
       configAdapter.trackIds = ids
       configAdapter.trackDomain = trackDomain
@@ -71,7 +72,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   fun setAnonymousTracking(enabled: Boolean, promise: Promise) {
     runOnPlugin(
       whenInitialized = {
-        instance.anonymousTracking(enabled)
+        instance?.anonymousTracking(enabled)
       }, whenNotInitialized = {
         configAdapter.anonymousTracking = enabled
       })
@@ -84,7 +85,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   @ReactMethod
   fun setSendAppVersionInEveryRequest(enabled: Boolean, promise: Promise) {
     runOnPlugin(whenInitialized = {
-      instance.setVersionInEachRequest(enabled)
+      instance?.setVersionInEachRequest(enabled)
     }, whenNotInitialized = {
       configAdapter.versionInEachRequest = enabled
     })
@@ -98,7 +99,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   @ReactMethod
   fun setEnableUserMatching(enabled: Boolean, promise: Promise) {
     runOnPlugin(whenInitialized = {
-      instance.setUserMatchingEnabled(enabled)
+      instance?.setUserMatchingEnabled(enabled)
     }, whenNotInitialized = {
       configAdapter.userMatchingEnabled = enabled
     })
@@ -113,7 +114,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   @ReactMethod
   fun setEverId(everId: String?, promise: Promise) {
     runOnPlugin(whenInitialized = {
-      instance.setEverId(everId)
+      instance?.setEverId(everId)
     }, whenNotInitialized = {
       configAdapter.everId = everId
     })
@@ -123,7 +124,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   @ReactMethod
   fun getEverId(promise: Promise) {
     runOnPlugin(whenInitialized = {
-      val everId = instance.getEverId()
+      val everId = instance?.getEverId()
       promise.resolve(everId)
     }, whenNotInitialized = {
       promise.reject("", "SDK not initialized yet!")
@@ -133,7 +134,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   @ReactMethod
   fun setTemporarySessionId(sessionId: String, promise: Promise) {
     runOnPlugin(whenInitialized = {
-      instance.setTemporarySessionId(sessionId)
+      instance?.setTemporarySessionId(sessionId)
     }, whenNotInitialized = {
       configAdapter.temporarySessionId = sessionId
     })
@@ -143,7 +144,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   @ReactMethod
   fun optOut(sendData: Boolean, promise: Promise) {
     runOnPlugin(whenInitialized = {
-      instance.optOut(true, sendData)
+      instance?.optOut(true, sendData)
     })
     promise.resolve(true)
   }
@@ -151,7 +152,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   @ReactMethod
   fun optIn(sendData: Boolean, promise: Promise) {
     runOnPlugin(whenInitialized = {
-      instance.optOut(false, sendData)
+      instance?.optOut(false, sendData)
     })
     promise.resolve(true)
   }
@@ -160,7 +161,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   fun setExceptionLogLevel(exceptionLevel: Double, promise: Promise) {
     val exceptionType = ExceptionTypeMapper(exceptionLevel).getData()
     runOnPlugin(whenInitialized = {
-      instance.setExceptionLogLevel(exceptionType)
+      instance?.setExceptionLogLevel(exceptionType)
     }, whenNotInitialized = {
       configAdapter.exceptionLogLevel = exceptionType
     })
@@ -178,7 +179,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
       Logger.Level.BASIC
     }
     runOnPlugin(whenInitialized = {
-      instance.setLogLevel(nativeLevel)
+      instance?.setLogLevel(nativeLevel)
     }, whenNotInitialized = {
       configAdapter.logLevel = nativeLevel
     })
@@ -193,7 +194,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   @ReactMethod
   fun setBatchSupportEnabled(enabled: Boolean, promise: Promise) {
     runOnPlugin(whenInitialized = {
-      instance.setBatchEnabled(enabled)
+      instance?.setBatchEnabled(enabled)
     }, whenNotInitialized = {
       configAdapter.batchSupport = enabled
     })
@@ -210,7 +211,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   ) {
     runOnPlugin(
       whenInitialized = {
-        instance.setRequestPerBatch(size)
+        instance?.setRequestPerBatch(size)
       }, whenNotInitialized = {
         configAdapter.requestPerBatch = size
       })
@@ -227,7 +228,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   ) {
     runOnPlugin(
       whenInitialized = {
-        instance.setRequestInterval(interval.toLong())
+        instance?.setRequestInterval(interval.toLong())
       }, whenNotInitialized = {
         configAdapter.requestsIntervalMinutes = interval
       })
@@ -295,7 +296,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
           this.eCommerceParameters = ecommerce
           this.campaignParameters = campaign
         }
-        instance.trackPage(pageViewEvent)
+        instance?.trackPage(pageViewEvent)
       }
     )
     promise.resolve(true)
@@ -307,7 +308,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   @ReactMethod
   fun trackPageWithCustomData(params: ReadableMap?, pageTitle: String, promise: Promise) {
     runOnPlugin(whenInitialized = {
-      instance.trackCustomPage(pageTitle, params.toMap(keyTransform = {it.toString()}))
+      instance?.trackCustomPage(pageTitle, params.toMap(keyTransform = { it.toString() }))
     })
     promise.resolve(true)
   }
@@ -315,7 +316,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   @ReactMethod
   fun trackPage(pageTitle: String, promise: Promise) {
     runOnPlugin(whenInitialized = {
-      instance.trackPage(PageViewEvent(pageTitle))
+      instance?.trackPage(PageViewEvent(pageTitle))
     })
     promise.resolve(true)
   }
@@ -324,7 +325,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   fun sendRequestsAndClean(promise: Promise) {
     runOnPlugin(
       whenInitialized = {
-        instance.sendRequestsNowAndClean()
+        instance?.sendRequestsNowAndClean()
       })
     promise.resolve(true)
   }
@@ -353,7 +354,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
           this.eCommerceParameters = ecommerce
           this.campaignParameters = campaignParams
         }
-        instance.trackAction(actionEvent)
+        instance?.trackAction(actionEvent)
       })
     promise.resolve(true)
   }
@@ -363,7 +364,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
     runOnPlugin(
       whenInitialized = {
         val innerException = Exception(exception.getString("message"))
-        instance.trackException(innerException)
+        instance?.trackException(innerException)
 
       })
     promise.resolve(true)
@@ -373,7 +374,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   fun trackMedia(readableMap: ReadableMap?, promise: Promise) {
     runOnPlugin(whenInitialized = {
       MediaEventMapper(readableMap).getData()?.let {
-        instance.trackMedia(it)
+        instance?.trackMedia(it)
       }
     })
     promise.resolve(true)
@@ -383,19 +384,24 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   fun trackUrl(url: String, mediaCode: String?, promise: Promise) {
     runOnPlugin(
       whenInitialized = {
-        instance.trackUrl(Uri.parse(url), mediaCode)
+        instance?.trackUrl(url.toUri(), mediaCode)
       })
     promise.resolve(true)
   }
 
   @ReactMethod
-  fun trackExceptionWithName(name: String, message: String, stacktrace: String? = null, promise: Promise) {
+  fun trackExceptionWithName(
+    name: String,
+    message: String,
+    stacktrace: String? = null,
+    promise: Promise
+  ) {
     runOnPlugin(whenInitialized = {
       Log.d("MappIntelligencePlugin", "trackExceptionWithName")
       if (stacktrace.isNullOrEmpty()) {
-        instance.trackException(name, message)
+        instance?.trackException(name, message)
       } else {
-        instance.trackException(name, message + "\n${stacktrace}")
+        instance?.trackException(name, message + "\n${stacktrace}")
       }
     })
     promise.resolve(true)
@@ -438,8 +444,11 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
    * Provide two functions as input parameters to be executed if instance is initialized or not
    */
   private fun runOnPlugin(whenInitialized: () -> Unit, whenNotInitialized: (() -> Unit)? = null) {
-    if (::instance.isInitialized) whenInitialized.invoke()
-    else whenNotInitialized?.invoke()
+    instance?.let {
+      whenInitialized.invoke()
+    } ?: {
+      whenNotInitialized?.invoke()
+    }
   }
 
   @ReactMethod
@@ -460,7 +469,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
     val trackIds = configAdapter.trackIds
     val domain = configAdapter.trackDomain
 
-    instance.setIdsAndDomain(trackIds,domain)
+    instance?.setIdsAndDomain(trackIds, domain)
 //    This requires some changes on native SDK
 //    val builder = WebtrekkConfiguration.Builder(trackIds, domain)
 //    presetAction.invoke(builder)
