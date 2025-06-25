@@ -11,4 +11,5 @@ export enum Routes {
   STREAMING_VIDEO_EXAMPLE = 'Streaming Video Example',
   VIDEO_EXAMPLE = 'Video Example',
   MANUAL_MEDIA_TRACKING = 'Manual Media Tracking',
+  FETCH_EXAMPLE="Fetch Example",
 }
