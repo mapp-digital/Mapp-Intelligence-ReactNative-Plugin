@@ -92,8 +92,7 @@
   ],
   "packageManager": "yarn@3.6.1",
   "engines": {
-    "node": "18.x",
-    "engine-strict": "true"
+    "node": ">=18.x && <=22.x"
   },
   "jest": {
     "preset": "react-native",
