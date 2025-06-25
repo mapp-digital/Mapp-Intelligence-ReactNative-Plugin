@@ -46,7 +46,7 @@ const App = () => {
     await MappIntelligencePlugin.setShouldMigrate(true);
     await MappIntelligencePlugin.setSendAppVersionInEveryRequest(true);
     await MappIntelligencePlugin.setEnableBackgroundSendout(true);
-    await MappIntelligencePlugin.setExceptionLogLevel(ExceptionType.all);
+    //await MappIntelligencePlugin.setExceptionLogLevel(ExceptionType.all);
     await MappIntelligencePlugin.setEnableUserMatching(true);
 
     await MappIntelligencePlugin.build();
