@@ -16,7 +16,7 @@ var onErrorCallback: ((e: Error, isFatal: Boolean) => {}) | undefined | null =
 
 const defaultErrorHandler: GlobalErrorHandler = (error, isFatal) => {
   try {
-    MappIntelligencePlugin.trackException(error, error.stackTrace);
+    MappIntelligencePlugin.trackException(error);
     console.log('GLOBAL ERROR HANDLER: ', isFatal, error);
   } catch (err) {
     console.error(err);

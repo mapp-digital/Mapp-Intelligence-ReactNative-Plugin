@@ -1,6 +1,6 @@
 import { ExceptionType, type MediaEvent } from '../DataTypes';
 import { MappIntelligencePlugin } from '../MappIntelligencePlugin';
-
+import {afterEach, beforeEach, describe, expect, it, jest} from '@jest/globals';
 // Mock the native module
 jest.mock('react-native', () => ({
   Platform: {
