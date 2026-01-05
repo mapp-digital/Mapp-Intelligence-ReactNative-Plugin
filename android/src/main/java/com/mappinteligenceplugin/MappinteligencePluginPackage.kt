@@ -25,9 +25,8 @@ class MappinteligencePluginPackage : ReactPackage {
         MappinteligencePluginModule.NAME,
         false,  // canOverrideExistingModule
         false,  // needsEagerInit
-        true,  // hasConstants
-        false,  // isCxxModule
-        true // isTurboModule -> THIS IS IMPORTANT
+        true,   // hasConstants
+        false   // isCxxModule
       )
       moduleInfos
     }

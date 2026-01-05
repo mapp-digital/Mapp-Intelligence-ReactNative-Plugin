@@ -21,6 +21,34 @@ export const useWebTracking = (
 ) => {
   const webViewRef = useRef<WebView>(null);
 
+
+  const trackCustomPage = useCallback((name: string, params: any) => {
+    try {
+      const parameters = getJson(params);
+      console.log('Page Name: ', name, '; Params: ', parameters);
+      MappIntelligencePlugin.trackPageWithCustomData(name, parameters);
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
+  const trackCustomEvent = useCallback((name: string, params: any) => {
+    try {
+      const parameters = getJson(params);
+      console.log('Event Name: ', name, '; Params: ', parameters);
+      MappIntelligencePlugin.trackAction(
+        name,
+        parameters,
+        null,
+        null,
+        null,
+        null
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
   const handleMessage = useCallback(
     (event: WebViewMessageEvent) => {
       try {
@@ -41,35 +69,9 @@ export const useWebTracking = (
       }
       onMessage?.(event.nativeEvent.data);
     },
-    [onMessage]
+    [onMessage, trackCustomPage, trackCustomEvent]
   );
 
-  const trackCustomPage = (name: string, params: any) => {
-    try {
-      const parameters = getJson(params);
-      console.log('Page Name: ', name, '; Params: ', parameters);
-      MappIntelligencePlugin.trackPageWithCustomData(name, parameters);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const trackCustomEvent = (name: string, params: any) => {
-    try {
-      const parameters = getJson(params);
-      console.log('Event Name: ', name, '; Params: ', parameters);
-      MappIntelligencePlugin.trackAction(
-        name,
-        parameters,
-        null,
-        null,
-        null,
-        null
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const getJson = (data?: any | null): any => {
     try {
@@ -106,7 +108,7 @@ export const useWebTracking = (
     if (onLoad) {
       onLoad();
     }
-  }, []);
+  }, [onLoad]);
 
   const getInjectedJavaScript = (script?: string | undefined | null) => {
     if (script) {

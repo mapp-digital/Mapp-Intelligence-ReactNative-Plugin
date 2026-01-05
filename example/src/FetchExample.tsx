@@ -24,7 +24,7 @@ const FetchExample = ()=>{
             console.error('Error:', response.statusText);
             Dialog.show({title:'Error', message:'Failed to fetch data', positiveButtonText:"Ok"});
         }
-    }
+    };
 
     return(
     <SafeAreaView style={DefaultStyles.sectionContainer}>
@@ -45,6 +45,6 @@ const FetchExample = ()=>{
               />
     </SafeAreaView>
     );
-}
+};
 
 export default FetchExample;
