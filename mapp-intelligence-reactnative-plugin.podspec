@@ -15,11 +15,14 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/mapp-digital/Mapp-Intelligence-ReactNative-Plugin.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,mm}"
+  s.vendored_framework = "ios/Frameworks/MappIntelligenceiOS.xcframework"
+  s.preserve_path = "ios/Frameworks/"
+  s.public_header_files = "ios/Frameworks/MappIntelligenceiOS.xcframework/ios-arm64/Headers/MappIntelligenceiOS/"
+  s.requires_arc = true
   s.dependency "React-Core"
   s.dependency "React-Codegen"
   s.dependency "RCT-Folly"
   s.dependency "RCTRequired"
   s.dependency "RCTTypeSafety"
   s.dependency "ReactCommon/turbomodule/core"
-  s.dependency "MappIntelligence", '5.0.15'
 end

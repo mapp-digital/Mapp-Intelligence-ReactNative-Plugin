@@ -9,14 +9,12 @@ PODS:
     - hermes-engine/Pre-built (= 0.79.2)
   - hermes-engine/Pre-built (0.79.2)
   - mapp-intelligence-reactnative-plugin (1.0.4):
-    - MappIntelligence (= 5.0.15)
     - RCT-Folly
     - RCTRequired
     - RCTTypeSafety
     - React-Codegen
     - React-Core
     - ReactCommon/turbomodule/core
-  - MappIntelligence (5.0.15)
   - RCT-Folly (2024.11.18.00):
     - boost
     - DoubleConversion
@@ -1972,7 +1970,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - MappIntelligence
     - React-Codegen
     - SocketRocket
 
@@ -2137,8 +2134,7 @@ SPEC CHECKSUMS:
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: 314be5250afa5692b57b4dd1705959e1973a8ebe
-  mapp-intelligence-reactnative-plugin: 1f550e69c08d6154fc759e3b13525de0e118c5e9
-  MappIntelligence: 3c9b578bf7a6986b7b4d0ba3d2525070b918e842
+  mapp-intelligence-reactnative-plugin: cbd9361362c9e727982a07f1db0089d06b36c25f
   RCT-Folly: 36fe2295e44b10d831836cc0d1daec5f8abcf809
   RCTDeprecation: 83ffb90c23ee5cea353bd32008a7bca100908f8c
   RCTRequired: eb7c0aba998009f47a540bec9e9d69a54f68136e
