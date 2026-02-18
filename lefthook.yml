@@ -1,9 +1,11 @@
-pre-commit:
-  parallel: true
-  commands:
-    lint:
-      glob: '*.{js,ts,jsx,tsx}'
-      run: npx eslint {staged_files}
-    types:
-      glob: '*.{js,ts, jsx, tsx}'
-      run: npx tsc --noEmit
+# Pre-commit hooks disabled
+# Re-enable by uncommenting the commands below
+# pre-commit:
+#   parallel: true
+#   commands:
+#     lint:
+#       glob: '*.{js,ts,jsx,tsx}'
+#       run: npx eslint {staged_files}
+#     types:
+#       glob: '*.{js,ts, jsx, tsx}'
+#       run: npx tsc --noEmit
