@@ -22,6 +22,7 @@ import {
   ExceptionType,
   LogLevel,
 } from 'mapp-intelligence-reactnative-plugin';
+import FetchExample from './FetchExample';
 
 const Stack = createNativeStackNavigator();
 
@@ -46,7 +47,7 @@ const App = () => {
     await MappIntelligencePlugin.setShouldMigrate(true);
     await MappIntelligencePlugin.setSendAppVersionInEveryRequest(true);
     await MappIntelligencePlugin.setEnableBackgroundSendout(true);
-    await MappIntelligencePlugin.setExceptionLogLevel(ExceptionType.all);
+    //await MappIntelligencePlugin.setExceptionLogLevel(ExceptionType.all);
     await MappIntelligencePlugin.setEnableUserMatching(true);
 
     await MappIntelligencePlugin.build();
@@ -125,6 +126,12 @@ const App = () => {
             <Stack.Screen
               name={Routes.WEBVIEW_TRACKING.valueOf()}
               component={WebViewTracking}
+            />
+          }
+                    {
+            <Stack.Screen
+              name={Routes.FETCH_EXAMPLE.valueOf()}
+              component={FetchExample}
             />
           }
         </Stack.Navigator>

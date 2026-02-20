@@ -21,6 +21,7 @@ const HomeScreen = (props: { navigation: any }) => {
           Routes.MEDIA_TRACKING,
           Routes.EXCEPTION_TRACKING,
           Routes.WEBVIEW_TRACKING,
+          Routes.FETCH_EXAMPLE,
         ]}
         renderItem={({ item }) => (
           <MappButton

@@ -9,12 +9,22 @@ buildscript {
     }
     repositories {
         google()
+        mavenLocal()
         mavenCentral()
     }
+
     dependencies {
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
+    }
+}
+
+allprojects {
+    repositories {
+        mavenLocal()     // 👈 Critical for consuming local maven artifacts
+        google()
+        mavenCentral()
     }
 }
 
