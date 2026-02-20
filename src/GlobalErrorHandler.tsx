@@ -1,8 +1,5 @@
 import { MappIntelligencePlugin } from 'mapp-intelligence-reactnative-plugin';
 
-const {
-  polyfillGlobal,
-} = require('react-native/Libraries/Utilities/PolyfillFunctions');
 const Promise = require('promise/setimmediate/es6-extensions');
 const tracking = require('promise/setimmediate/rejection-tracking');
 
@@ -31,16 +28,14 @@ export const setGlobalErrorHandler = (
 ): void => {
   onErrorCallback = errorCallback;
 
-  polyfillGlobal('Promise', () => {
-    tracking.enable({
-      allRejections: true,
-      onUnhandled: (_: number, error: unknown) => {
-        errorHandler(error, false);
-      },
-    });
-
-    return Promise;
+  tracking.enable({
+    allRejections: true,
+    onUnhandled: (_: number, error: unknown) => {
+      errorHandler(error, false);
+    },
   });
+
+  (global as any).Promise = Promise;
 
   ErrorUtils.setGlobalHandler(errorHandler);
   //   const prevTracker = getUnhandledPromiseRejectionTracker();

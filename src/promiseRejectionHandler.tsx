@@ -1,8 +1,5 @@
 'use strict';
 
-const {
-  polyfillGlobal,
-} = require('react-native/Libraries/Utilities/PolyfillFunctions');
 const Promise = require('promise/setimmediate/es6-extensions');
 
 require('promise/setimmediate/done');
@@ -43,12 +40,10 @@ export const getUnhandledPromiseRejectionTracker = () => handler;
 export const setUnhandledPromiseRejectionTracker = (tracker) => {
   handler = tracker;
 
-  polyfillGlobal('Promise', () => {
-    tracking.enable({
-      allRejections: true,
-      onUnhandled: tracker,
-    });
-
-    return Promise;
+  tracking.enable({
+    allRejections: true,
+    onUnhandled: tracker,
   });
+
+  (global as any).Promise = Promise;
 };

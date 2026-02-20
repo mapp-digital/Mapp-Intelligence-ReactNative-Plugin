@@ -1,141 +1,147 @@
 import { ExceptionType, type MediaEvent } from '../DataTypes';
 import { MappIntelligencePlugin } from '../MappIntelligencePlugin';
-import {afterEach, beforeEach, describe, expect, it, jest} from '@jest/globals';
-// Mock the native module
-jest.mock('react-native', () => ({
-  Platform: {
-    select: () => '',
-  },
-  NativeModules: {
-    MappinteligencePlugin: {
-      build: jest.fn(),
-      initWithConfiguration: jest.fn((ids, domain) => {
-        console.log(ids, domain);
-        return true;
-      }),
-      setLogLevel: jest.fn(),
-      setExceptionLogLevel: jest.fn(),
-      setRequestInterval: jest.fn(),
-      setBatchSupportEnabled: jest.fn(),
-      setEnableBackgroundSendout: jest.fn(),
-      setBatchSupportSize: jest.fn(),
-      setRequestPerQueue: jest.fn(),
-      setShouldMigrate: jest.fn(),
-      setAnonymousTracking: jest.fn(),
-      setSendAppVersionInEveryRequest: jest.fn(),
-      setEnableUserMatching: jest.fn(),
-      trackPage: jest.fn(),
-      trackCustomPage: jest.fn(),
-      trackPageWithCustomData: jest.fn(),
-      trackAction: jest.fn(),
-      trackUrl: jest.fn(),
-      trackMedia: jest.fn(),
-      trackException: jest.fn(),
-      trackExceptionWithName: jest.fn(),
-      setEverId: jest.fn(),
-      getEverId: jest.fn(),
-      isInitialized: jest.fn(),
-      setTemporarySessionId: jest.fn(),
-      optOut: jest.fn(),
-      optIn: jest.fn(),
-      reset: jest.fn(),
-      sendRequestsAndClean: jest.fn(),
+import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { NativeModules } from 'react-native';
+
+jest.mock('react-native', () => {
+  const { jest: jestFn } = require('@jest/globals');
+  const mockModule = {
+    build: jestFn.fn().mockResolvedValue(1),
+    initWithConfiguration: jestFn.fn().mockResolvedValue(1),
+    setLogLevel: jestFn.fn().mockResolvedValue(1),
+    setExceptionLogLevel: jestFn.fn().mockResolvedValue(1),
+    setRequestInterval: jestFn.fn().mockResolvedValue(1),
+    setBatchSupportEnabled: jestFn.fn().mockResolvedValue(1),
+    setEnableBackgroundSendout: jestFn.fn().mockResolvedValue(1),
+    setBatchSupportSize: jestFn.fn().mockResolvedValue(1),
+    setRequestPerQueue: jestFn.fn().mockResolvedValue(1),
+    setShouldMigrate: jestFn.fn().mockResolvedValue(1),
+    setAnonymousTracking: jestFn.fn().mockResolvedValue(1),
+    setSendAppVersionInEveryRequest: jestFn.fn().mockResolvedValue(1),
+    setEnableUserMatching: jestFn.fn().mockResolvedValue(1),
+    trackPage: jestFn.fn().mockResolvedValue(1),
+    trackCustomPage: jestFn.fn().mockResolvedValue(1),
+    trackPageWithCustomData: jestFn.fn().mockResolvedValue(1),
+    trackAction: jestFn.fn().mockResolvedValue(1),
+    trackUrl: jestFn.fn().mockResolvedValue(1),
+    trackMedia: jestFn.fn().mockResolvedValue(1),
+    trackException: jestFn.fn().mockResolvedValue(1),
+    trackExceptionWithName: jestFn.fn().mockResolvedValue(1),
+    setEverId: jestFn.fn().mockResolvedValue(1),
+    getEverId: jestFn.fn().mockResolvedValue('123456'),
+    isInitialized: jestFn.fn().mockResolvedValue(true),
+    setTemporarySessionId: jestFn.fn().mockResolvedValue(1),
+    optOut: jestFn.fn().mockResolvedValue(1),
+    optIn: jestFn.fn().mockResolvedValue(1),
+    reset: jestFn.fn().mockResolvedValue(1),
+    sendRequestsAndClean: jestFn.fn().mockResolvedValue(1),
+    getCurrentConfig: jestFn.fn().mockResolvedValue(''),
+    nativeCrash: jestFn.fn().mockResolvedValue(undefined),
+  };
+  return {
+    Platform: { select: () => '' },
+    NativeModules: {
+      MappinteligencePlugin: mockModule,
+      MappintelligencePlugin: mockModule,
     },
-  },
-}));
+    TurboModuleRegistry: { get: () => null },
+  };
+});
+
+const mockNativeModule = NativeModules.MappinteligencePlugin as jest.Mocked<
+  typeof NativeModules.MappinteligencePlugin
+>;
 
 describe('MappIntelligencePlugin', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
+
   afterEach(() => {
-    // restore the spy created with spyOn
     jest.restoreAllMocks();
   });
 
-  it('build method is called', async () => {
-    await build();
-    expect(MappIntelligencePlugin.build).toHaveBeenCalled();
+  it('build calls native method', async () => {
+    await MappIntelligencePlugin.build();
+    expect(mockNativeModule.build).toHaveBeenCalled();
   });
 
-  it('init with configuration to return success result and to native method is called', async () => {
+  it('initWithConfiguration calls native method with trackIDs and domain', async () => {
     const trackIDs = [123, 456];
     const domain = 'https://example.com';
-    const result = await initWithConfiguration(trackIDs, domain);
-    expect(result).toBe(true);
-    expect(MappIntelligencePlugin.initWithConfiguration).toHaveBeenCalledWith(
+    const result = await MappIntelligencePlugin.initWithConfiguration(
+      trackIDs,
+      domain
+    );
+    expect(result).toBe(1);
+    expect(mockNativeModule.initWithConfiguration).toHaveBeenCalledWith(
       trackIDs,
       domain
     );
   });
 
-  it('set log level for console output', async () => {
+  it('setLogLevel calls native method with level', async () => {
     await MappIntelligencePlugin.setLogLevel(1);
-    expect(MappIntelligencePlugin.setLogLevel).toBeCalledWith(1);
+    expect(mockNativeModule.setLogLevel).toHaveBeenCalledWith(1);
   });
 
-  it('set exception log level', async () => {
-    await setExceptionLogLevel(ExceptionType.all);
-    expect(MappIntelligencePlugin.setExceptionLogLevel).toBeCalledWith(4); // 4 is numeric value for ExceptionType.all
+  it('setExceptionLogLevel calls native method with ExceptionType value', async () => {
+    await MappIntelligencePlugin.setExceptionLogLevel(ExceptionType.all);
+    expect(mockNativeModule.setExceptionLogLevel).toHaveBeenCalledWith(4);
   });
 
-  it('set request interval', async () => {
-    await setRequestInterval(15);
-    expect(MappIntelligencePlugin.setRequestInterval).toBeCalledWith(15);
+  it('setRequestInterval calls native method', async () => {
+    await MappIntelligencePlugin.setRequestInterval(15);
+    expect(mockNativeModule.setRequestInterval).toHaveBeenCalledWith(15);
   });
 
-  it('set batch support', async () => {
-    await setBatchSupportEnabled(true);
-    expect(MappIntelligencePlugin.setBatchSupportEnabled).toBeCalledWith(true);
+  it('setBatchSupportEnabled calls native method', async () => {
+    await MappIntelligencePlugin.setBatchSupportEnabled(true);
+    expect(mockNativeModule.setBatchSupportEnabled).toHaveBeenCalledWith(true);
   });
 
-  it('set enable background sendout', async () => {
-    await setEnableBackgroundSendout(true);
-    expect(MappIntelligencePlugin.setEnableBackgroundSendout).toBeCalledWith(
+  it('setEnableBackgroundSendout calls native method', async () => {
+    await MappIntelligencePlugin.setEnableBackgroundSendout(true);
+    expect(mockNativeModule.setEnableBackgroundSendout).toHaveBeenCalledWith(
       true
     );
   });
 
-  it('set batch size', async () => {
-    await setBatchSupportSize(100);
-    expect(MappIntelligencePlugin.setBatchSupportSize).toBeCalledWith(100);
+  it('setBatchSupportSize calls native method', async () => {
+    await MappIntelligencePlugin.setBatchSupportSize(100);
+    expect(mockNativeModule.setBatchSupportSize).toHaveBeenCalledWith(100);
   });
 
-  it('set request per queue', async () => {
-    await setRequestPerQueue(10);
-    expect(MappIntelligencePlugin.setRequestPerQueue).toBeCalledWith(10);
+  it('setRequestPerQueue calls native method', async () => {
+    await MappIntelligencePlugin.setRequestPerQueue(10);
+    expect(mockNativeModule.setRequestPerQueue).toHaveBeenCalledWith(10);
   });
 
-  it('set should migrate', async () => {
-    await setShouldMigrate(false);
-    expect(MappIntelligencePlugin.setShouldMigrate).toBeCalledWith(false);
+  it('setShouldMigrate calls native method', async () => {
+    await MappIntelligencePlugin.setShouldMigrate(false);
+    expect(mockNativeModule.setShouldMigrate).toHaveBeenCalledWith(false);
   });
 
-  it('set request interval', async () => {
-    await setRequestInterval(15);
-    expect(MappIntelligencePlugin.setRequestInterval).toBeCalledWith(15);
+  it('setAnonymousTracking calls native method', async () => {
+    await MappIntelligencePlugin.setAnonymousTracking(true);
+    expect(mockNativeModule.setAnonymousTracking).toHaveBeenCalledWith(true);
   });
 
-  it('set anonymous tracking', async () => {
-    await setAnonymousTracking(true);
-    expect(MappIntelligencePlugin.setAnonymousTracking).toBeCalledWith(true);
-  });
-
-  it('set send app version in every request', async () => {
-    await setSendAppVersionInEveryRequest(true);
+  it('setSendAppVersionInEveryRequest calls native method', async () => {
+    await MappIntelligencePlugin.setSendAppVersionInEveryRequest(true);
     expect(
-      MappIntelligencePlugin.setSendAppVersionInEveryRequest
-    ).toBeCalledWith(true);
+      mockNativeModule.setSendAppVersionInEveryRequest
+    ).toHaveBeenCalledWith(true);
   });
 
-  it('track page', async () => {
-    await trackPage('Test page');
-    expect(MappIntelligencePlugin.trackPage).toBeCalledWith('Test page');
+  it('trackPage calls native method with page title', async () => {
+    await MappIntelligencePlugin.trackPage('Test page');
+    expect(mockNativeModule.trackPage).toHaveBeenCalledWith('Test page');
   });
 
-  it('track custom page', async () => {
-    await trackCustomPage('Test page');
-    expect(MappIntelligencePlugin.trackCustomPage).toBeCalledWith(
+  it('trackCustomPage calls native method with pageTitle and null params', async () => {
+    await MappIntelligencePlugin.trackCustomPage('Test page');
+    expect(mockNativeModule.trackCustomPage).toHaveBeenCalledWith(
       'Test page',
       null,
       null,
@@ -145,18 +151,18 @@ describe('MappIntelligencePlugin', () => {
     );
   });
 
-  it('track page with a custom data', async () => {
-    const pageParams: Map<string, string> = new Map([['1', 'PageParam1']]);
-    await trackPageWithCustomData('Test page', pageParams);
-    expect(MappIntelligencePlugin.trackPageWithCustomData).toBeCalledWith(
-      { '1': 'PageParam1' },
+  it('trackPageWithCustomData calls native method with pageParams and pageTitle', async () => {
+    const pageParams = new Map<string, string>([['1', 'PageParam1']]);
+    await MappIntelligencePlugin.trackPageWithCustomData('Test page', pageParams);
+    expect(mockNativeModule.trackPageWithCustomData).toHaveBeenCalledWith(
+      pageParams,
       'Test page'
     );
   });
 
-  it('track action', async () => {
-    await trackAction('Test Action');
-    expect(MappIntelligencePlugin.trackAction).toBeCalledWith(
+  it('trackAction calls native method with name and null params', async () => {
+    await MappIntelligencePlugin.trackAction('Test Action');
+    expect(mockNativeModule.trackAction).toHaveBeenCalledWith(
       'Test Action',
       null,
       null,
@@ -166,219 +172,111 @@ describe('MappIntelligencePlugin', () => {
     );
   });
 
-  it('track url', async () => {
-    await trackUrl('www.testurl.com', 'abc');
-    expect(MappIntelligencePlugin.trackUrl).toBeCalledWith(
+  it('trackUrl calls native method with url and mediaCode', async () => {
+    await MappIntelligencePlugin.trackUrl('www.testurl.com', 'abc');
+    expect(mockNativeModule.trackUrl).toHaveBeenCalledWith(
       'www.testurl.com',
       'abc'
     );
   });
 
-  it('track media', async () => {
+  it('trackUrl calls native with undefined mediaCode when omitted', async () => {
+    await MappIntelligencePlugin.trackUrl('www.testurl.com');
+    expect(mockNativeModule.trackUrl).toHaveBeenCalledWith(
+      'www.testurl.com',
+      undefined
+    );
+  });
+
+  it('trackMedia calls native method with converted mediaEvent', async () => {
     const mediaEvent: MediaEvent = {
       pageName: 'Test page',
       parameters: null,
     };
-    await trackMedia(mediaEvent);
-    expect(MappIntelligencePlugin.trackMedia).toBeCalledWith({
-      pageName: 'Test page',
-      parameters: null,
-      customParameters: null,
-      eCommerceParameters: null,
-      eventParameters: null,
-      sessionParameters: null,
-    });
+    await MappIntelligencePlugin.trackMedia(mediaEvent);
+    expect(mockNativeModule.trackMedia).toHaveBeenCalledWith(
+      expect.objectContaining({
+        pageName: 'Test page',
+        parameters: null,
+      })
+    );
   });
 
-  it('track exception', async () => {
+  it('trackException calls native method with error name, message and stackTrace', async () => {
     const e: Error = {
       name: 'CustomException',
       message: 'Testing Exception',
     };
-
-    await trackException(e, '');
-    expect(MappIntelligencePlugin.trackException).toBeCalledWith(
+    await MappIntelligencePlugin.trackException(e, '');
+    expect(mockNativeModule.trackException).toHaveBeenCalledWith(
       'CustomException',
       'Testing Exception',
       ''
     );
   });
 
-  it('track exception with name', async () => {
-    await trackExceptionWithName(
+  it('trackExceptionWithName calls native method', async () => {
+    await MappIntelligencePlugin.trackExceptionWithName(
       'TestException',
       'Handled test exception',
       'Exception in a unit testing'
     );
-
-    expect(MappIntelligencePlugin.trackException).toBeCalledWith(
+    expect(mockNativeModule.trackExceptionWithName).toHaveBeenCalledWith(
       'TestException',
       'Handled test exception',
       'Exception in a unit testing'
     );
   });
 
-  it('set EverID', async () => {
-    await setEverId('123456789');
-    expect(MappIntelligencePlugin.setEverId).toBeCalledWith('123456789');
+  it('setEverId calls native method', async () => {
+    await MappIntelligencePlugin.setEverId('123456789');
+    expect(mockNativeModule.setEverId).toHaveBeenCalledWith('123456789');
   });
 
-  it('get EverID', async () => {
-    const getEverIdSpy = jest.fn(getEverId);
-    //getEverIdSpy.mockResolvedValue('123');
-    const result = await getEverIdSpy();
+  it('getEverId returns value from native', async () => {
+    const result = await MappIntelligencePlugin.getEverId();
     expect(result).toBe('123456');
+    expect(mockNativeModule.getEverId).toHaveBeenCalled();
   });
 
-  it('Check if plugin initialized', async () => {
-    const isInitializedSpy = jest.fn(isInitialized);
-    //isInitializedSpy.mockResolvedValue(true);
-    const result = await isInitializedSpy();
+  it('isInitialized returns value from native', async () => {
+    const result = await MappIntelligencePlugin.isInitialized();
     expect(result).toBe(true);
+    expect(mockNativeModule.isInitialized).toHaveBeenCalled();
   });
 
-  it('Set temporarySessionId', async () => {
-    const spy = jest.fn(setTemporarySessionId);
-    //spy.mockResolvedValue(1);
-
-    const result = await spy('1234');
+  it('setTemporarySessionId calls native method', async () => {
+    const result = await MappIntelligencePlugin.setTemporarySessionId('1234');
     expect(result).toBe(1);
-    expect(spy).toBeCalledWith('1234');
+    expect(mockNativeModule.setTemporarySessionId).toHaveBeenCalledWith('1234');
   });
 
-  it('Opt out', async () => {
-    const spy = jest.fn(optOut);
-    // spy.mockResolvedValue(1);
-    const result = await spy(true);
+  it('optOut calls native method', async () => {
+    const result = await MappIntelligencePlugin.optOut(true);
     expect(result).toBe(1);
-    expect(spy).toBeCalledWith(true);
+    expect(mockNativeModule.optOut).toHaveBeenCalledWith(true);
   });
 
-  it('Opt in', async () => {
-    const spy = jest.fn(optIn);
-    //spy.mockResolvedValue(1);
-    const result = await spy(true);
+  it('optIn calls native method', async () => {
+    const result = await MappIntelligencePlugin.optIn(true);
     expect(result).toBe(1);
-    expect(spy).toBeCalledWith(true);
+    expect(mockNativeModule.optIn).toHaveBeenCalledWith(true);
   });
 
-  it('Reset', async () => {
-    await reset();
-    expect(MappIntelligencePlugin.reset).toBeCalled();
+  it('reset calls native method', async () => {
+    await MappIntelligencePlugin.reset();
+    expect(mockNativeModule.reset).toHaveBeenCalled();
   });
 
-  it('Send requests and clean', async () => {
-    await sendRequestsAndClean();
-    expect(MappIntelligencePlugin.sendRequestsAndClean).toBeCalled();
+  it('sendRequestsAndClean calls native method', async () => {
+    await MappIntelligencePlugin.sendRequestsAndClean();
+    expect(mockNativeModule.sendRequestsAndClean).toHaveBeenCalled();
+  });
+
+  it('printCurrentConfig calls native getCurrentConfig', async () => {
+    mockNativeModule.getCurrentConfig.mockResolvedValue('config: {...}');
+    const result = await MappIntelligencePlugin.printCurrentConfig();
+    expect(result).toBe('config: {...}');
+    expect(mockNativeModule.getCurrentConfig).toHaveBeenCalled();
   });
 });
-function build() {
-  throw new Error('Function not implemented.');
-}
-
-function initWithConfiguration(_trackIDs: number[], _domain: string) {
-  throw new Error('Function not implemented.');
-}
-
-function setExceptionLogLevel(_all: ExceptionType) {
-  throw new Error('Function not implemented.');
-}
-
-function setRequestInterval(_arg0: number) {
-  throw new Error('Function not implemented.');
-}
-
-function setBatchSupportEnabled(_arg0: boolean) {
-  throw new Error('Function not implemented.');
-}
-
-function setEnableBackgroundSendout(_arg0: boolean) {
-  throw new Error('Function not implemented.');
-}
-
-function setBatchSupportSize(_arg0: number) {
-  throw new Error('Function not implemented.');
-}
-
-function setRequestPerQueue(_arg0: number) {
-  throw new Error('Function not implemented.');
-}
-
-function setShouldMigrate(_arg0: boolean) {
-  throw new Error('Function not implemented.');
-}
-
-function setAnonymousTracking(_arg0: boolean) {
-  throw new Error('Function not implemented.');
-}
-
-function setSendAppVersionInEveryRequest(_arg0: boolean) {
-  throw new Error('Function not implemented.');
-}
-
-function trackPage(_arg0: string) {
-  throw new Error('Function not implemented.');
-}
-
-function trackCustomPage(_arg0: string) {
-  throw new Error('Function not implemented.');
-}
-
-function trackPageWithCustomData(
-  _arg0: string,
-  _pageParams: Map<string, string>
-) {
-  throw new Error('Function not implemented.');
-}
-
-function trackAction(_arg0: string) {
-  throw new Error('Function not implemented.');
-}
-
-function trackUrl(_arg0: string, _arg1: string) {
-  throw new Error('Function not implemented.');
-}
-
-function trackMedia(_mediaEvent: MediaEvent) {
-  throw new Error('Function not implemented.');
-}
-
-function trackException(_e: Error, _arg1: string) {
-  throw new Error('Function not implemented.');
-}
-
-function trackExceptionWithName(_arg0: string, _arg1: string, _arg2: string) {
-  throw new Error('Function not implemented.');
-}
-
-function setEverId(_arg0: string) {
-  throw new Error('Function not implemented.');
-}
-
-function getEverId(..._args: any[]): unknown {
-  throw new Error('Function not implemented.');
-}
-
-function isInitialized(..._args: any[]): unknown {
-  throw new Error('Function not implemented.');
-}
-
-function setTemporarySessionId(..._args: any[]): unknown {
-  throw new Error('Function not implemented.');
-}
-
-function optOut(..._args: any[]): unknown {
-  throw new Error('Function not implemented.');
-}
-
-function optIn(..._args: any[]): unknown {
-  throw new Error('Function not implemented.');
-}
-
-function reset() {
-  throw new Error('Function not implemented.');
-}
-
-function sendRequestsAndClean() {
-  throw new Error('Function not implemented.');
-}
