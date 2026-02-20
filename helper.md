@@ -143,7 +143,24 @@ cd example && npx react-native run-android
 
 ---
 
-## 5. Optional: manual cache cleanup
+## 5. Run tests
+
+Unit tests are in `src/__tests__/`. From the **repository root**:
+
+```bash
+# Run all tests
+yarn test
+
+# Run a specific test file
+yarn test src/__tests__/index.test.tsx
+
+# Run tests matching a pattern
+yarn test --testPathPattern="__tests__/index"
+```
+
+---
+
+## 6. Optional: manual cache cleanup
 
 If you still see odd build or Metro issues, you can clear global caches (optional):
 
