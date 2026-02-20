@@ -5,7 +5,6 @@ import androidx.annotation.IntRange
 import androidx.core.net.toUri
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
@@ -28,7 +27,7 @@ import webtrekk.android.sdk.events.PageViewEvent
 
 @ReactModule(name = MappinteligencePluginModule.NAME)
 class MappinteligencePluginModule(private val reactContext: ReactApplicationContext) :
-  ReactContextBaseJavaModule(reactContext), MappintelligencePluginSpec {
+  NativeMappintelligencePluginSpec(reactContext) {
 
   companion object {
     const val NAME = "MappinteligencePlugin"
@@ -140,10 +139,10 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   }
 
   @ReactMethod
-  override fun setTemporarySessionId(sessionId: String, promise: Promise) {
+  override fun setTemporarySessionId(sessionId: String?, promise: Promise) {
     runOnPlugin(
-      whenInitialized = { instance?.setTemporarySessionId(sessionId) },
-      whenNotInitialized = { configAdapter.temporarySessionId = sessionId }
+      whenInitialized = { instance?.setTemporarySessionId(sessionId ?: "") },
+      whenNotInitialized = { configAdapter.temporarySessionId = sessionId ?: "" }
     )
     promise.resolve(true)
   }
@@ -175,9 +174,10 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
    * and it's plugin
    */
   @ReactMethod
-  override fun setLogLevel(level: Int, promise: Promise) {
+  override fun setLogLevel(level: Double, promise: Promise) {
+    val levelInt = level.toInt()
     val nativeLevel =
-      if (level == 7) {
+      if (levelInt == 7) {
         Logger.Level.NONE
       } else {
         Logger.Level.BASIC
@@ -207,10 +207,11 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
    * range for size
    */
   @ReactMethod
-  override fun setBatchSupportSize(@IntRange size: Int, promise: Promise) {
+  override fun setBatchSupportSize(size: Double, promise: Promise) {
+    val sizeInt = size.toInt()
     runOnPlugin(
-      whenInitialized = { instance?.setRequestPerBatch(size) },
-      whenNotInitialized = { configAdapter.requestPerBatch = size }
+      whenInitialized = { instance?.setRequestPerBatch(sizeInt) },
+      whenNotInitialized = { configAdapter.requestPerBatch = sizeInt }
     )
     promise.resolve(true)
   }
@@ -220,17 +221,18 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
    * value is 15 minutes, limited by Android OS.
    */
   @ReactMethod
-  override fun setRequestInterval(@IntRange(from = 15) interval: Int, promise: Promise) {
+  override fun setRequestInterval(interval: Double, promise: Promise) {
+    val intervalInt = interval.toInt()
     runOnPlugin(
-      whenInitialized = { instance?.setRequestInterval(interval.toLong()) },
-      whenNotInitialized = { configAdapter.requestsIntervalMinutes = interval }
+      whenInitialized = { instance?.setRequestInterval(intervalInt.toLong()) },
+      whenNotInitialized = { configAdapter.requestsIntervalMinutes = intervalInt }
     )
     promise.resolve(true)
   }
 
   /** This operation is not supported on android Method exists only for compatibility */
   @ReactMethod
-  override fun setRequestPerQueue(queue: Int, promise: Promise) {
+  override fun setRequestPerQueue(queue: Double, promise: Promise) {
     promise.resolve(true)
   }
 
@@ -261,11 +263,11 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   @ReactMethod
   override fun trackCustomPage(
     pageTitle: String?,
-    pageParams: ReadableMap?,
-    sessionParams: ReadableMap?,
-    userCategoryParams: ReadableMap?,
-    ecommerceParams: ReadableMap?,
-    campaignParams: ReadableMap?,
+    pageParams: ReadableMap,
+    sessionParams: ReadableMap,
+    userCategoryParams: ReadableMap,
+    ecommerceParams: ReadableMap,
+    campaignParams: ReadableMap,
     promise: Promise
   ) {
     runOnPlugin(
@@ -292,7 +294,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
 
   /** Track page with a provided [PageViewEvent] */
   @ReactMethod
-  override fun trackPageWithCustomData(params: ReadableMap?, pageTitle: String, promise: Promise) {
+  override fun trackPageWithCustomData(params: ReadableMap, pageTitle: String, promise: Promise) {
     runOnPlugin(
       whenInitialized = {
         instance?.trackCustomPage(pageTitle, params.toMap(keyTransform = { it.toString() }))
@@ -317,11 +319,11 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   @ReactMethod
   override fun trackAction(
     name: String,
-    eventParameters: ReadableMap?,
-    sessionParameters: ReadableMap?,
-    userCategories: ReadableMap?,
-    eCommerceParameters: ReadableMap?,
-    campaignParameters: ReadableMap?,
+    eventParameters: ReadableMap,
+    sessionParameters: ReadableMap,
+    userCategories: ReadableMap,
+    eCommerceParameters: ReadableMap,
+    campaignParameters: ReadableMap,
     promise: Promise
   ) {
     runOnPlugin(
@@ -346,7 +348,26 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   }
 
   @ReactMethod
-  override fun trackException(exception: ReadableMap, promise: Promise) {
+  override fun trackException(
+    name: String,
+    message: String,
+    stacktrace: String?,
+    promise: Promise
+  ) {
+    runOnPlugin(
+      whenInitialized = {
+        if (stacktrace.isNullOrEmpty()) {
+          instance?.trackException(name, message)
+        } else {
+          instance?.trackException(name, message + "\n${stacktrace}")
+        }
+      }
+    )
+    promise.resolve(true)
+  }
+
+  @ReactMethod
+  fun trackException(exception: ReadableMap, promise: Promise) {
     runOnPlugin(
       whenInitialized = {
         val innerException = Exception(exception.getString("message"))
@@ -357,7 +378,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   }
 
   @ReactMethod
-  override fun trackMedia(readableMap: ReadableMap?, promise: Promise) {
+  override fun trackMedia(readableMap: ReadableMap, promise: Promise) {
     runOnPlugin(
       whenInitialized = {
         MediaEventMapper(readableMap).getData()?.let { instance?.trackMedia(it) }
@@ -483,7 +504,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   }
 
   @ReactMethod
-  override fun nativeCrash() {
+  override fun nativeCrash(promise: Promise) {
     throw Exception("Native crash")
   }
 

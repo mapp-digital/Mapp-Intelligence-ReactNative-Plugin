@@ -18,11 +18,11 @@ interface MappintelligencePluginSpec : TurboModule {
     fun optOut(sendData: Boolean, promise: Promise)
     fun optIn(sendData: Boolean, promise: Promise)
     fun setExceptionLogLevel(exceptionLevel: Double, promise: Promise)
-    fun setLogLevel(level: Int, promise: Promise)
+    fun setLogLevel(level: Double, promise: Promise)
     fun setBatchSupportEnabled(enabled: Boolean, promise: Promise)
-    fun setBatchSupportSize(size: Int, promise: Promise)
-    fun setRequestInterval(interval: Int, promise: Promise)
-    fun setRequestPerQueue(queue: Int, promise: Promise)
+    fun setBatchSupportSize(size: Double, promise: Promise)
+    fun setRequestInterval(interval: Double, promise: Promise)
+    fun setRequestPerQueue(queue: Double, promise: Promise)
     fun setShouldMigrate(migrate: Boolean, promise: Promise)
     fun setEnableBackgroundSendout(enabled: Boolean, promise: Promise)
     fun trackCustomPage(
@@ -46,6 +46,7 @@ interface MappintelligencePluginSpec : TurboModule {
         campaignParameters: ReadableMap?,
         promise: Promise
     )
+    fun trackException(name: String, message: String, stacktrace: String?, promise: Promise)
     fun trackException(exception: ReadableMap, promise: Promise)
     fun trackMedia(readableMap: ReadableMap?, promise: Promise)
     fun trackUrl(url: String, mediaCode: String?, promise: Promise)

@@ -1,9 +1,8 @@
 const path = require('path');
-const pak = require('./package.json');
 
 module.exports = {
   dependencies: {
-    [pak.name]: {
+    'mapp-intelligence-reactnative-plugin': {
       root: path.join(__dirname, '..'),
     },
   },

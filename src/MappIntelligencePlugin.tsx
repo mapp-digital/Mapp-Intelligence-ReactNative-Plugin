@@ -1,4 +1,4 @@
-import { Platform, NativeModules } from 'react-native';
+import { Platform, NativeModules, TurboModuleRegistry } from 'react-native';
 import {
   convertPageParameters,
   convertSessionParamters,
@@ -26,16 +26,21 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
-const mappPlugin = NativeModules.MappinteligencePlugin
-  ? NativeModules.MappinteligencePlugin
-  : new Proxy(
-      {},
-      {
-        get() {
-          throw new Error(LINKING_ERROR);
-        },
-      }
-    );
+const mappPlugin =
+  // New Architecture / TurboModules
+  TurboModuleRegistry.get('MappinteligencePlugin') ||
+  TurboModuleRegistry.get('MappintelligencePlugin') ||
+  // Legacy bridge fallback
+  NativeModules.MappinteligencePlugin ||
+  NativeModules.MappintelligencePlugin ||
+  new Proxy(
+    {},
+    {
+      get() {
+        throw new Error(LINKING_ERROR);
+      },
+    }
+  );
 
 export const MappIntelligencePlugin = {
   /**

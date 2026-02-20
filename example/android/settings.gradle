@@ -1,6 +1,22 @@
 pluginManagement { includeBuild("../node_modules/@react-native/gradle-plugin") }
 plugins { id("com.facebook.react.settings") }
-extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autolinkLibrariesFromCommand() }
+
+// Include root yarn.lock so autolinking cache invalidates when workspace deps change (monorepo).
+def exampleDir = settingsDir.parentFile.canonicalFile
+def rootDir = exampleDir.parentFile.canonicalFile
+def autolinkLockFiles = files(
+  new File(exampleDir, "package.json"),
+  new File(exampleDir, "react-native.config.js"),
+  new File(rootDir, "yarn.lock")
+)
+extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
+  ex.autolinkLibrariesFromCommand(
+    ["npx", "@react-native-community/cli", "config"],
+    exampleDir,
+    autolinkLockFiles
+  )
+}
+
 rootProject.name = "MappinteligencePluginExample"
 include ':app'
-includeBuild('../node_modules/@react-native/gradle-plugin')
+includeBuild("../node_modules/@react-native/gradle-plugin")

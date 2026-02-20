@@ -18,11 +18,11 @@ export interface Spec extends TurboModule {
   trackPage(pageTitle: string): Promise<number>;
   trackCustomPage(
     pageTitle: string,
-    pageParameters: any,
-    sessionParameters: any,
-    userCategories: any,
-    ecommerceParameters: any,
-    campaignParameters: any
+    pageParameters: Object,
+    sessionParameters: Object,
+    userCategories: Object,
+    ecommerceParameters: Object,
+    campaignParameters: Object
   ): Promise<number>;
   trackPageWithCustomData(
     pageParameters: { [key: string]: string },
@@ -30,14 +30,14 @@ export interface Spec extends TurboModule {
   ): Promise<number>;
   trackAction(
     name: string,
-    eventParameters: any,
-    sessionParameters: any,
-    userCategories: any,
-    ecommerceParameters: any,
-    campaignParameters: any
+    eventParameters: Object,
+    sessionParameters: Object,
+    userCategories: Object,
+    ecommerceParameters: Object,
+    campaignParameters: Object
   ): Promise<number>;
   trackUrl(url: string, mediaCode?: string): Promise<number>;
-  trackMedia(mediaEvent: any): Promise<number>;
+  trackMedia(mediaEvent: Object): Promise<number>;
   trackException(name: string, message: string, stackTrace?: string): Promise<number>;
   trackExceptionWithName(name: string, message: string, stackTrace?: string): Promise<number>;
   setEverId(everId?: string): Promise<number>;
@@ -52,4 +52,4 @@ export interface Spec extends TurboModule {
   nativeCrash(): Promise<void>;
 }
 
-export default TurboModuleRegistry.getEnforcing<Spec>('MappintelligencePlugin');
+export default TurboModuleRegistry.getEnforcing<Spec>('MappinteligencePlugin');
