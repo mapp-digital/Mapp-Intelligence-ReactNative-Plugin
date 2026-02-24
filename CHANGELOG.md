@@ -17,3 +17,8 @@ All notable changes to this project are documented in this file.
 - **Gradle:** Plugin uses Gradle 8.14.3. Ensure your app’s Gradle version is compatible when building.
 - **Kotlin:** Plugin requires Kotlin 2.3.0. Your app’s Kotlin version should be compatible (2.3.x recommended when using New Architecture).
 - **New Architecture:** Plugin is compatible with React Native New Architecture (TurboModules). No app changes needed when `newArchEnabled=true`.
+
+### iOS Native (Client Impact)
+
+- **Vendored SDK:** The iOS SDK is now bundled as `ios/Frameworks/MappIntelligenceiOS.xcframework` via the podspec (no CocoaPods dependency on `MappIntelligence`).
+- **Podspec:** Updated to use `vendored_framework`, `preserve_path`, and `public_header_files` for the bundled framework.
