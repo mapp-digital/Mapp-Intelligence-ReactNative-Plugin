@@ -319,11 +319,11 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   @ReactMethod
   override fun trackAction(
     name: String,
-    eventParameters: ReadableMap?,
-    sessionParameters: ReadableMap?,
-    userCategories: ReadableMap?,
-    eCommerceParameters: ReadableMap?,
-    campaignParameters: ReadableMap?,
+    eventParameters: ReadableMap,
+    sessionParameters: ReadableMap,
+    userCategories: ReadableMap,
+    eCommerceParameters: ReadableMap,
+    campaignParameters: ReadableMap,
     promise: Promise
   ) {
     runOnPlugin(

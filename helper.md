@@ -201,7 +201,28 @@ cd example && npx react-native run-android
 
 ---
 
-## 6. Run tests
+## 6. Plugin Integration Test
+
+The example app includes a **Plugin Integration Test** screen that exercises all plugin methods (with full and null params) and detects exceptions. Use it to catch regressions like nullable→non-nullable parameter changes.
+
+**Run manually:**
+1. Launch the example app (`cd example && npx react-native run-android`)
+2. Tap **Plugin Integration Test** on the home screen
+3. Tap **Run All Plugin Tests**
+4. Verify all tests pass (0 failed)
+
+**Run with Maestro (E2E):** Install [Maestro](https://maestro.mobile.dev/) then:
+
+```bash
+cd example
+yarn test:integration
+```
+
+Or: `maestro test example/.maestro/flows/plugin-integration-test.yaml`
+
+---
+
+## 7. Run tests
 
 Unit tests are in `src/__tests__/`. From the **repository root**:
 
@@ -218,7 +239,7 @@ yarn test --testPathPattern="__tests__/index"
 
 ---
 
-## 7. Optional: manual cache cleanup
+## 8. Optional: manual cache cleanup
 
 If you still see odd build or Metro issues, you can clear global caches (optional):
 
