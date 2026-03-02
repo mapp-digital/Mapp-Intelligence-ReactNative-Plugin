@@ -2,7 +2,21 @@
 
 All notable changes to this project are documented in this file.
 
-## [1.1.2] - 2026-02-11
+## [1.1.2] - 2026-02-26
+
+### Bug Fixes
+
+- **Android null-safety:** Fixed crashes when optional tracking parameters are omitted. The native `MappinteligencePluginModule` methods (`trackCustomPage`, `trackAction`, `trackPageWithCustomData`, `trackMedia`) now accept nullable `ReadableMap` parameters in line with the TurboModule spec and JS API.
+- **iOS NSNull handling:** Hardened `trackPageWithCustomData` and `trackMedia` bridges to safely handle `NSNull` inputs coming from JavaScript, avoiding native exceptions for missing/optional parameters.
+- **Example WebView hook error:** Resolved "Invalid hook call" in the WebView tracking example by ensuring a single React instance is used via Metro configuration and peer dependency alignment.
+
+### Testing & Tooling
+
+- **PluginIntegrationTest screen:** Added a dedicated `PluginIntegrationTest` screen in the example app that exercises all public plugin APIs (configuration, page, action, campaign, ecommerce, manual media, and safe exception tracking) and reports pass/fail per function.
+- **Maestro integration tests:** Added a Maestro flow (`example/.maestro/flows/plugin-integration-test.yaml`) and wiring to run the full integration suite locally or in CI (e.g. `cd example && yarn test:integration`), providing regression protection against crashes and native/JS contract mismatches.
+- **Documentation:** Extended `helper.md` with instructions for running the example app against a published version of the plugin and for running the new integration tests.
+
+## [1.1.1] - 2026-02-11
 
 ### React Native & Dependencies
 
