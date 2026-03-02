@@ -5,13 +5,13 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
 } from 'react-native';
 import {
   MappIntelligencePlugin,
   LogLevel,
   type MediaEvent,
 } from 'mapp-intelligence-reactnative-plugin';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type TestResult = { success: boolean; error?: string; duration?: number };
 
