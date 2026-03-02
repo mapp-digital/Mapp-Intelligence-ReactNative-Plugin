@@ -129,7 +129,65 @@ npx react-native run-android   # or run-ios
 
 ---
 
-## 4. Full reset workflow
+## 4. Testing with the published plugin
+
+By default, the example app uses the **local** plugin via `workspace:*`. To test with the **published** version from npm instead:
+
+### 1. Switch the dependency
+
+In `example/package.json`, change:
+
+```json
+"mapp-intelligence-reactnative-plugin": "workspace:*",
+```
+
+to the published version (e.g. `1.1.1`):
+
+```json
+"mapp-intelligence-reactnative-plugin": "1.1.1",
+```
+
+### 2. Reinstall dependencies
+
+From the **repository root**:
+
+```bash
+yarn install
+```
+
+### 3. Rebuild native projects
+
+Because the plugin has native code, rebuild the apps:
+
+**Android:**
+```bash
+cd example
+npx react-native run-android
+# or for a clean build:
+yarn android:clean
+```
+
+**iOS:**
+```bash
+cd example
+npx pod-install
+npx react-native run-ios
+```
+
+### 4. Clear Metro cache (if needed)
+
+If you see stale behavior:
+
+```bash
+cd example
+npx react-native start --reset-cache
+```
+
+**To switch back to the local plugin**, change the dependency back to `"workspace:*"` and run `yarn install` again.
+
+---
+
+## 5. Full reset workflow
 
 Use this when you want a completely fresh environment (e.g. after pulling changes or switching branches):
 
@@ -143,7 +201,28 @@ cd example && npx react-native run-android
 
 ---
 
-## 5. Run tests
+## 6. Plugin Integration Test
+
+The example app includes a **Plugin Integration Test** screen that exercises all plugin methods (with full and null params) and detects exceptions. Use it to catch regressions like nullable→non-nullable parameter changes.
+
+**Run manually:**
+1. Launch the example app (`cd example && npx react-native run-android`)
+2. Tap **Plugin Integration Test** on the home screen
+3. Tap **Run All Plugin Tests**
+4. Verify all tests pass (0 failed)
+
+**Run with Maestro (E2E):** Install [Maestro](https://maestro.mobile.dev/) then:
+
+```bash
+cd example
+yarn test:integration
+```
+
+Or: `maestro test example/.maestro/flows/plugin-integration-test.yaml`
+
+---
+
+## 7. Run tests
 
 Unit tests are in `src/__tests__/`. From the **repository root**:
 
@@ -160,7 +239,7 @@ yarn test --testPathPattern="__tests__/index"
 
 ---
 
-## 6. Optional: manual cache cleanup
+## 8. Optional: manual cache cleanup
 
 If you still see odd build or Metro issues, you can clear global caches (optional):
 

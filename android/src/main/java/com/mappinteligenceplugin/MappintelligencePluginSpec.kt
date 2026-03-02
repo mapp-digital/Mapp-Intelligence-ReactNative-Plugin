@@ -47,7 +47,7 @@ interface MappintelligencePluginSpec : TurboModule {
         promise: Promise
     )
     fun trackException(name: String, message: String, stacktrace: String?, promise: Promise)
-    fun trackException(exception: ReadableMap, promise: Promise)
+    fun trackException(exception: ReadableMap?, promise: Promise)
     fun trackMedia(readableMap: ReadableMap?, promise: Promise)
     fun trackUrl(url: String, mediaCode: String?, promise: Promise)
     fun trackExceptionWithName(name: String, message: String, stacktrace: String?, promise: Promise)

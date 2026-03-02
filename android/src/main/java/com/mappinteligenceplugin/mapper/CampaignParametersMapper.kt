@@ -4,6 +4,7 @@ import com.facebook.react.bridge.ReadableMap
 import com.mappinteligenceplugin.mapper.Util.optBoolean
 import com.mappinteligenceplugin.mapper.Util.optString
 import com.mappinteligenceplugin.mapper.Util.toMap
+import com.mappinteligenceplugin.mapper.Util.optMap
 import webtrekk.android.sdk.events.eventParams.CampaignParameters
 
 class CampaignParametersMapper(private val readableMap: ReadableMap?) : Mapper<CampaignParameters> {
@@ -20,7 +21,7 @@ class CampaignParametersMapper(private val readableMap: ReadableMap?) : Mapper<C
       this.action = action
       this.mediaCode = mediaCode
       this.oncePerSession = oncePerSession
-      this.customParameters = map.getMap("customParameters").toMap(keyTransform = {
+      this.customParameters = map.optMap("customParameters").toMap(keyTransform = {
         it.toString().toInt()
       })
     }

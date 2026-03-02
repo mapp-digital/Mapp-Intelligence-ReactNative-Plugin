@@ -291,12 +291,13 @@ RCT_EXPORT_METHOD(trackPageWithCustomData:(NSDictionary*)pageParameters
                                             pageTitle:(NSString*)pageTitle
                                             resolve:(RCTPromiseResolveBlock)resolve
                                             reject:(RCTPromiseRejectBlock)reject)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[MappIntelligence shared] trackCustomPage:pageTitle trackingParams:pageParameters];
-        });
-        resolve(@1);
-    }
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSDictionary* params = [pageParameters isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)pageParameters;
+        [[MappIntelligence shared] trackCustomPage:pageTitle trackingParams:params];
+    });
+    resolve(@1);
+}
 
 RCT_EXPORT_METHOD(trackAction:(NSString*)name
                                         eventParameters:(id)eventParameters
@@ -369,20 +370,27 @@ RCT_EXPORT_METHOD(trackMedia:(NSDictionary*)mediaEventDictionary
                                        reject:(RCTPromiseRejectBlock)reject)
 {
    dispatch_async(dispatch_get_main_queue(), ^{
-       if(!mediaEventDictionary[@"parameters"]) {
-           NSLog(@"Media event must have page name");
-       }
        NSDictionary* mp = [mediaEventDictionary isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)mediaEventDictionary;
-       MIMediaParameters* mParameters = [self prepareMediaParameters:mp[@"parameters"]];
-       MIMediaEvent* mediaEvent = [[MIMediaEvent alloc] initWithPageName:mediaEventDictionary[@"parameters"][@"name"] parameters:mParameters];
-       [mediaEvent setEventParameters:[self prepareEventParamters:mediaEventDictionary[@"eventParameters"]]];
-       [mediaEvent setPageName:mediaEventDictionary[@"pageName"]];
-       [mediaEvent setSessionParameters:[self prepareSessionParameters:mediaEventDictionary[@"sessionParameters"]]];
-       [mediaEvent setEcommerceParameters:[self prepareEcommerceParameters:mediaEventDictionary[@"eCommerceParameters"]]];
+       if (!mp || !mp[@"parameters"]) {
+           NSLog(@"Media event must have valid dictionary with parameters");
+           resolve(@0);
+           return;
+       }
+       NSDictionary* params = mp[@"parameters"];
+       NSString* pageName = mp[@"pageName"] ?: @"";
+       MIMediaParameters* mParameters = [self prepareMediaParameters:params];
+       if (params[@"name"]) {
+           mParameters.name = params[@"name"];
+       }
+       MIMediaEvent* mediaEvent = [[MIMediaEvent alloc] initWithPageName:pageName parameters:mParameters];
+       [mediaEvent setEventParameters:[self prepareEventParamters:mp[@"eventParameters"]]];
+       [mediaEvent setPageName:pageName];
+       [mediaEvent setSessionParameters:[self prepareSessionParameters:mp[@"sessionParameters"]]];
+       [mediaEvent setEcommerceParameters:[self prepareEcommerceParameters:mp[@"eCommerceParameters"]]];
 
        [[MappIntelligence shared] trackMedia:mediaEvent];
+       resolve(@1);
    });
-   resolve(@1);
 }
 
 RCT_EXPORT_METHOD(trackException:(NSString*)name

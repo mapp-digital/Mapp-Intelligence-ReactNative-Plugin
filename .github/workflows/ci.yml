@@ -149,3 +149,43 @@ jobs:
       - name: Build example for iOS
         run: |
           yarn turbo run build:ios --cache-dir="${{ env.TURBO_CACHE_DIR }}"
+
+  plugin-integration-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Install JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install Maestro
+        run: |
+          curl -Ls "https://get.maestro.mobile.dev" | bash
+          export PATH="$HOME/.maestro/bin:$PATH"
+          maestro --version
+          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
+          echo "MAESTRO=$HOME/.maestro/bin/maestro" >> $GITHUB_ENV
+
+      - name: Run Plugin Integration Test
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: default
+          arch: x86_64
+          script: |
+            cd $GITHUB_WORKSPACE
+            yarn install --immutable
+            cd example
+            npx react-native start &
+            sleep 30
+            npx react-native run-android --no-packager
+            sleep 15
+            export PATH="$HOME/.maestro/bin:$PATH"
+            maestro test .maestro/flows/plugin-integration-test.yaml

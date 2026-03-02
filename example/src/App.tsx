@@ -23,6 +23,7 @@ import {
   LogLevel,
 } from 'mapp-intelligence-reactnative-plugin';
 import FetchExample from './FetchExample';
+import PluginIntegrationTest from './PluginIntegrationTest';
 
 const Stack = createNativeStackNavigator();
 
@@ -82,6 +83,10 @@ const App = () => {
           }}
         >
           <Stack.Screen name={Routes.HOME.valueOf()} component={Home} />
+          <Stack.Screen
+            name={Routes.PLUGIN_INTEGRATION_TEST.valueOf()}
+            component={PluginIntegrationTest}
+          />
           <Stack.Screen
             name={Routes.PAGE_TRACKING.valueOf()}
             component={PageTracking}

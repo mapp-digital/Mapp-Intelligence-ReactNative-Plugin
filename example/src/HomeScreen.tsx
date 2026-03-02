@@ -13,6 +13,7 @@ const HomeScreen = (props: { navigation: any }) => {
     <View style={DefaultStyles.sectionContainer}>
       <FlatList
         data={[
+          Routes.PLUGIN_INTEGRATION_TEST,
           Routes.CONFIG_TRACKING,
           Routes.PAGE_TRACKING,
           Routes.ACTION_TRACKING,
