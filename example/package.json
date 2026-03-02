@@ -41,6 +41,10 @@
     "react-native-builder-bob": "^0.40.8",
     "react-native-monorepo-config": "^0.1.9"
   },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
   "engines": {
     "node": ">=18"
   }

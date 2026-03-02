@@ -263,11 +263,11 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   @ReactMethod
   override fun trackCustomPage(
     pageTitle: String?,
-    pageParams: ReadableMap,
-    sessionParams: ReadableMap,
-    userCategoryParams: ReadableMap,
-    ecommerceParams: ReadableMap,
-    campaignParams: ReadableMap,
+    pageParams: ReadableMap?,
+    sessionParams: ReadableMap?,
+    userCategoryParams: ReadableMap?,
+    ecommerceParams: ReadableMap?,
+    campaignParams: ReadableMap?,
     promise: Promise
   ) {
     runOnPlugin(
@@ -294,10 +294,10 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
 
   /** Track page with a provided [PageViewEvent] */
   @ReactMethod
-  override fun trackPageWithCustomData(params: ReadableMap, pageTitle: String, promise: Promise) {
+  override fun trackPageWithCustomData(params: ReadableMap?, pageTitle: String, promise: Promise) {
     runOnPlugin(
       whenInitialized = {
-        instance?.trackCustomPage(pageTitle, params.toMap(keyTransform = { it.toString() }))
+        instance?.trackCustomPage(pageTitle, params?.toMap(keyTransform = { it.toString() }) ?: emptyMap())
       }
     )
     promise.resolve(true)
@@ -319,11 +319,11 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   @ReactMethod
   override fun trackAction(
     name: String,
-    eventParameters: ReadableMap,
-    sessionParameters: ReadableMap,
-    userCategories: ReadableMap,
-    eCommerceParameters: ReadableMap,
-    campaignParameters: ReadableMap,
+    eventParameters: ReadableMap?,
+    sessionParameters: ReadableMap?,
+    userCategories: ReadableMap?,
+    eCommerceParameters: ReadableMap?,
+    campaignParameters: ReadableMap?,
     promise: Promise
   ) {
     runOnPlugin(
@@ -367,10 +367,11 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   }
 
   @ReactMethod
-  fun trackException(exception: ReadableMap, promise: Promise) {
+  fun trackException(exception: ReadableMap?, promise: Promise) {
     runOnPlugin(
       whenInitialized = {
-        val innerException = Exception(exception.getString("message"))
+        val message = exception?.getString("message") ?: "Unknown exception"
+        val innerException = Exception(message)
         instance?.trackException(innerException)
       }
     )
@@ -378,7 +379,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   }
 
   @ReactMethod
-  override fun trackMedia(readableMap: ReadableMap, promise: Promise) {
+  override fun trackMedia(readableMap: ReadableMap?, promise: Promise) {
     runOnPlugin(
       whenInitialized = {
         MediaEventMapper(readableMap).getData()?.let { instance?.trackMedia(it) }
@@ -506,11 +507,6 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
   @ReactMethod
   override fun nativeCrash(promise: Promise) {
     throw Exception("Native crash")
-  }
-
-  @ReactMethod
-  fun nativeCrash() {
-    throw Exception("Native crash");
   }
 
   override fun getName(): String {
