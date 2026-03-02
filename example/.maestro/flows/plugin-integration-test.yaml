@@ -1,0 +1,15 @@
+# Plugin Integration Test - exercises all MappIntelligencePlugin methods
+# and asserts no exceptions occurred.
+appId: com.mappinteligencepluginexample
+---
+- launchApp
+- tapOn:
+    text: "Plugin Integration Test"
+- tapOn:
+    id: "run-plugin-tests"
+- extendedWaitUntil:
+    visible:
+      id: "plugin-test-results"
+    timeout: 60000
+- assertVisible:
+    text: "0 failed"
