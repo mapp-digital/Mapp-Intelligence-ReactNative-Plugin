@@ -12,4 +12,4 @@ appId: com.mappinteligencepluginexample
       id: "plugin-test-results"
     timeout: 60000
 - assertVisible:
-    text: "0 failed"
+    id: "plugin-test-all-passed"
