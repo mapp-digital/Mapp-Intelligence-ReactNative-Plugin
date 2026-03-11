@@ -19,7 +19,6 @@ import HomeScreen from './HomeScreen';
 import { Routes } from './Routes';
 import {
   MappIntelligencePlugin,
-  ExceptionType,
   LogLevel,
 } from 'mapp-intelligence-reactnative-plugin';
 import FetchExample from './FetchExample';

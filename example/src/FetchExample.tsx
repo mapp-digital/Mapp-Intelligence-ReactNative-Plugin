@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, FlatList, SafeAreaView } from 'react-native';
+import { FlatList, SafeAreaView } from 'react-native';
 import { DefaultStyles, Dialog, MappButton } from './components/MappComponents';
 
 const FetchExample = ()=>{
