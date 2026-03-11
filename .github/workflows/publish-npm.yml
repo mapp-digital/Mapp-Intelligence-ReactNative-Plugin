@@ -1,7 +1,12 @@
 name: Publish to npm
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   push:
+    branches:
+      - deploy-actions
     tags:
       - 'v*'
   workflow_dispatch:
@@ -38,5 +43,10 @@ jobs:
       - name: Build package
         run: yarn prepare
 
+      - name: Dry run publish (deploy-actions branch)
+        if: github.ref == 'refs/heads/deploy-actions'
+        run: npm publish --provenance --access public --dry-run
+
       - name: Publish to npm
+        if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
         run: npm publish --provenance --access public
