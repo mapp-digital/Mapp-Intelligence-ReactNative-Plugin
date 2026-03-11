@@ -22,7 +22,6 @@ interface MappintelligencePluginSpec : TurboModule {
     fun setBatchSupportEnabled(enabled: Boolean, promise: Promise)
     fun setBatchSupportSize(size: Double, promise: Promise)
     fun setRequestInterval(interval: Double, promise: Promise)
-    fun setRequestPerQueue(queue: Double, promise: Promise)
     fun setShouldMigrate(migrate: Boolean, promise: Promise)
     fun setEnableBackgroundSendout(enabled: Boolean, promise: Promise)
     fun trackCustomPage(
@@ -56,4 +55,3 @@ interface MappintelligencePluginSpec : TurboModule {
     fun getCurrentConfig(promise: Promise)
     fun nativeCrash()
 }
-

@@ -187,17 +187,6 @@ RCT_EXPORT_METHOD(setBatchSupportSize:(NSInteger)size
     resolve(@1);
 }
 
-RCT_EXPORT_METHOD(setRequestPerQueue:(NSInteger)numberOfRequsts
-                                        resolve:(RCTPromiseResolveBlock)resolve
-                                        reject:(RCTPromiseRejectBlock)reject)
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[MappIntelligence shared] setRequestPerQueue:numberOfRequsts];
-    });
-    resolve(@1);
-}
-
-
 RCT_EXPORT_METHOD(setShouldMigrate:(BOOL)migrate
                                         resolve:(RCTPromiseResolveBlock)resolve
                                         reject:(RCTPromiseRejectBlock)reject)
@@ -377,12 +366,26 @@ RCT_EXPORT_METHOD(trackMedia:(NSDictionary*)mediaEventDictionary
            return;
        }
        NSDictionary* params = mp[@"parameters"];
-       NSString* pageName = mp[@"pageName"] ?: @"";
-       MIMediaParameters* mParameters = [self prepareMediaParameters:params];
-       if (params[@"name"]) {
-           mParameters.name = params[@"name"];
+       NSString* rawPageName = mp[@"pageName"];
+       NSString* pageName = (rawPageName && ![rawPageName isKindOfClass:[NSNull class]] && [rawPageName length] > 0) ? rawPageName : @"";
+
+       MIMediaEvent* mediaEvent = nil;
+       MIMediaParameters* mParameters = nil;
+       if (params == nil || [((id)params) isKindOfClass:[NSNull class]]) {
+           // Create an empty parameters object to satisfy nonnull requirement
+           mParameters = [[MIMediaParameters alloc] initWithDictionary:@{}];
+       } else {
+           mParameters = [self prepareMediaParameters:params];
+           if (mParameters == nil) {
+               mParameters = [[MIMediaParameters alloc] initWithDictionary:@{}];
+           }
+           if (params[@"name"]) {
+               mParameters.name = params[@"name"];
+           }
        }
-       MIMediaEvent* mediaEvent = [[MIMediaEvent alloc] initWithPageName:pageName parameters:mParameters];
+
+       mediaEvent = [[MIMediaEvent alloc] initWithPageName:pageName parameters:mParameters];
+
        [mediaEvent setEventParameters:[self prepareEventParamters:mp[@"eventParameters"]]];
        [mediaEvent setPageName:pageName];
        [mediaEvent setSessionParameters:[self prepareSessionParameters:mp[@"sessionParameters"]]];
@@ -394,6 +397,31 @@ RCT_EXPORT_METHOD(trackMedia:(NSDictionary*)mediaEventDictionary
 }
 
 RCT_EXPORT_METHOD(trackException:(NSString*)name
+                                       message:(NSString*)message
+                                       stackTrace:(NSString*)stackTrace
+                                       resolve:(RCTPromiseResolveBlock)resolve
+                                       reject:(RCTPromiseRejectBlock)reject)
+{
+   dispatch_async(dispatch_get_main_queue(), ^{
+
+       if (stackTrace) {
+           NSDictionary *userInfo = @{
+             NSLocalizedDescriptionKey: NSLocalizedString(message, nil),
+             NSLocalizedFailureReasonErrorKey: NSLocalizedString(stackTrace, nil),
+             NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"", nil)
+                                     };
+           NSError *error = [NSError errorWithDomain:name
+                                                code:-57
+                                            userInfo:userInfo];
+           [[MappIntelligence shared] trackExceptionWith:error];
+       } else {
+           [[MappIntelligence shared] trackExceptionWithName:name andWithMessage:message];
+       }
+   });
+   resolve(@1);
+}
+
+RCT_EXPORT_METHOD(trackExceptionWithName:(NSString*)name
                                        message:(NSString*)message
                                        stackTrace:(NSString*)stackTrace
                                        resolve:(RCTPromiseResolveBlock)resolve
@@ -440,7 +468,7 @@ RCT_EXPORT_METHOD(trackException:(NSString*)name
 }
 
 -(MIMediaParameters*)prepareMediaParameters:(NSDictionary*) mediaParameters {
-    if (mediaParameters == NULL) {
+    if (mediaParameters == NULL || [((id)mediaParameters) isKindOfClass:[NSNull class]]) {
         return NULL;
     }
     MIMediaParameters* testparams = [[MIMediaParameters alloc] initWithDictionary:mediaParameters];
@@ -495,8 +523,8 @@ RCT_EXPORT_METHOD(trackException:(NSString*)name
 }
 
 -(MIEventParameters*)prepareEventParamters:(NSDictionary*) eventParameters {
-    if (eventParameters == NULL || eventParameters == [NSNull null]) {
-        return NULL;
+    if (eventParameters == nil || [((id)eventParameters) isKindOfClass:[NSNull class]]) {
+        return nil;
     }
     NSDictionary* eParameters = [self clearDictionaryFromNull:[eventParameters mutableCopy]];
     //this is difference from Android
@@ -507,8 +535,8 @@ RCT_EXPORT_METHOD(trackException:(NSString*)name
 }
 
 -(MIUserCategories*)prepareUserCategories:(NSDictionary*) userCategories {
-    if (userCategories == NULL || userCategories == [NSNull null]) {
-        return NULL;
+    if (userCategories == nil || [((id)userCategories) isKindOfClass:[NSNull class]]) {
+        return nil;
     }
     NSDictionary* uCategories = [self clearDictionaryFromNull:[userCategories mutableCopy]];
     MIUserCategories* userCategoriesNew = [[MIUserCategories alloc] initWithDictionary:uCategories];
@@ -516,8 +544,8 @@ RCT_EXPORT_METHOD(trackException:(NSString*)name
 }
 
 -(MISessionParameters*)prepareSessionParameters:(NSDictionary*) sessionParamters {
-    if (sessionParamters == NULL || sessionParamters == [NSNull null]) {
-        return NULL;
+    if (sessionParamters == nil || [((id)sessionParamters) isKindOfClass:[NSNull class]]) {
+        return nil;
     }
     NSDictionary* sParameters = [self clearDictionaryFromNull:[sessionParamters mutableCopy]];
     MISessionParameters* sessionParamtersObject = [[MISessionParameters alloc] initWithParameters:sParameters];
@@ -525,8 +553,8 @@ RCT_EXPORT_METHOD(trackException:(NSString*)name
 }
 
 -(MIEcommerceParameters*)prepareEcommerceParameters:(NSDictionary*) ecommerceParamters {
-    if (ecommerceParamters == NULL || ecommerceParamters == [NSNull null]) {
-        return NULL;
+    if (ecommerceParamters == nil || [((id)ecommerceParamters) isKindOfClass:[NSNull class]]) {
+        return nil;
     }
     NSDictionary* eParameters = [self clearDictionaryFromNull:[ecommerceParamters mutableCopy]];
     MIEcommerceParameters* ecommerceParamtersObject = [[MIEcommerceParameters alloc] initWithDictionary:eParameters];
@@ -534,8 +562,8 @@ RCT_EXPORT_METHOD(trackException:(NSString*)name
 }
 
 -(MICampaignParameters*)prepareCampaignParameters:(NSDictionary*) campaignParamters {
-    if (campaignParamters == NULL || campaignParamters == [NSNull null]) {
-        return NULL;
+    if (campaignParamters == nil || [((id)campaignParamters) isKindOfClass:[NSNull class]]) {
+        return nil;
     }
     NSDictionary* cParameters = [self clearDictionaryFromNull:[campaignParamters mutableCopy]];
     MICampaignParameters* campaignParamtersObject = [[MICampaignParameters alloc] initWithDictionary:cParameters];
@@ -566,3 +594,4 @@ RCT_EXPORT_METHOD(trackException:(NSString*)name
 }
 
 @end
+

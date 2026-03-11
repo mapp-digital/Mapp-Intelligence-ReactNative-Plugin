@@ -14,7 +14,6 @@ jest.mock('react-native', () => {
     setBatchSupportEnabled: jestFn.fn().mockResolvedValue(1),
     setEnableBackgroundSendout: jestFn.fn().mockResolvedValue(1),
     setBatchSupportSize: jestFn.fn().mockResolvedValue(1),
-    setRequestPerQueue: jestFn.fn().mockResolvedValue(1),
     setShouldMigrate: jestFn.fn().mockResolvedValue(1),
     setAnonymousTracking: jestFn.fn().mockResolvedValue(1),
     setSendAppVersionInEveryRequest: jestFn.fn().mockResolvedValue(1),
@@ -110,11 +109,6 @@ describe('MappIntelligencePlugin', () => {
   it('setBatchSupportSize calls native method', async () => {
     await MappIntelligencePlugin.setBatchSupportSize(100);
     expect(mockNativeModule.setBatchSupportSize).toHaveBeenCalledWith(100);
-  });
-
-  it('setRequestPerQueue calls native method', async () => {
-    await MappIntelligencePlugin.setRequestPerQueue(10);
-    expect(mockNativeModule.setRequestPerQueue).toHaveBeenCalledWith(10);
   });
 
   it('setShouldMigrate calls native method', async () => {
@@ -225,6 +219,24 @@ describe('MappIntelligencePlugin', () => {
       'TestException',
       'Handled test exception',
       'Exception in a unit testing'
+    );
+  });
+
+  it('trackExceptionWithName falls back to trackException when missing in native', async () => {
+    // Simulates older native iOS build where trackExceptionWithName is not exported.
+    delete (mockNativeModule as { trackExceptionWithName?: unknown })
+      .trackExceptionWithName;
+
+    await MappIntelligencePlugin.trackExceptionWithName(
+      'LegacyException',
+      'Handled by fallback',
+      'Fallback stack trace'
+    );
+
+    expect(mockNativeModule.trackException).toHaveBeenCalledWith(
+      'LegacyException',
+      'Handled by fallback',
+      'Fallback stack trace'
     );
   });
 

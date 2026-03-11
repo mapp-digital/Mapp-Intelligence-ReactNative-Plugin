@@ -127,16 +127,6 @@ export const MappIntelligencePlugin = {
   },
 
   /**
-   * Requests are buffered in a queue before sending. This option set size of the queue.
-   * @param numberOfRequsts size of a queue for buffering requests
-   * @returns result if method executed succesfully or not
-   */
-  setRequestPerQueue: (numberOfRequsts: number): Promise<number> => {
-    console.log('setRequestPerQueue');
-    return mappPlugin.setRequestPerQueue(numberOfRequsts);
-  },
-
-  /**
    * Control if migration should be applied from a previos SDK version.
    * @param migrate true to apply migration on the initialization process; otherwise false
    * @returns result if method executed succesfully or not
@@ -305,11 +295,16 @@ export const MappIntelligencePlugin = {
     message: string,
     stackTrace?: string | null
   ): Promise<number> => {
-    return mappPlugin.trackExceptionWithName(
-      name,
-      message.slice(0, 1000),
-      stackTrace?.slice(0, 1000)
-    );
+    const trimmedMessage = message.slice(0, 1000);
+    const trimmedStackTrace = stackTrace?.slice(0, 1000);
+    if (typeof mappPlugin.trackExceptionWithName === 'function') {
+      return mappPlugin.trackExceptionWithName(
+        name,
+        trimmedMessage,
+        trimmedStackTrace
+      );
+    }
+    return mappPlugin.trackException(name, trimmedMessage, trimmedStackTrace);
   },
 
   /**

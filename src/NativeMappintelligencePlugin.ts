@@ -10,7 +10,6 @@ export interface Spec extends TurboModule {
   setBatchSupportEnabled(enabled: boolean): Promise<number>;
   setEnableBackgroundSendout(enabled: boolean): Promise<number>;
   setBatchSupportSize(size: number): Promise<number>;
-  setRequestPerQueue(numberOfRequests: number): Promise<number>;
   setShouldMigrate(migrate: boolean): Promise<number>;
   setAnonymousTracking(anonymous: boolean): Promise<number>;
   setSendAppVersionInEveryRequest(flag: boolean): Promise<number>;

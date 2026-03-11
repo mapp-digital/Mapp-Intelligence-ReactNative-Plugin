@@ -230,12 +230,6 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
     promise.resolve(true)
   }
 
-  /** This operation is not supported on android Method exists only for compatibility */
-  @ReactMethod
-  override fun setRequestPerQueue(queue: Double, promise: Promise) {
-    promise.resolve(true)
-  }
-
   /**
    * Enable or disable migration from previous version of a native SDK React Native plugin was not
    * developed with a older version (v4) of the native plugin, so migration for this plugin will

@@ -123,7 +123,6 @@ const ConfigurationTrackingView = () => {
                 await MappIntelligencePlugin.setBatchSupportEnabled(false);
                 await MappIntelligencePlugin.setBatchSupportSize(150);
                 await MappIntelligencePlugin.setRequestInterval(1);
-                await MappIntelligencePlugin.setRequestPerQueue(300);
                 await MappIntelligencePlugin.setShouldMigrate(true);
                 await MappIntelligencePlugin.setSendAppVersionInEveryRequest(
                   true

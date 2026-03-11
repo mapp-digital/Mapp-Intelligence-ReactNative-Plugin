@@ -49,7 +49,6 @@ typedef NS_ENUM(NSInteger, exceptionType) {
 @property (nonatomic, readwrite) BOOL batchSupportEnabled;
 @property (nonatomic, readwrite) BOOL enableBackgroundSendout;
 @property (nonatomic, readwrite) NSInteger batchSupportSize;
-@property (nonatomic, readwrite) NSInteger requestPerQueue;
 @property (nonatomic, readwrite) BOOL shouldMigrate;
 @property (nonatomic, readwrite) BOOL anonymousTracking;
 @property (nonatomic, readwrite) BOOL sendAppVersionInEveryRequest;
@@ -84,6 +83,13 @@ typedef NS_ENUM(NSInteger, exceptionType) {
 @return Error in case of a failure. Returns nil if no error was detected.
 */
 - (NSError *_Nullable)trackPageWithViewController:(UIViewController *_Nonnull)controller pageViewEvent:(MIPageViewEvent*_Nullable) event;
+
+/**
+@brief Method which will track page by name
+@param name - page name
+@return the error which may happen through process of tracking, if returns nil there is no error.
+*/
+- (NSError *_Nullable)trackPageWith:(NSString *_Nonnull)name;
 
 
 /**
