@@ -1,6 +1,6 @@
 {
   "name": "mapp-intelligence-reactnative-plugin",
-  "version": "1.1.3",
+  "version": "1.1.2",
   "description": "The MappIntelligence SDK allows you to track user activities, screen flow and media usage for an App. All data is send to the MappIntelligence tracking system for further analysis.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -29,7 +29,7 @@
     "example": "yarn workspace react-native-mappinteligence-plugin-example",
     "install:high-mem": "NODE_OPTIONS=--max-old-space-size=8192 yarn install",
     "test": "jest",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit -p tsconfig.build.json",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
     "prepare": "bob build",
