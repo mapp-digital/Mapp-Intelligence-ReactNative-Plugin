@@ -1,6 +1,6 @@
 # iOS Native Plugin – Required Changes
 
-All notable iOS changes identified during the plugin audit for React Native 0.83 compatibility and correctness.
+All notable iOS changes identified during the plugin audit for React Native 0.84 compatibility and correctness.
 
 ---
 
@@ -12,7 +12,7 @@ All notable iOS changes identified during the plugin audit for React Native 0.83
 |---------|----------|
 | `s.platforms = { :ios => "11.0" }` | `s.platforms = { :ios => "15.1" }` |
 
-**Reason:** React Native 0.83 uses `min_ios_version_supported` = **15.1** (from `react-native/scripts/cocoapods/helpers.rb`). The example app's Podfile uses `min_ios_version_supported`, and the Xcode project targets 13.4 in `project.pbxproj`. Align the podspec with RN 0.83 requirements.
+**Reason:** React Native 0.84 uses `min_ios_version_supported` = **15.1** (from `react-native/scripts/cocoapods/helpers.rb`). The example app's Podfile, podspec, and Xcode project must align with that minimum.
 
 ---
 

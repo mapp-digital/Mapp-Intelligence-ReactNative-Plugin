@@ -443,6 +443,7 @@ class MappinteligencePluginModule(private val reactContext: ReactApplicationCont
           Webtrekk.getInstance().apply {
             this.init(reactContext.applicationContext, builder.build())
             this.anonymousTracking(configAdapter.anonymousTracking)
+            this.setUserMatchingEnabled(configAdapter.userMatchingEnabled)
             this.setTemporarySessionId(configAdapter.temporarySessionId)
           }
         promise.resolve(true)

@@ -223,8 +223,8 @@ RCT_EXPORT_METHOD(setEnableUserMatching:(BOOL)enabled
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [[MappIntelligence shared] setEnableUserMatching:enabled];
+        resolve(@1);
     });
-    resolve(@1);
 }
 
 RCT_EXPORT_METHOD(trackPage:(NSString*)pageTitle
@@ -594,4 +594,3 @@ RCT_EXPORT_METHOD(trackExceptionWithName:(NSString*)name
 }
 
 @end
-
