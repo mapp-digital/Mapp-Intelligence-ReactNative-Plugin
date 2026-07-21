@@ -128,6 +128,11 @@ describe('MappIntelligencePlugin', () => {
     ).toHaveBeenCalledWith(true);
   });
 
+  it('setEnableUserMatching calls native method', async () => {
+    await MappIntelligencePlugin.setEnableUserMatching(true);
+    expect(mockNativeModule.setEnableUserMatching).toHaveBeenCalledWith(true);
+  });
+
   it('trackPage calls native method with page title', async () => {
     await MappIntelligencePlugin.trackPage('Test page');
     expect(mockNativeModule.trackPage).toHaveBeenCalledWith('Test page');

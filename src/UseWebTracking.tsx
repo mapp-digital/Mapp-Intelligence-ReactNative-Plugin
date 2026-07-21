@@ -80,7 +80,7 @@ export const useWebTracking = (
         return json;
       }
       return null;
-    } catch (error) {
+    } catch {
       return null;
     }
   };
