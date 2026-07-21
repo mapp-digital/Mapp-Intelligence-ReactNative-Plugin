@@ -1,12 +1,27 @@
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+const fs = require('fs');
 const path = require('path');
 const escape = require('escape-string-regexp');
 const exclusionList =
   require('metro-config/private/defaults/exclusionList').default;
-const pak = require('./package.json');
+const libraryPackage = require('../package.json');
 
 const root = path.resolve(__dirname, '..');
-const modules = Object.keys({ ...pak.peerDependencies });
+const localNodeModules = path.join(__dirname, 'node_modules');
+const rootNodeModules = path.join(root, 'node_modules');
+const localTransformer = path.join(
+  localNodeModules,
+  '@react-native',
+  'metro-babel-transformer',
+  'src',
+  'index.js'
+);
+const nodeModules = fs.existsSync(localTransformer)
+  ? localNodeModules
+  : rootNodeModules;
+const inactiveNodeModules =
+  nodeModules === localNodeModules ? rootNodeModules : localNodeModules;
+const modules = Object.keys({ ...libraryPackage.peerDependencies });
 
 /**
  * Metro configuration
@@ -23,20 +38,19 @@ const config = {
     blockList: exclusionList(
       modules.map(
         (m) =>
-          new RegExp(`^${escape(path.join(root, 'node_modules', m))}\\/.*$`)
+          new RegExp(`^${escape(path.join(inactiveNodeModules, m))}\\/.*$`)
       )
     ),
 
     extraNodeModules: modules.reduce((acc, name) => {
-      acc[name] = path.join(__dirname, 'node_modules', name);
+      acc[name] = path.join(nodeModules, name);
       return acc;
     }, {}),
   },
 
   transformer: {
     babelTransformerPath: path.join(
-      __dirname,
-      'node_modules',
+      nodeModules,
       '@react-native',
       'metro-babel-transformer',
       'src',

@@ -2,6 +2,20 @@
 
 All notable changes to this project are documented in this file.
 
+## [1.1.3] - [Unreleased]
+
+### React Native & Dependencies
+
+- Migrated the plugin and example app to React Native 0.84.1 and React 19.2.3.
+- Updated the supported peer range to React Native `>=0.84.0 <0.85.0`.
+- Updated Android tooling to AGP 8.12.0, Gradle 9.0.0, and Kotlin 2.3.21.
+- Raised the required Node.js version to 22.13 and aligned the iOS deployment target to 15.1.
+
+### Bug Fixes
+
+- Applied the configured user-matching flag during Android SDK initialization so `setEnableUserMatching(true)` before `build()` is reflected in the active SDK configuration.
+- Made the iOS user-matching promise resolve only after the native setter runs on the main queue.
+
 ## [1.1.2] - 2026-02-26
 
 ### Bug Fixes

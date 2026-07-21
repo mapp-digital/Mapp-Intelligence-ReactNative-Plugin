@@ -17,7 +17,7 @@ This guide explains how to clean the project, install dependencies, and build an
 
 ## Prerequisites
 
-- **Node.js** ≥ 18
+- **Node.js** ≥ 22.13
 - **Yarn** (v3) – This project uses Yarn 3 with workspaces (`packageManager: yarn@3.6.1`). Use **Yarn** for installing dependencies; npm is not recommended and may cause issues with the local plugin and lockfiles.
 - **Android:** Android Studio, SDK, and environment variables (e.g. `ANDROID_HOME`)
 - **iOS:** Xcode, CocoaPods (`bundle` and `pod` from the `example` directory)
@@ -64,7 +64,7 @@ Use **Yarn** from the **repository root** so both the library and the example ap
 yarn install
 ```
 
-The example app depends on the local plugin via **`workspace:*`** (not `file:..`) so Yarn resolves it from the workspace graph and install stays light.
+The example app depends on the local plugin via **`file:..`**, which works with Yarn and npm and resolves to the repository root.
 
 This will:
 
@@ -127,35 +127,41 @@ cd example
 npx react-native run-android   # or run-ios
 ```
 
+Metro can also be started from the repository root. The root configuration delegates to the example app:
+
+```bash
+npm start
+# or
+yarn start
+```
+
 ---
 
 ## 4. Testing with the published plugin
 
-By default, the example app uses the **local** plugin via `workspace:*`. To test with the **published** version from npm instead:
+By default, the example app uses the **local** plugin via `file:..`. Two root-level scripts switch both dependency resolution and React Native autolinking between the local and published plugin.
 
-### 1. Switch the dependency
+### Switch to the published plugin
 
-In `example/package.json`, change:
-
-```json
-"mapp-intelligence-reactnative-plugin": "workspace:*",
-```
-
-to the published version (e.g. `1.1.1`):
-
-```json
-"mapp-intelligence-reactnative-plugin": "1.1.1",
-```
-
-### 2. Reinstall dependencies
-
-From the **repository root**:
+From the repository root:
 
 ```bash
+yarn plugin:published
 yarn install
 ```
 
-### 3. Rebuild native projects
+This selects the root package's current version from npm and installs it. The version must already be published and support React Native 0.84. To select a different published version, pass it after the script name, for example `yarn plugin:published 1.1.3-beta02`, and then run `yarn install`.
+
+### Switch back to the local plugin
+
+```bash
+yarn plugin:local
+yarn install
+```
+
+The switch commands update `example/package.json`; the following install applies the selected dependency. With npm, use `npm run plugin:local` or `npm run plugin:published`, followed by `npm install`. The example's `react-native.config.js` forces the repository root only in local mode; published mode uses normal package autolinking.
+
+### Rebuild native projects
 
 Because the plugin has native code, rebuild the apps:
 
@@ -174,7 +180,7 @@ npx pod-install
 npx react-native run-ios
 ```
 
-### 4. Clear Metro cache (if needed)
+### Clear Metro cache (if needed)
 
 If you see stale behavior:
 
@@ -182,8 +188,6 @@ If you see stale behavior:
 cd example
 npx react-native start --reset-cache
 ```
-
-**To switch back to the local plugin**, change the dependency back to `"workspace:*"` and run `yarn install` again.
 
 ---
 
