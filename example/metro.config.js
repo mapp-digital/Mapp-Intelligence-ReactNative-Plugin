@@ -2,8 +2,6 @@ const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 const fs = require('fs');
 const path = require('path');
 const escape = require('escape-string-regexp');
-const exclusionList =
-  require('metro-config/private/defaults/exclusionList').default;
 const libraryPackage = require('../package.json');
 
 const root = path.resolve(__dirname, '..');
@@ -22,6 +20,7 @@ const nodeModules = fs.existsSync(localTransformer)
 const inactiveNodeModules =
   nodeModules === localNodeModules ? rootNodeModules : localNodeModules;
 const modules = Object.keys({ ...libraryPackage.peerDependencies });
+const defaultConfig = getDefaultConfig(__dirname);
 
 /**
  * Metro configuration
@@ -35,12 +34,13 @@ const config = {
   // We need to make sure that only one version is loaded for peerDependencies
   // So we block them at the root, and alias them to the versions in example's node_modules
   resolver: {
-    blockList: exclusionList(
-      modules.map(
+    blockList: [
+      defaultConfig.resolver.blockList,
+      ...modules.map(
         (m) =>
           new RegExp(`^${escape(path.join(inactiveNodeModules, m))}\\/.*$`)
-      )
-    ),
+      ),
+    ],
 
     extraNodeModules: modules.reduce((acc, name) => {
       acc[name] = path.join(nodeModules, name);
@@ -65,4 +65,4 @@ const config = {
   },
 };
 
-module.exports = mergeConfig(getDefaultConfig(__dirname), config);
+module.exports = mergeConfig(defaultConfig, config);
