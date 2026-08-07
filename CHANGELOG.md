@@ -2,7 +2,7 @@
 
 All notable changes to this project are documented in this file.
 
-## [1.1.3] - [Unreleased]
+## [1.1.3] - 2026-08-08
 
 ### React Native & Dependencies
 
@@ -15,6 +15,7 @@ All notable changes to this project are documented in this file.
 
 - Applied the configured user-matching flag during Android SDK initialization so `setEnableUserMatching(true)` before `build()` is reflected in the active SDK configuration.
 - Made the iOS user-matching promise resolve only after the native setter runs on the main queue.
+- Removed the obsolete direct `RCT-Folly` pod dependency, avoiding iOS dependency conflicts for client apps using React Native 0.84.
 
 ## [1.1.2] - 2026-02-26
 
