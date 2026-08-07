@@ -2,7 +2,7 @@
 
 All notable changes to this project are documented in this file.
 
-## [1.1.3] - 2026-08-08
+## [1.1.3] - 2026-08-07
 
 ### React Native & Dependencies
 
