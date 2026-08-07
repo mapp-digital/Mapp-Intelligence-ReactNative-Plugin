@@ -19,7 +19,7 @@
     "mapp-intelligence-reactnative-plugin": "file:..",
     "react": "19.2.3",
     "react-native": "0.84.1",
-    "react-native-mapp-plugin": "file:../../Mapp-Engage-ReactNative-Plugin/react-native-mapp-plugin-1.4.2-beta.1.tgz",
+    "react-native-mapp-plugin": "^1.4.2",
     "react-native-safe-area-context": "^5.5.2",
     "react-native-screens": "^4.10.0",
     "react-native-video": "^6.14.0",
