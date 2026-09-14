@@ -1,0 +1,12 @@
+appId: com.mappintelligence.expoexample
+---
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: run-smoke-test
+    timeout: 120000
+- tapOn:
+    id: run-smoke-test
+- extendedWaitUntil:
+    visible: MAPP_TRACKING_OK
+    timeout: 60000

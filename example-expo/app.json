@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "Mapp Intelligence Expo",
+    "slug": "mapp-intelligence-expo-example",
+    "scheme": "mapp-intelligence-expo",
+    "version": "1.0.0",
+    "sdkVersion": "56.0.0",
+    "android": {
+      "package": "com.mappintelligence.expoexample"
+    },
+    "ios": {
+      "bundleIdentifier": "com.mappintelligence.expoexample"
+    },
+    "plugins": [
+      "expo-dev-client",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "kotlinVersion": "2.3.20"
+          }
+        }
+      ],
+      "mapp-intelligence-reactnative-plugin"
+    ]
+  }
+}
