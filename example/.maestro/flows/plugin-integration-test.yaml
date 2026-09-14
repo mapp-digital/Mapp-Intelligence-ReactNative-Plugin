@@ -3,6 +3,9 @@
 appId: com.mappinteligencepluginexample
 ---
 - launchApp
+- extendedWaitUntil:
+    visible: "Plugin Integration Test"
+    timeout: 120000
 - tapOn:
     text: "Plugin Integration Test"
 - tapOn:

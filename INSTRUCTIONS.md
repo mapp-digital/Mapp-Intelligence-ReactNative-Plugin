@@ -2,14 +2,15 @@
 
 This guide explains how to clean the project, install dependencies, and build and run the example app for the Mapp Intelligence React Native Plugin.
 
-**Package manager:** This repository is set up for **Yarn 3** (workspaces, `resolutions`, `.yarnrc.yml`). Use **`yarn install`** for dependencies; do not use npm for installs in this repo.
+**Package manager:** This repository is set up for **Yarn 3** (workspaces, `resolutions`, `.yarnrc.yml`). Use **`yarn install`** for root and CLI workspace dependencies. The separate `example-expo/` app uses its own npm install; see [its README](example-expo/README.md).
 
 ---
 
 ## Project structure
 
 - **Root** – The plugin library (`mapp-intelligence-reactnative-plugin`) and its native code (`android/`, `ios/`).
-- **example/** – A sample React Native app that depends on the local plugin and is used for development and testing.
+- **example/** – The existing React Native CLI app, retained for CLI regression testing.
+- **example-expo/** – A separate Expo CNG app with isolated dependencies and generated native projects for Expo testing.
 
 **Linking:** The example app uses **React Native autolinking** for the local plugin. `example/react-native.config.js` points the dependency to the repo root, and `example/android/settings.gradle` passes a custom lockfile list (including the root `yarn.lock`) so the autolinking cache invalidates when workspace deps change. No manual `build.gradle` or `MainApplication` changes are needed. Always run Android from the **example** folder: `cd example` then `yarn android`.
 
@@ -34,7 +35,8 @@ The `clean.sh` script removes build artifacts, caches, and dependency trees so y
 | Location   | Removed |
 |-----------|---------|
 | **Root**  | `node_modules`, `yarn.lock`, `package-lock.json`, `lib/`, Android build dirs (`.gradle`, `build`, etc.), iOS (`Pods`, `build`, `DerivedData`, `*.xcworkspace`) |
-| **example** | Same for the example app: `node_modules`, lockfiles, Android and iOS build/cache dirs |
+| **example** | Same for the CLI example app: `node_modules`, lockfiles, Android and iOS build/cache dirs |
+| **example-expo** | `node_modules`, generated Android/iOS projects, and local Expo/Metro caches; its committed npm lockfile is preserved |
 | **Caches** | Project-local Metro cache (`.metro`) |
 
 It does **not** remove global caches (e.g. Xcode DerivedData, Gradle user cache, Watchman). Instructions for those are printed at the end of the script if you need them.

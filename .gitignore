@@ -88,4 +88,5 @@ lib/
 
 yarn.lock
 package-lock.json
+!/example-expo/package-lock.json
 *.tgz
