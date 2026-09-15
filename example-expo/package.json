@@ -7,18 +7,30 @@
     "start": "expo start --dev-client",
     "android": "expo run:android",
     "ios": "expo run:ios",
+    "prebuild": "expo prebuild --clean --platform all --no-install",
     "prebuild:android": "expo prebuild --clean --platform android --no-install",
+    "prebuild:ios": "expo prebuild --clean --platform ios --no-install",
+    "config:check": "expo config --type public",
     "test:prebuild": "node scripts/check-prebuild.cjs",
+    "typecheck": "tsc --noEmit",
+    "bundle:check": "expo export --platform all --output-dir .expo-export",
     "build:android": "cd android && ./gradlew :app:assembleDebug",
-    "test:integration": "maestro test .maestro/smoke.yaml"
+    "build:ios": "cd ios && pod install && xcodebuild -workspace MappIntelligenceExpo.xcworkspace -scheme MappIntelligenceExpo -configuration Debug -sdk iphonesimulator CODE_SIGNING_ALLOWED=NO",
+    "test:integration": "maestro test .maestro/plugin-integration-test.yaml"
   },
   "dependencies": {
+    "@react-navigation/native": "6.1.18",
+    "@react-navigation/native-stack": "6.11.0",
     "expo": "56.0.0",
+    "expo-build-properties": "56.0.27",
     "expo-dev-client": "56.0.26",
+    "mapp-intelligence-reactnative-plugin": "file:..",
     "react": "19.2.3",
     "react-native": "0.85.3",
-    "react-native-webview": "13.16.1",
-    "mapp-intelligence-reactnative-plugin": "file:..",
-    "expo-build-properties": "56.0.27"
+    "react-native-mapp-plugin": "1.4.2",
+    "react-native-safe-area-context": "~5.7.0",
+    "react-native-screens": "4.25.1",
+    "react-native-video": "6.19.2",
+    "react-native-webview": "13.16.1"
   }
 }

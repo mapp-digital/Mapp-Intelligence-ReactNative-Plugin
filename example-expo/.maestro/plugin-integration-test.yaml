@@ -1,0 +1,17 @@
+# Runs the same representative native API suite as the React Native CLI app.
+appId: com.mappintelligence.expoexample
+---
+- launchApp
+- extendedWaitUntil:
+    visible: "Plugin Integration Test"
+    timeout: 120000
+- tapOn:
+    text: "Plugin Integration Test"
+- tapOn:
+    id: "run-plugin-tests"
+- extendedWaitUntil:
+    visible:
+      id: "plugin-test-results"
+    timeout: 60000
+- assertVisible:
+    id: "plugin-test-all-passed"

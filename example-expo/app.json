@@ -9,7 +9,12 @@
       "package": "com.mappintelligence.expoexample"
     },
     "ios": {
-      "bundleIdentifier": "com.mappintelligence.expoexample"
+      "bundleIdentifier": "com.mappintelligence.expoexample",
+      "infoPlist": {
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true
+        }
+      }
     },
     "plugins": [
       "expo-dev-client",
@@ -21,7 +26,9 @@
           }
         }
       ],
-      "mapp-intelligence-reactnative-plugin"
+      "mapp-intelligence-reactnative-plugin",
+      "./plugins/withAndroidLifecycleVersion",
+      "./plugins/withAppoxeeConfig"
     ]
   }
 }

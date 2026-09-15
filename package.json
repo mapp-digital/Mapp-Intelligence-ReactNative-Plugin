@@ -1,6 +1,6 @@
 {
   "name": "mapp-intelligence-reactnative-plugin",
-  "version": "1.1.3",
+  "version": "2.0.0",
   "description": "The MappIntelligence SDK allows you to track user activities, screen flow and media usage for an App. All data is send to the MappIntelligence tracking system for further analysis.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -38,7 +38,8 @@
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
     "prepare": "bob build",
     "release": "release-it",
-    "test:expo-plugin": "node --test scripts/test-expo-config-plugin.cjs"
+    "test:expo-plugin": "node --test scripts/test-expo-config-plugin.cjs",
+    "test:package": "node scripts/verify-package-artifact.cjs"
   },
   "keywords": [
     "react-native",

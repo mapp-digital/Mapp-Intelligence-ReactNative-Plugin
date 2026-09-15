@@ -2,6 +2,37 @@
 
 All notable changes to this project are documented in this file.
 
+## [2.0.0] - 2026-09-15
+
+### Expo support
+
+- Added package-level Expo config-plugin support for Expo Prebuild and Continuous Native Generation (CNG).
+- Added support for Expo SDK 56 development builds using React Native 0.85.3. **Expo Go is unsupported because this package contains native code.**
+- Made repeated clean Expo prebuilds safe and reproducible. The package does not require Android manifest or iOS project changes.
+- Added the Expo config-plugin entry point and required native files to the published npm package.
+
+### React Native and Android compatibility
+
+- Expanded the supported React Native peer range from `>=0.84.0 <0.85.0` to `>=0.84.0 <0.86.0`.
+- Removed the hard-coded `react-android:0.84.1` dependency. The consuming application's React Native Gradle plugin now selects the matching React Native Android artifact.
+- Removed package-local Android Gradle Plugin and Kotlin plugin pins. The library now uses the compatible Gradle plugins, Kotlin compiler, and Android SDK values supplied by a standard React Native CLI or Expo-generated application.
+- Preserved an Expo application's explicitly configured Kotlin version. For the validated Expo SDK 56 setup, the config plugin supplies Kotlin 2.3.20 only when the application has not selected a version.
+- Retained Android SDK fallbacks of min SDK 24, compile SDK 36, and target SDK 36.
+
+### Upgrade notes
+
+- There are no breaking JavaScript or TypeScript API changes. Existing initialization, configuration, and tracking calls continue to work.
+- A React Native CLI application that already builds version 1.1.3 with compatible Kotlin and Android SDK settings does not need a Kotlin migration. Standard React Native autolinking remains unchanged.
+- Custom Android Gradle projects must make the `com.android.library`, `org.jetbrains.kotlin.android`, and `com.facebook.react` plugins available to the library.
+- Reinstall iOS pods and rebuild the native Android and iOS applications after upgrading. A Metro reload alone cannot apply native package changes.
+- Expo applications must register `mapp-intelligence-reactnative-plugin` in the Expo `plugins` array, run a clean prebuild, and create a new development build.
+- See the [migration guide](docs/MIGRATION.md) for the React Native CLI upgrade checklist and Expo adoption steps.
+
+### Examples and verification
+
+- Kept the existing React Native CLI example for regression testing and added a separate Expo development-build example with equivalent tracking functionality.
+- Added documented checks for Expo config resolution, idempotent clean prebuilds, Android and iOS native builds, TurboModule initialization, representative tracking operations, and existing React Native CLI builds.
+
 ## [1.1.3] - 2026-08-07
 
 ### React Native & Dependencies
