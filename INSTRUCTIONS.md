@@ -1,15 +1,19 @@
 # Development Guide
 
-This guide explains how to clean the project, install dependencies, and build and run the example app for the Mapp Intelligence React Native Plugin.
+This guide explains how to clean the project, install dependencies, and build and run both sample apps for the Mapp Intelligence React Native Plugin:
 
-**Package manager:** This repository is set up for **Yarn 3** (workspaces, `resolutions`, `.yarnrc.yml`). Use **`yarn install`** for dependencies; do not use npm for installs in this repo.
+- `example/` verifies a standard React Native CLI integration.
+- `example-expo/` verifies Expo CNG, prebuild, and development-build integration.
+
+**Package manager:** This repository is set up for **Yarn 3** (workspaces, `resolutions`, `.yarnrc.yml`). Use **`yarn install`** for root and CLI workspace dependencies. The separate `example-expo/` app uses its own npm install; see [its README](example-expo/README.md).
 
 ---
 
 ## Project structure
 
 - **Root** – The plugin library (`mapp-intelligence-reactnative-plugin`) and its native code (`android/`, `ios/`).
-- **example/** – A sample React Native app that depends on the local plugin and is used for development and testing.
+- **example/** – The existing React Native CLI app, retained for CLI regression testing.
+- **example-expo/** – A separate Expo CNG app with isolated dependencies and generated native projects for Expo testing.
 
 **Linking:** The example app uses **React Native autolinking** for the local plugin. `example/react-native.config.js` points the dependency to the repo root, and `example/android/settings.gradle` passes a custom lockfile list (including the root `yarn.lock`) so the autolinking cache invalidates when workspace deps change. No manual `build.gradle` or `MainApplication` changes are needed. Always run Android from the **example** folder: `cd example` then `yarn android`.
 
@@ -18,10 +22,13 @@ This guide explains how to clean the project, install dependencies, and build an
 ## Prerequisites
 
 - **Node.js** ≥ 22.13
-- **Yarn** (v3) – This project uses Yarn 3 with workspaces (`packageManager: yarn@3.6.1`). Use **Yarn** for installing dependencies; npm is not recommended and may cause issues with the local plugin and lockfiles.
+- **Yarn** (v3) – The repository root and React Native CLI example use Yarn workspaces (`packageManager: yarn@3.6.1`).
+- **npm** – The Expo example has an independent npm dependency tree and committed `package-lock.json`.
 - **Android:** Android Studio, SDK, and environment variables (e.g. `ANDROID_HOME`)
-- **iOS:** Xcode, CocoaPods (`bundle` and `pod` from the `example` directory)
+- **iOS:** A full Xcode installation and CocoaPods (`bundle` and `pod` from the `example` directory)
 - **React Native CLI:** Used via `npx react-native` (no global install required)
+- **Expo CLI:** Used through the scripts in `example-expo/package.json` (no global install required)
+- **Maestro:** Optional, for running the integration flows on an installed app
 
 ---
 
@@ -34,7 +41,8 @@ The `clean.sh` script removes build artifacts, caches, and dependency trees so y
 | Location   | Removed |
 |-----------|---------|
 | **Root**  | `node_modules`, `yarn.lock`, `package-lock.json`, `lib/`, Android build dirs (`.gradle`, `build`, etc.), iOS (`Pods`, `build`, `DerivedData`, `*.xcworkspace`) |
-| **example** | Same for the example app: `node_modules`, lockfiles, Android and iOS build/cache dirs |
+| **example** | Same for the CLI example app: `node_modules`, lockfiles, Android and iOS build/cache dirs |
+| **example-expo** | `node_modules`, generated Android/iOS projects, and local Expo/Metro caches; its committed npm lockfile is preserved |
 | **Caches** | Project-local Metro cache (`.metro`) |
 
 It does **not** remove global caches (e.g. Xcode DerivedData, Gradle user cache, Watchman). Instructions for those are printed at the end of the script if you need them.
@@ -57,19 +65,29 @@ The script changes into the repo root automatically, so it is safe to run from a
 
 ## 2. Install dependencies
 
-Use **Yarn** from the **repository root** so both the library and the example app get the correct dependency tree (workspaces and the local plugin are wired for Yarn).
+Use **Yarn** from the **repository root** so the library and React Native CLI example get the correct workspace dependency tree.
 
 ```bash
 # From repo root (required: use Yarn)
 yarn install
 ```
 
-The example app depends on the local plugin via **`file:..`**, which works with Yarn and npm and resolves to the repository root.
+The CLI example depends on the local plugin via **`file:..`**.
 
 This will:
 
 - Install root dependencies and build the library (`lib/` via the `prepare` script).
-- Install the example app dependencies and link the local plugin.
+- Install the CLI example dependencies and link the local plugin.
+
+Install the Expo example separately with npm:
+
+```bash
+cd example-expo
+npm install
+cd ..
+```
+
+The Expo example also depends on the plugin through `file:..`. Its `.npmrc` enables `install-links`, so npm copies the package into `example-expo/node_modules`. This keeps Expo's dependency tree isolated from the Yarn workspace.
 
 **iOS only** – Install CocoaPods dependencies for the example app:
 
@@ -82,7 +100,7 @@ cd ..
 
 ---
 
-## 3. Build and run the example app
+## 3. Build and run the React Native CLI example
 
 All commands below assume you are in the **repository root** unless stated otherwise.
 
@@ -137,9 +155,128 @@ yarn start
 
 ---
 
-## 4. Testing with the published plugin
+## 4. Build and run the Expo example
 
-By default, the example app uses the **local** plugin via `file:..`. Two root-level scripts switch both dependency resolution and React Native autolinking between the local and published plugin.
+Expo Go cannot load this plugin because it contains custom native Android and iOS code. Use an Expo **development build**.
+
+Run these commands from the Expo app directory:
+
+```bash
+cd example-expo
+npm install
+```
+
+### Validate the Expo configuration and prebuild
+
+Check that Expo resolves the local package and its config plugin, then generate both native projects twice to verify that clean prebuilds are repeatable:
+
+```bash
+npm run config:check
+npm run typecheck
+npm run bundle:check
+npm run test:prebuild
+```
+
+For a normal clean prebuild, use one of these commands:
+
+```bash
+npm run prebuild          # Android and iOS
+npm run prebuild:android  # Android only
+npm run prebuild:ios      # iOS only
+```
+
+The generated `example-expo/android/` and `example-expo/ios/` directories are ignored by Git. Treat `app.json`, package config plugins, and native source files in the package as the source of truth instead of editing generated projects.
+
+### Android development build
+
+Start an emulator or connect a device, then build, install, and launch the development client:
+
+```bash
+cd example-expo
+npm run android
+```
+
+To compile a debug APK without installing it:
+
+```bash
+npm run prebuild:android
+npm run build:android
+```
+
+For a faster emulator-only check when the host supports an ARM64 emulator:
+
+```bash
+npm run build:android -- -PreactNativeArchitectures=arm64-v8a
+```
+
+### iOS development build
+
+On macOS with a full Xcode installation, generate the native project and build, install, and launch the development client:
+
+```bash
+cd example-expo
+npm run ios
+```
+
+To compile without launching the app:
+
+```bash
+npm run prebuild:ios
+npm run build:ios
+```
+
+### Start Metro separately
+
+The run commands can start Metro. To manage it in a separate terminal:
+
+```bash
+# Terminal 1
+cd example-expo
+npm start
+
+# Terminal 2
+cd example-expo
+npm run android # or: npm run ios
+```
+
+`npm start` uses `expo start --dev-client`, which targets the installed development build rather than Expo Go.
+
+### Verify module initialization and tracking
+
+The Expo app exposes the same Plugin Integration Test functionality as the CLI app. After installing the development build:
+
+1. Open **Plugin Integration Test**.
+2. Tap **Run All Plugin Tests**.
+3. Confirm that the module initializes and the representative tracking operations finish with 0 failures.
+
+To run the flow with Maestro, keep Metro running and use another terminal:
+
+```bash
+cd example-expo
+npm run test:integration
+```
+
+The development build must already be installed on a connected emulator, simulator, or device.
+
+### Rebuild after package changes
+
+Native package installation or native configuration changes require a new development build. Because npm copies the local package, refresh that copy after changing the library. Run this sequence from the repository root:
+
+```bash
+rm -rf example-expo/node_modules/mapp-intelligence-reactnative-plugin
+cd example-expo
+npm install
+npm run prebuild
+npm run android # or: npm run ios
+```
+
+JavaScript-only app changes normally require only a Metro reload. See [Expo validation](docs/android-expo-validation.md) for the complete repeatable validation sequence.
+
+---
+
+## 5. Testing with the published plugin
+
+By default, the React Native CLI example uses the **local** plugin via `file:..`. Two root-level scripts switch both dependency resolution and React Native autolinking between the local and published plugin.
 
 ### Switch to the published plugin
 
@@ -191,9 +328,11 @@ npx react-native start --reset-cache
 
 ---
 
-## 5. Full reset workflow
+## 6. Full reset workflow
 
-Use this when you want a completely fresh environment (e.g. after pulling changes or switching branches):
+Use this when you want a completely fresh environment after pulling changes or switching branches.
+
+For the React Native CLI example:
 
 ```bash
 ./clean.sh
@@ -203,9 +342,20 @@ cd example && npx react-native run-android
 # or for iOS:  npx react-native run-ios
 ```
 
+For the Expo example:
+
+```bash
+./clean.sh
+yarn install
+cd example-expo
+npm install
+npm run test:prebuild
+npm run android # or: npm run ios
+```
+
 ---
 
-## 6. Plugin Integration Test
+## 7. React Native CLI Plugin Integration Test
 
 The example app includes a **Plugin Integration Test** screen that exercises all plugin methods (with full and null params) and detects exceptions. Use it to catch regressions like nullable→non-nullable parameter changes.
 
@@ -226,7 +376,7 @@ Or: `maestro test example/.maestro/flows/plugin-integration-test.yaml`
 
 ---
 
-## 7. Run tests
+## 8. Run library tests
 
 Unit tests are in `src/__tests__/`. From the **repository root**:
 
@@ -243,7 +393,7 @@ yarn test --testPathPattern="__tests__/index"
 
 ---
 
-## 8. Optional: manual cache cleanup
+## 9. Optional: manual cache cleanup
 
 If you still see odd build or Metro issues, you can clear global caches (optional):
 

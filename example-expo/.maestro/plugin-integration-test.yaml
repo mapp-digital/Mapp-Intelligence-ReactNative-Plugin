@@ -1,6 +1,5 @@
-# Plugin Integration Test - exercises all MappIntelligencePlugin methods
-# and asserts no exceptions occurred.
-appId: com.mappinteligencepluginexample
+# Runs the same representative native API suite as the React Native CLI app.
+appId: com.mappintelligence.expoexample
 ---
 - launchApp
 - extendedWaitUntil:

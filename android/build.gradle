@@ -1,26 +1,7 @@
-buildscript {
-  ext.getExtOrDefault = {name ->
-    return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties['MappinteligencePlugin_' + name]
-  }
-
-  repositories {
-    google()
-    mavenCentral()
-  }
-
-  dependencies {
-    classpath "com.android.tools.build:gradle:8.12.0"
-    classpath("com.facebook.react:react-native-gradle-plugin")
-    // noinspection DifferentKotlinGradleVersion
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${getExtOrDefault('kotlinVersion')}"
-  }
-}
-
-plugins {
-  id("com.android.library")
-  id("org.jetbrains.kotlin.android")
-  id("com.facebook.react") // This is required for New Architecture & Codegen
-}
+// Use the build plugins supplied by the consuming React Native / Expo app.
+apply plugin: "com.android.library"
+apply plugin: "org.jetbrains.kotlin.android"
+apply plugin: "com.facebook.react"
 
 def getExtOrIntegerDefault(name) {
   return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["MappinteligencePlugin_" + name]).toInteger()
@@ -53,24 +34,6 @@ android {
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
   }
-
-  sourceSets {
-    main {
-      java.srcDirs += [
-        "generated/java",
-        "generated/jni"
-      ]
-    }
-  }
-
-  sourceSets {
-    main {
-      java.srcDirs += [
-        "generated/java",
-        "generated/jni"
-      ]
-    }
-  }
 }
 
 repositories {
@@ -78,14 +41,9 @@ repositories {
   google()
 }
 
-def kotlin_version = getExtOrDefault("kotlinVersion")
-
 dependencies {
-  // For < 0.71, this will be from the local maven repo
-  // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
-  //noinspection GradleDynamicVersion
-  implementation "com.facebook.react:react-android:0.84.1"
-  implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  // The consuming app's React Native Gradle plugin selects the matching version.
+  implementation("com.facebook.react:react-android")
 
   implementation("androidx.annotation:annotation:1.9.1")
   implementation("androidx.core:core-ktx:1.16.0")
@@ -94,7 +52,7 @@ dependencies {
 }
 
 react {
-  jsRootDir = rootDir
+  jsRootDir = file("..")
   libraryName = "MappinteligencePlugin"
   codegenJavaPackageName = "com.mappinteligenceplugin"
 }
