@@ -3,7 +3,7 @@ const {
   withProjectBuildGradle,
 } = require('expo/config-plugins');
 
-// The SDK 56 template leaves the Kotlin buildscript dependency versionless.
+// Expo templates leave the Kotlin buildscript dependency versionless.
 // Bind it to the app property (optionally set by expo-build-properties), with a
 // default compatible with both the native SDK metadata and Expo compiler plugins.
 module.exports = function withMappAndroidKotlin(config) {

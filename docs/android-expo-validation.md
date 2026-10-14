@@ -13,9 +13,12 @@ manages codegen. Android SDK values come from the root project when present,
 with library fallbacks for compatible CLI layouts. There is no hard-coded React
 Native Maven version.
 
+The library exports the OkHttp 5.4.0 BOM to align networking dependencies for
+both CLI and Expo consumers, and targets JVM 17 for Java and Kotlin compilation.
+
 Expo discovers the package through React Native autolinking. Its package-level
-`app.plugin.js` supplies Kotlin 2.3.20 for Expo SDK 56 only when the application
-has not selected a version, then binds the generated versionless Kotlin
+`app.plugin.js` supplies Kotlin 2.3.20 for Expo SDK 56 and 57 only when the
+application has not selected a version, then binds the generated versionless Kotlin
 buildscript dependency to that property. Existing Kotlin properties and
 explicit dependency versions remain app-owned. The plugin makes no Android
 manifest or iOS project changes because the Intelligence module does not require
@@ -30,7 +33,7 @@ them.
 
 Android builds use Java 21. React Native 0.84.1 and 0.85.3 both declare Xcode
 16.1 as their minimum. The package peer range is React Native
-`>=0.84.0 <0.86.0`.
+`>=0.84.0 <0.87.0`.
 
 ## Automated package and CNG checks
 
@@ -48,6 +51,18 @@ versioned dependencies, and idempotence. `test:package` performs an `npm pack`
 dry run and requires the config-plugin entry point, Android sources, iOS podspec
 and XCFramework, JavaScript output, and TypeScript declarations while rejecting
 example app files.
+
+Check Android networking alignment from either example's `android/` directory:
+
+```sh
+./gradlew :app:dependencyInsight --configuration debugRuntimeClasspath --dependency com.squareup.okhttp3
+./gradlew :app:dependencyInsight --configuration releaseRuntimeClasspath --dependency com.squareup.okhttp3
+```
+
+The app should inherit `okhttp-bom:5.4.0` from this library and resolve `okhttp`,
+`okhttp-urlconnection`, and `okhttp-java-net-cookiejar` to 5.4.0 (or a newer
+compatible BOM selected by the app). Repeat with `debugCompileClasspath` and
+`releaseCompileClasspath` to verify compile-time alignment as well.
 
 From `example-expo/`:
 

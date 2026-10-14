@@ -23,7 +23,7 @@ The React Native peer range is broadened:
 | Package implementation | React Native peer range |
 | --- | --- |
 | Published `1.1.3` on `main` | `>=0.84.0 <0.85.0` |
-| Expo-compatible `2.0.0` | `>=0.84.0 <0.86.0` |
+| Expo-compatible `2.0.0` | `>=0.84.0 <0.87.0` |
 
 The Android build setup changes, but a working CLI consumer should not need to
 change versions. The published version declares its own React Native and Kotlin
@@ -41,6 +41,7 @@ Gradle project only needs attention if it relied on nonstandard plugin loading.
 | Concern | Handled by the package? | Explanation |
 | --- | --- | --- |
 | React Native Android dependency | Yes | The library declares versionless `react-android`; the consuming React Native Gradle plugin selects the matching version. |
+| OkHttp alignment | Yes | The library exports the OkHttp 5.4.0 BOM to CLI and Expo consumers, aligning the SDK's OkHttp 5 with React Native's networking modules. Remove any app-level `withOkHttpAlignment` config plugin after upgrading. |
 | React Native codegen and autolinking | Yes | Standard React Native CLI and Expo projects discover and generate the TurboModule integration. |
 | Library Android SDK values | Yes, with limits | The library inherits root project SDK values and retains min/compile/target fallbacks of 24/36/36. The application module must still use SDK values compatible with all of its dependencies. |
 | Expo Kotlin selection | Yes | The package config plugin runs before Expo generates/builds Android and supplies Kotlin 2.3.20 when the app has not selected a version. |
@@ -322,7 +323,7 @@ config plugins first.
 
 The validated target for this package is Expo SDK 56.0.0 with React Native
 0.85.3 and React 19.2.3. Do not migrate to a React Native version outside the
-package peer range `>=0.84.0 <0.86.0`.
+package peer range `>=0.84.0 <0.87.0`.
 
 Expo requires its SDK and React Native versions to be compatible. Follow Expo's
 [Adopt Prebuild guide](https://docs.expo.dev/guides/adopting-prebuild/) and
@@ -433,7 +434,7 @@ generated from Expo configuration.
 
 ### Staying on React Native CLI
 
-- [ ] React Native is within `>=0.84.0 <0.86.0`.
+- [ ] React Native is within `>=0.84.0 <0.87.0`.
 - [ ] React satisfies `^19.2.3`.
 - [ ] Android uses min SDK 24+, compile SDK 36+, and Kotlin 2.3.x.
 - [ ] A custom Gradle setup provides the standard React Native build plugins.

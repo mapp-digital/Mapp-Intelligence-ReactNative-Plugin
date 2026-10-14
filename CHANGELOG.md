@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented in this file.
 
+## [Unreleased]
+
+- Widened the React Native peer range to `>=0.84.0 <0.87.0`, including 0.86.3.
+- Replaced manual iOS React Native pod dependencies with `install_modules_dependencies`, resolving the current `ReactCodegen` pod name and removing unused Folly flags.
+- Exported the OkHttp 5.4.0 BOM from the Android library so both Expo and bare React Native apps align networking dependencies without an app-level config plugin.
+- Aligned Java and Kotlin compilation targets to JVM 17.
+- Updated the Expo Kotlin template comment to cover SDK 57 as well as SDK 56.
+
 ## [2.0.0] - 2026-09-15
 
 ### Expo support

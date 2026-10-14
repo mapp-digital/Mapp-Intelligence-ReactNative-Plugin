@@ -95,7 +95,11 @@ export const useWebTracking = (
 
           setTimeout(() => {
             webViewRef.current?.injectJavaScript(
-              `window.WebtrekkAndroidWebViewCallback.getEverId()`
+              `if (window.WebtrekkAndroidWebViewCallback &&
+                   typeof window.WebtrekkAndroidWebViewCallback.getEverId === 'function') {
+                 window.WebtrekkAndroidWebViewCallback.getEverId();
+               }
+               true;`
             );
           }, 1000);
         }
@@ -111,10 +115,7 @@ export const useWebTracking = (
   }, [onLoad]);
 
   const getInjectedJavaScript = (script?: string | undefined | null) => {
-    if (script) {
-      return runOnce + '; true; ' + script;
-    }
-    return runOnce;
+    return runOnce + '\n' + (script || '') + '\n; true;';
   };
 
   return { webViewRef, handleMessage, handleLoad, getInjectedJavaScript };

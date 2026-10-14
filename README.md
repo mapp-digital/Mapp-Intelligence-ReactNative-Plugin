@@ -7,7 +7,7 @@ media usage in React Native applications.
 
 There is no breaking JavaScript or TypeScript API change. This integration does
 not require manual native module registration, and the React Native peer range
-has been expanded from 0.84 to include 0.85.
+has been expanded from 0.84 to include 0.85 and 0.86.
 
 The Android library now uses the React Native, Android, Kotlin, SDK, and Gradle
 configuration supplied by the consuming application. Standard React Native CLI
@@ -20,8 +20,8 @@ There is no new Kotlin migration for an existing CLI application that already
 builds published version 1.1.3. That version already uses Mapp Android SDK
 5.1.14, whose Kotlin 2.3 metadata requires a compatible compiler, and its CLI
 example already uses Kotlin 2.3.21. The new package does not replace the CLI
-application's Kotlin version. For Expo SDK 56, the config plugin supplies Kotlin
-2.3.20 only when the application has not selected a version.
+application's Kotlin version. For Expo SDK 56 and 57, the config plugin supplies
+Kotlin 2.3.20 only when the application has not selected a version.
 
 | Integration | Expo | React Native | React | Android toolchain | Native target |
 | --- | --- | --- | --- | --- | --- |
@@ -29,7 +29,13 @@ application's Kotlin version. For Expo SDK 56, the config plugin supplies Kotlin
 | Expo development build | 56.0.0 | 0.85.3 | 19.2.3 | Kotlin 2.3.20, Gradle 9.3.1, Java 21 | Android min/compile/target SDK 24/36/36; iOS 15.1, Xcode 16.1+ |
 
 The package peer dependencies are React `^19.2.3` and React Native
-`>=0.84.0 <0.86.0`.
+`>=0.84.0 <0.87.0`.
+
+The Android library targets Java and Kotlin JVM 17 and exports the OkHttp 5.4.0
+BOM to align the native SDK and React Native networking dependencies in both
+CLI and Expo applications. An app-level OkHttp alignment config plugin is no
+longer needed. The iOS podspec uses React Native's dependency helper to select
+the matching codegen and TurboModule pods.
 
 Existing consumers should use the [migration guide](docs/MIGRATION.md) for the
 CLI upgrade checklist and the alternatives for adopting Expo.
@@ -196,9 +202,9 @@ the returned `expo.plugins` array.
 
 The config plugin changes only the generated Android Kotlin configuration. It
 does not modify Android manifests or generated iOS projects. It preserves an
-app-provided Kotlin version; when none is present for Expo SDK 56, it supplies
-Kotlin 2.3.20, which is compatible with the Mapp Android SDK metadata and Expo's
-compiler plugins.
+app-provided Kotlin version; when none is present for Expo SDK 56 or 57, it
+supplies Kotlin 2.3.20, which is compatible with the Mapp Android SDK metadata
+and Expo's compiler plugins.
 
 ### 4. Generate clean native projects
 
