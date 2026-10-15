@@ -2,7 +2,7 @@
 
 All notable changes to this project are documented in this file.
 
-## [Unreleased]
+## [2.0.1] - [Unreleased]
 
 - Widened the React Native peer range to `>=0.84.0 <0.87.0`, including 0.86.3.
 - Replaced manual iOS React Native pod dependencies with `install_modules_dependencies`, resolving the current `ReactCodegen` pod name and removing unused Folly flags.
