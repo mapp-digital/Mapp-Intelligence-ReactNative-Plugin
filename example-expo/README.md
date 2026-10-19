@@ -5,7 +5,7 @@ app. Both examples expose configuration, page, action, campaign, ecommerce,
 media, exception, webview, video, fetch, and plugin integration-test screens.
 Keep `../example/` for CLI regression testing; do not convert it to Expo.
 
-The validation target is Expo SDK 56.0.0, React Native 0.85.3, React 19.2.3,
+The validation target is Expo SDK 57.0.30, React Native 0.86.3, React 19.2.3,
 Kotlin 2.3.20, Android SDK 24/36/36, and iOS 15.1. Native directories are
 generated and ignored by Git.
 

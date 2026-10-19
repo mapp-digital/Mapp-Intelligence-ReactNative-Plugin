@@ -1,9 +1,9 @@
 # Migration guide: React Native CLI and Expo
 
-This guide covers migration from the package version `1.1.3` to Expo-compatible version `2.0.0`. It describes three paths:
+This guide covers migration from the package version `1.1.3` to Expo-compatible version `2.0.1`. It describes three paths:
 
 1. Continue using a React Native CLI application.
-2. Add the package to an existing Expo SDK 56 application.
+2. Add the package to an existing Expo SDK 56 or 57 application.
 3. Convert a React Native CLI application to Expo Prebuild/CNG.
 
 ## Is this a breaking change?
@@ -23,7 +23,7 @@ The React Native peer range is broadened:
 | Package implementation | React Native peer range |
 | --- | --- |
 | Published `1.1.3` on `main` | `>=0.84.0 <0.85.0` |
-| Expo-compatible `2.0.0` | `>=0.84.0 <0.87.0` |
+| Expo-compatible `2.0.1` | `>=0.84.0 <0.87.0` |
 
 The Android build setup changes, but a working CLI consumer should not need to
 change versions. The published version declares its own React Native and Kotlin
@@ -180,7 +180,7 @@ cd ..
 ```
 
 Use `bundle exec pod install` when the application manages CocoaPods with a
-Gemfile. The supported iOS deployment target is 15.1, and React Native 0.84/0.85
+Gemfile. The supported iOS deployment target is 15.1, and React Native 0.84–0.86
 requires Xcode 16.1 or newer.
 
 ### 6. Clean and rebuild both native applications
@@ -220,8 +220,8 @@ The repository keeps `example/` as the React Native CLI regression application.
 
 ## Path B: use the package in an existing Expo application
 
-This path applies when the application already uses Expo SDK 56 and React Native
-0.85.3.
+This path applies when the application already uses Expo SDK 57 with React Native
+0.86.3, or Expo SDK 56 with React Native 0.85.3.
 
 ### 1. Install the native package and development client
 
@@ -321,8 +321,8 @@ config plugins first.
 
 ### 1. Choose a supported Expo and React Native pair
 
-The validated target for this package is Expo SDK 56.0.0 with React Native
-0.85.3 and React 19.2.3. Do not migrate to a React Native version outside the
+The validated target for this package is Expo SDK 57.0.30 with React Native
+0.86.3 and React 19.2.3. Do not migrate to a React Native version outside the
 package peer range `>=0.84.0 <0.87.0`.
 
 Expo requires its SDK and React Native versions to be compatible. Follow Expo's
@@ -346,14 +346,14 @@ Kotlin compatibility change; it cannot preserve unrelated native app edits.
 
 ### 3. Adopt Expo modules and the Expo entry point
 
-After aligning the application with React Native 0.85.3, run Expo's automatic
+After aligning the application with React Native 0.86.3, run Expo's automatic
 existing-app installer:
 
 ```sh
 npx install-expo-modules@latest
 ```
 
-Confirm that the resulting Expo dependency is SDK 56 compatible. If the
+Confirm that the resulting Expo dependency is SDK 57 compatible. If the
 automatic installer cannot update a customized project, follow the manual
 Android and iOS changes in Expo's existing-app installation guide.
 
@@ -444,7 +444,7 @@ generated from Expo configuration.
 
 ### Moving to Expo Prebuild/CNG
 
-- [ ] Expo SDK and React Native versions are compatible; SDK 56/RN 0.85.3 is the
+- [ ] Expo SDK and React Native versions are compatible; SDK 57/RN 0.86.3 is the
   validated target.
 - [ ] Existing native customizations were moved into Expo configuration or
   app-level config plugins.

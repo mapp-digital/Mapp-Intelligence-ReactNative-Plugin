@@ -29,9 +29,9 @@ them.
 | App | Expo | React Native | React | Kotlin | Gradle | Native target |
 | --- | --- | --- | --- | --- | --- | --- |
 | `example/` CLI regression | — | 0.84.1 | 19.2.3 | 2.3.21 | 9.0 | Android 24/36/36; iOS 15.1, Xcode 16.1+ |
-| `example-expo/` development build | 56.0.0 | 0.85.3 | 19.2.3 | 2.3.20 | 9.3.1 | Android 24/36/36; iOS 15.1, Xcode 16.1+ |
+| `example-expo/` development build | 57.0.30 | 0.86.3 | 19.2.3 | 2.3.20 | 9.3.1 | Android 24/36/36; iOS 15.1, Xcode 16.1+ |
 
-Android builds use Java 21. React Native 0.84.1 and 0.85.3 both declare Xcode
+Android builds use Java 21. React Native 0.84.1 and 0.86.3 both declare Xcode
 16.1 as their minimum. The package peer range is React Native
 `>=0.84.0 <0.87.0`.
 
@@ -74,7 +74,8 @@ npm run test:prebuild
 ```
 
 `test:prebuild` runs `expo prebuild --clean --platform all --no-install` twice
-and compares both generated projects. Xcode object IDs are normalized before
+and asserts that the package plugin writes exactly one Kotlin version property
+and binds the Kotlin classpath to it, then compares both generated projects. Xcode object IDs are normalized before
 comparison because clean Xcode project generation assigns new opaque IDs. The
 current check compares 36 Android and 18 iOS files.
 
@@ -127,7 +128,7 @@ npm start
 npm run test:integration
 ```
 
-## Results recorded on 2026-09-15
+## Results recorded on 2026-09-15 (Expo SDK 56 / RN 0.85.3)
 
 | Check | Result |
 | --- | --- |
@@ -149,3 +150,30 @@ The iOS commands above are the remaining release validation gate. The local
 CocoaPods attempt reached autolinking and codegen discovery, then stopped because
 the selected developer directory contains Command Line Tools rather than full
 Xcode. This is an environment limitation rather than an autolinking error.
+
+## Results recorded on 2026-10-19 (Expo SDK 57 / RN 0.86.3)
+
+The Expo example now installs Expo 57.0.30, React Native 0.86.3,
+`expo-build-properties` 57.0.22, `expo-dev-client` 57.0.20, and
+`react-native-screens` 4.26.2 from its committed npm lockfile. React remains
+19.2.3. The package and both lockfiles already declare the required React Native
+peer range `>=0.84.0 <0.87.0`.
+
+| Check | Result |
+| --- | --- |
+| Expo dependency alignment (`npx expo install --check`) | Passed: dependencies are up to date |
+| Library TypeScript and Jest suite | Passed: 31 tests |
+| Package config-plugin tests and artifact audit | Passed: 4 tests; 169 package files checked |
+| Expo TypeScript and public config resolution | Passed |
+| Android and iOS JavaScript exports | Passed |
+| Two clean all-platform prebuilds | Passed: 36 Android and 18 iOS files identical; Kotlin property and classpath assertions passed |
+| Expo Android arm64 debug APK (`assembleDebug`) | Passed: 433 Gradle tasks executed |
+| Expo Android TurboModule initialization and representative tracking flow | Passed on Pixel_10; Maestro reached `plugin-test-all-passed` |
+| Expo iOS autolinking | Passed: resolves the Intelligence podspec |
+| Android debug runtime dependency alignment | Passed: React Native 0.86.3, Intelligence Android 5.1.14, and OkHttp modules aligned to 5.4.0 |
+| RN 0.86.3 iOS codegen | Passed: generated Intelligence TurboModule artifacts and module providers |
+| iOS native build/runtime | Not run: only Command Line Tools are installed; full Xcode is required |
+
+The React Native CLI sample remains on 0.84.1; its native build and runtime
+checks were not repeated for this Expo sample upgrade. iOS code generation and
+JavaScript export do not replace the iOS native build/runtime release gate.

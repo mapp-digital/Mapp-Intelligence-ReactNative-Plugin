@@ -26,7 +26,7 @@ Kotlin 2.3.20 only when the application has not selected a version.
 | Integration | Expo | React Native | React | Android toolchain | Native target |
 | --- | --- | --- | --- | --- | --- |
 | React Native CLI | — | 0.84.1 | 19.2.3 | Kotlin 2.3.21, Gradle 9.0, Java 21 | Android min/compile/target SDK 24/36/36; iOS 15.1, Xcode 16.1+ |
-| Expo development build | 56.0.0 | 0.85.3 | 19.2.3 | Kotlin 2.3.20, Gradle 9.3.1, Java 21 | Android min/compile/target SDK 24/36/36; iOS 15.1, Xcode 16.1+ |
+| Expo development build | 57.0.30 | 0.86.3 | 19.2.3 | Kotlin 2.3.20, Gradle 9.3.1, Java 21 | Android min/compile/target SDK 24/36/36; iOS 15.1, Xcode 16.1+ |
 
 The package peer dependencies are React `^19.2.3` and React Native
 `>=0.84.0 <0.87.0`.

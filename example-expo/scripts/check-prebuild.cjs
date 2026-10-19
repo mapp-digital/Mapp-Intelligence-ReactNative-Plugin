@@ -52,6 +52,28 @@ function prebuild() {
   );
   if (result.error) throw result.error;
   assert.equal(result.status, 0, 'Expo prebuild failed');
+  // Check the package plugin's effects as well as repeatability: two identical
+  // projects would also pass the snapshot check if the plugin stopped running.
+  const gradleProperties = fs.readFileSync(
+    path.join(appRoot, 'android/gradle.properties'),
+    'utf8'
+  );
+  assert.match(gradleProperties, /^android\.kotlinVersion=2\.3\.20$/m);
+  assert.equal(
+    (gradleProperties.match(/^android\.kotlinVersion=/gm) || []).length,
+    1,
+    'Expected exactly one Kotlin version property'
+  );
+  const buildGradle = fs.readFileSync(
+    path.join(appRoot, 'android/build.gradle'),
+    'utf8'
+  );
+  assert.ok(
+    buildGradle.includes(
+      'classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${findProperty(\'android.kotlinVersion\')}")'
+    ),
+    'Package config plugin did not bind the Kotlin classpath to the app property'
+  );
   return {
     android: snapshot(path.join(appRoot, 'android')),
     ios: snapshot(path.join(appRoot, 'ios')),

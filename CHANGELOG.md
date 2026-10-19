@@ -4,6 +4,8 @@ All notable changes to this project are documented in this file.
 
 ## [2.0.1] - [Unreleased]
 
+- Upgraded the Expo development-build example to Expo SDK 57.0.30 and React Native 0.86.3, with SDK-compatible native modules.
+- Added generated-project assertions for the package config plugin's Kotlin property and Gradle classpath binding to the repeatable prebuild check.
 - Widened the React Native peer range to `>=0.84.0 <0.87.0`, including 0.86.3.
 - Replaced manual iOS React Native pod dependencies with `install_modules_dependencies`, resolving the current `ReactCodegen` pod name and removing unused Folly flags.
 - Exported the OkHttp 5.4.0 BOM from the Android library so both Expo and bare React Native apps align networking dependencies without an app-level config plugin.
