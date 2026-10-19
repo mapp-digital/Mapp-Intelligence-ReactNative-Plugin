@@ -1,8 +1,8 @@
 
 #ifdef RCT_NEW_ARCH_ENABLED
-#import "RNMappinteligencePluginSpec.h"
+#import <MappinteligencePlugin/MappinteligencePlugin.h>
 
-@interface MappinteligencePlugin : NSObject <NativeMappinteligencePluginSpec>
+@interface MappinteligencePlugin : NSObject <NativeMappintelligencePluginSpec>
 #else
 #import <React/RCTBridgeModule.h>
 

@@ -255,10 +255,16 @@ The package config plugin:
   56 setup.
 - Connects Expo's generated versionless Kotlin Gradle dependency to that
   property.
-- Makes no Android manifest or iOS project changes.
+- On Expo SDK 57.0.23+ within SDK 57, generates the iOS scene manifest and moves
+  the standard Swift AppDelegate's window startup to Expo's scene delegate for
+  Xcode 27 / iOS 27 compatibility. No separate `expo-build-properties` iOS
+  setting is needed.
 
-No Mapp Intelligence permissions, manifest entries, `Info.plist` entries, or
-manual Xcode files are required by this package.
+No manual Android manifest or Xcode edits are required. Apps with a custom iOS
+scene lifecycle can opt out with
+`["mapp-intelligence-reactnative-plugin", { "ios": { "enableSceneSupport": false } }]`.
+Older Expo versions keep their existing lifecycle, and SDK 58+ uses its native
+scene template. Upgrade older SDK 57 patches before building with Xcode 27.
 
 ### 3. Resolve the Expo configuration
 
@@ -341,8 +347,9 @@ Before the first clean Prebuild, inventory changes currently stored in:
 - Native files required by other installed SDKs.
 
 Move those settings into `app.json`, `app.config.js`, `app.config.ts`, or app-level
-config plugins. The Mapp Intelligence package plugin covers only its Android
-Kotlin compatibility change; it cannot preserve unrelated native app edits.
+config plugins. The Mapp Intelligence package plugin handles Android Kotlin
+compatibility and the standard Expo SDK 57 iOS scene migration; unrelated
+native app edits still need their own config plugins.
 
 ### 3. Adopt Expo modules and the Expo entry point
 

@@ -200,11 +200,21 @@ Add `mapp-intelligence-reactnative-plugin` to the `plugins` array in `app.json`:
 For a JavaScript or TypeScript Expo configuration, add the same package name to
 the returned `expo.plugins` array.
 
-The config plugin changes only the generated Android Kotlin configuration. It
-does not modify Android manifests or generated iOS projects. It preserves an
-app-provided Kotlin version; when none is present for Expo SDK 56 or 57, it
-supplies Kotlin 2.3.20, which is compatible with the Mapp Android SDK metadata
-and Expo's compiler plugins.
+The config plugin preserves an app-provided Kotlin version; when none is present
+for Expo SDK 56 or 57, it supplies Kotlin 2.3.20, which is compatible with the
+Mapp Android SDK metadata and Expo's compiler plugins.
+
+On Expo SDK 57.0.23 and newer 57.x releases, the package plugin also generates
+the iOS scene manifest and migrates the standard Swift AppDelegate to Expo's
+built-in scene delegate. This enables startup with Xcode 27 / iOS 27 without a
+separate `expo-build-properties` iOS setting. SDK 56 and earlier 57.x patches keep
+their existing lifecycle; SDK 58 and newer provide scenes in their templates.
+
+Apps that manage their own scene lifecycle can disable this migration with
+`["mapp-intelligence-reactnative-plugin", { "ios": { "enableSceneSupport": false } }]`.
+An existing `expo-build-properties` scene opt-out is also respected unless the
+Mapp plugin explicitly overrides it. Custom AppDelegates or scene manifests
+are not overwritten automatically. See [Expo's scene lifecycle guide](https://github.com/expo/fyi/blob/main/ios-scene-lifecycle.md).
 
 ### 4. Generate clean native projects
 

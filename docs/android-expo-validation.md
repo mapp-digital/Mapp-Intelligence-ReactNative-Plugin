@@ -20,9 +20,10 @@ Expo discovers the package through React Native autolinking. Its package-level
 `app.plugin.js` supplies Kotlin 2.3.20 for Expo SDK 56 and 57 only when the
 application has not selected a version, then binds the generated versionless Kotlin
 buildscript dependency to that property. Existing Kotlin properties and
-explicit dependency versions remain app-owned. The plugin makes no Android
-manifest or iOS project changes because the Intelligence module does not require
-them.
+explicit dependency versions remain app-owned. For Expo SDK 57.0.23+ within SDK
+57, the plugin also generates the iOS scene manifest and migrates the standard
+Swift AppDelegate to Expo's built-in scene delegate. Apps with custom scene
+handling can opt out through the Mapp plugin's `ios.enableSceneSupport` option.
 
 ## Validated targets
 
@@ -47,7 +48,9 @@ npm run test:package
 ```
 
 `test:expo-plugin` covers absent and app-owned Kotlin settings, explicitly
-versioned dependencies, and idempotence. `test:package` performs an `npm pack`
+versioned dependencies, iOS scene generation and idempotence, Expo version
+boundaries, scene opt-outs, and custom native configuration conflicts.
+`test:package` performs an `npm pack`
 dry run and requires the config-plugin entry point, Android sources, iOS podspec
 and XCFramework, JavaScript output, and TypeScript declarations while rejecting
 example app files.
@@ -75,7 +78,8 @@ npm run test:prebuild
 
 `test:prebuild` runs `expo prebuild --clean --platform all --no-install` twice
 and asserts that the package plugin writes exactly one Kotlin version property
-and binds the Kotlin classpath to it, then compares both generated projects. Xcode object IDs are normalized before
+and binds the Kotlin classpath to it. It also checks the generated iOS scene
+manifest and AppDelegate startup before comparing both generated projects. Xcode object IDs are normalized before
 comparison because clean Xcode project generation assigns new opaque IDs. The
 current check compares 36 Android and 18 iOS files.
 

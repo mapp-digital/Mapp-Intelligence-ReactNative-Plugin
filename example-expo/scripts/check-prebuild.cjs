@@ -3,6 +3,7 @@ const { createHash } = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
 const assert = require('node:assert/strict');
+const plist = require('@expo/plist').default;
 
 const appRoot = path.resolve(__dirname, '..');
 function canonicalizePbxProject(contents) {
@@ -74,6 +75,26 @@ function prebuild() {
     ),
     'Package config plugin did not bind the Kotlin classpath to the app property'
   );
+  const iosRoot = path.join(appRoot, 'ios/MappIntelligenceExpo');
+  const infoPlist = plist.parse(
+    fs.readFileSync(path.join(iosRoot, 'Info.plist'), 'utf8')
+  );
+  const manifest = infoPlist.UIApplicationSceneManifest;
+  assert.equal(manifest?.UIApplicationSupportsMultipleScenes, false);
+  assert.equal(
+    manifest.UISceneConfigurations.UIWindowSceneSessionRoleApplication[0]
+      .UISceneDelegateClassName,
+    'EXExpoAppSceneDelegate'
+  );
+  const appDelegate = fs.readFileSync(
+    path.join(iosRoot, 'AppDelegate.swift'),
+    'utf8'
+  );
+  assert.match(
+    appDelegate,
+    /AppDelegate: ExpoAppDelegate, ExpoReactNativeFactoryProvider/
+  );
+  assert.doesNotMatch(appDelegate, /UIWindow\(frame:|factory\.startReactNative\(/);
   return {
     android: snapshot(path.join(appRoot, 'android')),
     ios: snapshot(path.join(appRoot, 'ios')),
