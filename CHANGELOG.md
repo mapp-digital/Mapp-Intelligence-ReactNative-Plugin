@@ -4,7 +4,7 @@ All notable changes to this project are documented in this file.
 
 ## [2.0.1] - [Unreleased]
 
-- The package Expo config plugin now automatically enables iOS scene support on Expo SDK 57.0.23+, with an opt-out for custom scene lifecycles. Consumers no longer need a separate `expo-build-properties` iOS setting to launch with Xcode 27 / iOS 27.
+- The Expo SDK 57 sample opts in to iOS scene support through `expo-build-properties` for Xcode 27 / iOS 27. Expo owns the scene migration; the package config plugin retains its Android Kotlin integration.
 - Fixed iOS New Architecture builds by importing the configured Codegen header, using the generated protocol and TurboModule adapter, and matching native method signatures to the TypeScript spec.
 - Upgraded the Expo development-build example to Expo SDK 57.0.30 and React Native 0.86.3, with SDK-compatible native modules.
 - Added generated-project assertions for the package config plugin's Kotlin property and Gradle classpath binding to the repeatable prebuild check.

@@ -252,19 +252,26 @@ The package config plugin:
 
 - Preserves an existing `android.kotlinVersion` value.
 - Supplies Kotlin 2.3.20 when that property is absent in the validated Expo SDK
-  56 setup.
+  56 and 57 setups.
 - Connects Expo's generated versionless Kotlin Gradle dependency to that
   property.
-- On Expo SDK 57.0.23+ within SDK 57, generates the iOS scene manifest and moves
-  the standard Swift AppDelegate's window startup to Expo's scene delegate for
-  Xcode 27 / iOS 27 compatibility. No separate `expo-build-properties` iOS
-  setting is needed.
 
-No manual Android manifest or Xcode edits are required. Apps with a custom iOS
-scene lifecycle can opt out with
-`["mapp-intelligence-reactnative-plugin", { "ios": { "enableSceneSupport": false } }]`.
-Older Expo versions keep their existing lifecycle, and SDK 58+ uses its native
-scene template. Upgrade older SDK 57 patches before building with Xcode 27.
+The native module is registered through React Native autolinking. The Mapp
+config plugin handles Android Kotlin configuration.
+
+For SDK 57 apps built with Xcode 27 / iOS 27, use Expo 57.0.23 or newer within
+SDK 57. Install or update `expo-build-properties` with
+`npx expo install expo-build-properties`, then add the application opt-in:
+
+```json
+["expo-build-properties", { "ios": { "enableSceneSupport": true } }]
+```
+
+Merge this into the application's existing plugin options, preserving any
+Android settings. Expo migrates the standard AppDelegate and scene manifest
+during prebuild. Apps with custom native lifecycle code should follow
+[Expo's scene migration guide](https://github.com/expo/fyi/blob/main/ios-scene-lifecycle.md#staying-on-sdk-57-with-xcode-27).
+Remove the option after upgrading to SDK 58, which enables scenes by default.
 
 ### 3. Resolve the Expo configuration
 
@@ -348,8 +355,8 @@ Before the first clean Prebuild, inventory changes currently stored in:
 
 Move those settings into `app.json`, `app.config.js`, `app.config.ts`, or app-level
 config plugins. The Mapp Intelligence package plugin handles Android Kotlin
-compatibility and the standard Expo SDK 57 iOS scene migration; unrelated
-native app edits still need their own config plugins.
+compatibility. Use `expo-build-properties` for the SDK 57 iOS scene opt-in;
+other native app edits need their own config plugins.
 
 ### 3. Adopt Expo modules and the Expo entry point
 

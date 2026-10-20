@@ -204,17 +204,20 @@ The config plugin preserves an app-provided Kotlin version; when none is present
 for Expo SDK 56 or 57, it supplies Kotlin 2.3.20, which is compatible with the
 Mapp Android SDK metadata and Expo's compiler plugins.
 
-On Expo SDK 57.0.23 and newer 57.x releases, the package plugin also generates
-the iOS scene manifest and migrates the standard Swift AppDelegate to Expo's
-built-in scene delegate. This enables startup with Xcode 27 / iOS 27 without a
-separate `expo-build-properties` iOS setting. SDK 56 and earlier 57.x patches keep
-their existing lifecycle; SDK 58 and newer provide scenes in their templates.
+For Expo SDK 57 apps built with Xcode 27 / iOS 27, install or update
+`expo-build-properties` with `npx expo install expo-build-properties`, then opt
+in to scene support in the application's plugin options:
 
-Apps that manage their own scene lifecycle can disable this migration with
-`["mapp-intelligence-reactnative-plugin", { "ios": { "enableSceneSupport": false } }]`.
-An existing `expo-build-properties` scene opt-out is also respected unless the
-Mapp plugin explicitly overrides it. Custom AppDelegates or scene manifests
-are not overwritten automatically. See [Expo's scene lifecycle guide](https://github.com/expo/fyi/blob/main/ios-scene-lifecycle.md).
+```json
+["expo-build-properties", { "ios": { "enableSceneSupport": true } }]
+```
+
+Merge this setting into an existing `expo-build-properties` entry, preserving
+its other options. This requires Expo 57.0.23 or newer within SDK 57 and an
+updated `expo-build-properties`. Expo owns the AppDelegate and scene manifest
+migration; the Mapp config plugin handles Android Kotlin configuration. The
+sample already includes this opt-in. Remove the option after upgrading to SDK
+58, whose templates enable scenes. See [Expo's scene lifecycle guide](https://github.com/expo/fyi/blob/main/ios-scene-lifecycle.md#staying-on-sdk-57-with-xcode-27).
 
 ### 4. Generate clean native projects
 

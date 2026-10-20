@@ -6,6 +6,17 @@ const assert = require('node:assert/strict');
 const plist = require('@expo/plist').default;
 
 const appRoot = path.resolve(__dirname, '..');
+const appConfig = JSON.parse(
+  fs.readFileSync(path.join(appRoot, 'app.json'), 'utf8')
+).expo;
+const buildProperties = appConfig.plugins.find(
+  (plugin) => Array.isArray(plugin) && plugin[0] === 'expo-build-properties'
+)?.[1];
+assert.equal(
+  buildProperties?.ios?.enableSceneSupport,
+  true,
+  'The SDK 57 sample must opt in to scenes through expo-build-properties'
+);
 function canonicalizePbxProject(contents) {
   const ids = new Map();
   return contents.replace(/[A-F0-9]{24}/g, (id) => {
@@ -75,6 +86,7 @@ function prebuild() {
     ),
     'Package config plugin did not bind the Kotlin classpath to the app property'
   );
+  // Expo's expo-build-properties plugin owns the sample's scene migration.
   const iosRoot = path.join(appRoot, 'ios/MappIntelligenceExpo');
   const infoPlist = plist.parse(
     fs.readFileSync(path.join(iosRoot, 'Info.plist'), 'utf8')

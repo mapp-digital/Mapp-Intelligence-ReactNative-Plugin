@@ -25,8 +25,9 @@ npm run prebuild
 the generated projects for idempotence. It deletes and regenerates both native
 directories, so keep native settings in `app.json` or config plugins.
 
-The package's plugin configures the Kotlin compiler required by the Android SDK
-and enables Expo SDK 57's iOS scene lifecycle.
+The package's plugin configures the Kotlin compiler required by the Android SDK.
+The sample opts in to Expo SDK 57's iOS scene lifecycle through its existing
+`expo-build-properties` entry in `app.json`.
 This example has two additional app-local plugins: one constrains AndroidX
 Lifecycle for the combined Mapp Engage/video dependency graph, and one adds
 Mapp Engage's `AppoxeeConfig.plist` to the generated iOS target. Neither setting
@@ -44,11 +45,12 @@ npm run android
 
 iOS, on a macOS host with full Xcode and CocoaPods:
 
-The Mapp Intelligence config plugin automatically enables the UIKit scene
-lifecycle required by Xcode 27 / iOS 27 on Expo SDK 57.0.23+. Prebuild configures
-Expo's scene delegate and moves window creation out of `AppDelegate`. The
-`app.json` file only needs the existing Mapp plugin registration for this;
-no separate `expo-build-properties` iOS setting is required.
+The sample sets `ios.enableSceneSupport: true` in its `expo-build-properties`
+options for Xcode 27 / iOS 27. Expo owns the scene manifest and AppDelegate
+migration during prebuild. This requires Expo 57.0.23 or newer within SDK 57 and
+an updated `expo-build-properties`, both already installed by the sample.
+Remove the option after upgrading to SDK 58. See
+[Expo's scene lifecycle guide](https://github.com/expo/fyi/blob/main/ios-scene-lifecycle.md#staying-on-sdk-57-with-xcode-27).
 
 ```sh
 npm run prebuild:ios
