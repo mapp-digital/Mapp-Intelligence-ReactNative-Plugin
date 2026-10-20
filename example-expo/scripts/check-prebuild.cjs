@@ -64,8 +64,7 @@ function prebuild() {
   );
   if (result.error) throw result.error;
   assert.equal(result.status, 0, 'Expo prebuild failed');
-  // Check the package plugin's effects as well as repeatability: two identical
-  // projects would also pass the snapshot check if the plugin stopped running.
+  // Expo owns compiler selection through the app's expo-build-properties options.
   const gradleProperties = fs.readFileSync(
     path.join(appRoot, 'android/gradle.properties'),
     'utf8'
@@ -82,9 +81,9 @@ function prebuild() {
   );
   assert.ok(
     buildGradle.includes(
-      'classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${findProperty(\'android.kotlinVersion\')}")'
+      'classpath("org.jetbrains.kotlin:kotlin-gradle-plugin" + (findProperty(\'android.kotlinVersion\') ? ":${findProperty(\'android.kotlinVersion\')}" : ""))'
     ),
-    'Package config plugin did not bind the Kotlin classpath to the app property'
+    'Expected the Kotlin classpath to honor the app version with a versionless fallback'
   );
   // Expo's expo-build-properties plugin owns the sample's scene migration.
   const iosRoot = path.join(appRoot, 'ios/MappIntelligenceExpo');

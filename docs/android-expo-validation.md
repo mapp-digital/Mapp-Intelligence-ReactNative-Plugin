@@ -16,16 +16,17 @@ Native Maven version.
 The library exports the OkHttp 5.4.0 BOM to align networking dependencies for
 both CLI and Expo consumers, and targets JVM 17 for Java and Kotlin compilation.
 
-Expo discovers the package through React Native autolinking. Its package-level
-`app.plugin.js` supplies Kotlin 2.3.20 for Expo SDK 56 and 57 only when the
-application has not selected a version, then binds the generated versionless Kotlin
-buildscript dependency to that property. Existing Kotlin properties and
-explicit dependency versions remain app-owned.
+Expo discovers the package through React Native autolinking. The package's
+`app.plugin.js` connects an explicit `android.kotlinVersion` to the Gradle
+classpath without supplying a default. With no app override, the dependency
+remains versionless and the framework selects the compiler.
+The app owns compiler selection. The sample selects Kotlin 2.3.20 through
+`expo-build-properties` to meet the native SDK's Kotlin 2.3 requirement; Expo
+owns the compiler version, and the package config plugin binds it to the classpath.
 
 The sample's `expo-build-properties` options enable `ios.enableSceneSupport`
 for Expo SDK 57 builds with Xcode 27 / iOS 27. Expo generates the scene manifest
-and migrates the standard Swift AppDelegate. The Mapp plugin only handles
-Android Kotlin configuration. See [Expo's scene lifecycle guide](https://github.com/expo/fyi/blob/main/ios-scene-lifecycle.md#staying-on-sdk-57-with-xcode-27).
+and migrates the standard Swift AppDelegate. See [Expo's scene lifecycle guide](https://github.com/expo/fyi/blob/main/ios-scene-lifecycle.md#staying-on-sdk-57-with-xcode-27).
 
 ## Validated targets
 
@@ -79,10 +80,10 @@ npm run test:prebuild
 ```
 
 `test:prebuild` runs `expo prebuild --clean --platform all --no-install` twice
-and asserts that the package plugin writes exactly one Kotlin version property
-and binds the Kotlin classpath to it. It also checks that the sample opts in to
-scenes through `expo-build-properties` and that Expo generates the expected
-iOS scene manifest and AppDelegate startup. Xcode object IDs are normalized before
+and asserts that Expo writes the app-selected Kotlin version exactly once
+and checks the package's Kotlin classpath binding with a versionless fallback.
+It also checks that the sample opts in to scenes through `expo-build-properties`
+and that Expo generates the expected iOS scene manifest and AppDelegate startup. Xcode object IDs are normalized before
 comparison because clean Xcode project generation assigns new opaque IDs. The
 current check compares 36 Android and 18 iOS files.
 

@@ -25,7 +25,10 @@ npm run prebuild
 the generated projects for idempotence. It deletes and regenerates both native
 directories, so keep native settings in `app.json` or config plugins.
 
-The package's plugin configures the Kotlin compiler required by the Android SDK.
+The app selects Kotlin 2.3.20 through `expo-build-properties` to meet the native
+SDK's Kotlin 2.3 requirement. The package's config plugin connects that app
+setting to the Gradle classpath without supplying its own version. When the app
+has no override, the framework selects the compiler.
 The sample opts in to Expo SDK 57's iOS scene lifecycle through its existing
 `expo-build-properties` entry in `app.json`.
 This example has two additional app-local plugins: one constrains AndroidX

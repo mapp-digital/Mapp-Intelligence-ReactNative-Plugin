@@ -44,7 +44,7 @@ Gradle project only needs attention if it relied on nonstandard plugin loading.
 | OkHttp alignment | Yes | The library exports the OkHttp 5.4.0 BOM to CLI and Expo consumers, aligning the SDK's OkHttp 5 with React Native's networking modules. Remove any app-level `withOkHttpAlignment` config plugin after upgrading. |
 | React Native codegen and autolinking | Yes | Standard React Native CLI and Expo projects discover and generate the TurboModule integration. |
 | Library Android SDK values | Yes, with limits | The library inherits root project SDK values and retains min/compile/target fallbacks of 24/36/36. The application module must still use SDK values compatible with all of its dependencies. |
-| Expo Kotlin selection | Yes | The package config plugin runs before Expo generates/builds Android and supplies Kotlin 2.3.20 when the app has not selected a version. |
+| Expo Kotlin selection | App-owned | The package inherits the app compiler. If the default is older than Kotlin 2.3, select a compatible version through `expo-build-properties`. |
 | CLI Kotlin selection | Inherited without replacement | The package uses the application's compiler. A CLI app that already builds version `1.1.3` should keep its existing compatible Kotlin version. |
 | Standard Android Gradle plugins | Yes for standard templates | React Native CLI and Expo templates provide them. Only custom Gradle layouts may need to declare them. |
 | iOS autolinking | Yes | CocoaPods discovers the pod after the npm dependency is installed. The user still runs `pod install` and rebuilds. |
@@ -233,31 +233,21 @@ npm install mapp-intelligence-reactnative-plugin
 The package contains native code. Expo Go cannot load it because Expo Go has a
 fixed native runtime. Use a development build for local testing.
 
-### 2. Register the package config plugin
+### 2. Configure the application toolchain
 
-Add the plugin to `app.json`:
+React Native autolinking registers the native module. Add
+`"mapp-intelligence-reactnative-plugin"` to `expo.plugins` to connect an explicit
+app Kotlin version to the Gradle classpath. The plugin supplies no version;
+without an app override, the framework selects the compiler.
+
+The native Android SDK requires a compatible Kotlin 2.3 compiler. The package
+inherits the app compiler without selecting a version. If the app default is older,
+install `expo-build-properties` with `npx expo install expo-build-properties`
+and configure the version in the app:
 
 ```json
-{
-  "expo": {
-    "plugins": ["mapp-intelligence-reactnative-plugin"]
-  }
-}
+["expo-build-properties", { "android": { "kotlinVersion": "2.3.20" } }]
 ```
-
-If the application already has plugins, append the package name to the existing
-array. Do not replace the other entries.
-
-The package config plugin:
-
-- Preserves an existing `android.kotlinVersion` value.
-- Supplies Kotlin 2.3.20 when that property is absent in the validated Expo SDK
-  56 and 57 setups.
-- Connects Expo's generated versionless Kotlin Gradle dependency to that
-  property.
-
-The native module is registered through React Native autolinking. The Mapp
-config plugin handles Android Kotlin configuration.
 
 For SDK 57 apps built with Xcode 27 / iOS 27, use Expo 57.0.23 or newer within
 SDK 57. Install or update `expo-build-properties` with
@@ -287,8 +277,8 @@ Resolve any config-plugin error before generating native projects.
 npx expo prebuild --clean
 ```
 
-Expo Prebuild applies the package plugin, then React Native autolinking discovers
-the Android module and iOS pod. Generated native directories should not contain
+During Expo Prebuild, React Native autolinking discovers the Android module and
+iOS pod. Generated native directories should not contain
 hand-written configuration that would be lost during a clean Prebuild.
 
 ### 5. Build a development application
@@ -354,9 +344,8 @@ Before the first clean Prebuild, inventory changes currently stored in:
 - Native files required by other installed SDKs.
 
 Move those settings into `app.json`, `app.config.js`, `app.config.ts`, or app-level
-config plugins. The Mapp Intelligence package plugin handles Android Kotlin
-compatibility. Use `expo-build-properties` for the SDK 57 iOS scene opt-in;
-other native app edits need their own config plugins.
+config plugins. Use `expo-build-properties` for app-owned Kotlin selection and
+the SDK 57 iOS scene opt-in; other native app edits need their own config plugins.
 
 ### 3. Adopt Expo modules and the Expo entry point
 
