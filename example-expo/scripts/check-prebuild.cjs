@@ -3,8 +3,20 @@ const { createHash } = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
 const assert = require('node:assert/strict');
+const plist = require('@expo/plist').default;
 
 const appRoot = path.resolve(__dirname, '..');
+const appConfig = JSON.parse(
+  fs.readFileSync(path.join(appRoot, 'app.json'), 'utf8')
+).expo;
+const buildProperties = appConfig.plugins.find(
+  (plugin) => Array.isArray(plugin) && plugin[0] === 'expo-build-properties'
+)?.[1];
+assert.equal(
+  buildProperties?.ios?.enableSceneSupport,
+  true,
+  'The SDK 57 sample must opt in to scenes through expo-build-properties'
+);
 function canonicalizePbxProject(contents) {
   const ids = new Map();
   return contents.replace(/[A-F0-9]{24}/g, (id) => {
@@ -52,6 +64,48 @@ function prebuild() {
   );
   if (result.error) throw result.error;
   assert.equal(result.status, 0, 'Expo prebuild failed');
+  // Expo owns compiler selection through the app's expo-build-properties options.
+  const gradleProperties = fs.readFileSync(
+    path.join(appRoot, 'android/gradle.properties'),
+    'utf8'
+  );
+  assert.match(gradleProperties, /^android\.kotlinVersion=2\.3\.20$/m);
+  assert.equal(
+    (gradleProperties.match(/^android\.kotlinVersion=/gm) || []).length,
+    1,
+    'Expected exactly one Kotlin version property'
+  );
+  const buildGradle = fs.readFileSync(
+    path.join(appRoot, 'android/build.gradle'),
+    'utf8'
+  );
+  assert.ok(
+    buildGradle.includes(
+      'classpath("org.jetbrains.kotlin:kotlin-gradle-plugin" + (findProperty(\'android.kotlinVersion\') ? ":${findProperty(\'android.kotlinVersion\')}" : ""))'
+    ),
+    'Expected the Kotlin classpath to honor the app version with a versionless fallback'
+  );
+  // Expo's expo-build-properties plugin owns the sample's scene migration.
+  const iosRoot = path.join(appRoot, 'ios/MappIntelligenceExpo');
+  const infoPlist = plist.parse(
+    fs.readFileSync(path.join(iosRoot, 'Info.plist'), 'utf8')
+  );
+  const manifest = infoPlist.UIApplicationSceneManifest;
+  assert.equal(manifest?.UIApplicationSupportsMultipleScenes, false);
+  assert.equal(
+    manifest.UISceneConfigurations.UIWindowSceneSessionRoleApplication[0]
+      .UISceneDelegateClassName,
+    'EXExpoAppSceneDelegate'
+  );
+  const appDelegate = fs.readFileSync(
+    path.join(iosRoot, 'AppDelegate.swift'),
+    'utf8'
+  );
+  assert.match(
+    appDelegate,
+    /AppDelegate: ExpoAppDelegate, ExpoReactNativeFactoryProvider/
+  );
+  assert.doesNotMatch(appDelegate, /UIWindow\(frame:|factory\.startReactNative\(/);
   return {
     android: snapshot(path.join(appRoot, 'android')),
     ios: snapshot(path.join(appRoot, 'ios')),

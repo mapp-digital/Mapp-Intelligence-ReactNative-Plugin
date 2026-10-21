@@ -1,9 +1,9 @@
 # Migration guide: React Native CLI and Expo
 
-This guide covers migration from the package version `1.1.3` to Expo-compatible version `2.0.0`. It describes three paths:
+This guide covers migration from the package version `1.1.3` to Expo-compatible version `2.0.1`. It describes three paths:
 
 1. Continue using a React Native CLI application.
-2. Add the package to an existing Expo SDK 56 application.
+2. Add the package to an existing Expo SDK 56 or 57 application.
 3. Convert a React Native CLI application to Expo Prebuild/CNG.
 
 ## Is this a breaking change?
@@ -23,7 +23,7 @@ The React Native peer range is broadened:
 | Package implementation | React Native peer range |
 | --- | --- |
 | Published `1.1.3` on `main` | `>=0.84.0 <0.85.0` |
-| Expo-compatible `2.0.0` | `>=0.84.0 <0.86.0` |
+| Expo-compatible `2.0.1` | `>=0.84.0 <0.87.0` |
 
 The Android build setup changes, but a working CLI consumer should not need to
 change versions. The published version declares its own React Native and Kotlin
@@ -41,9 +41,10 @@ Gradle project only needs attention if it relied on nonstandard plugin loading.
 | Concern | Handled by the package? | Explanation |
 | --- | --- | --- |
 | React Native Android dependency | Yes | The library declares versionless `react-android`; the consuming React Native Gradle plugin selects the matching version. |
+| OkHttp alignment | Yes | The library exports the OkHttp 5.4.0 BOM to CLI and Expo consumers, aligning the SDK's OkHttp 5 with React Native's networking modules. Remove any app-level `withOkHttpAlignment` config plugin after upgrading. |
 | React Native codegen and autolinking | Yes | Standard React Native CLI and Expo projects discover and generate the TurboModule integration. |
 | Library Android SDK values | Yes, with limits | The library inherits root project SDK values and retains min/compile/target fallbacks of 24/36/36. The application module must still use SDK values compatible with all of its dependencies. |
-| Expo Kotlin selection | Yes | The package config plugin runs before Expo generates/builds Android and supplies Kotlin 2.3.20 when the app has not selected a version. |
+| Expo Kotlin selection | App-owned | The package inherits the app compiler. If the default is older than Kotlin 2.3, select a compatible version through `expo-build-properties`. |
 | CLI Kotlin selection | Inherited without replacement | The package uses the application's compiler. A CLI app that already builds version `1.1.3` should keep its existing compatible Kotlin version. |
 | Standard Android Gradle plugins | Yes for standard templates | React Native CLI and Expo templates provide them. Only custom Gradle layouts may need to declare them. |
 | iOS autolinking | Yes | CocoaPods discovers the pod after the npm dependency is installed. The user still runs `pod install` and rebuilds. |
@@ -179,7 +180,7 @@ cd ..
 ```
 
 Use `bundle exec pod install` when the application manages CocoaPods with a
-Gemfile. The supported iOS deployment target is 15.1, and React Native 0.84/0.85
+Gemfile. The supported iOS deployment target is 15.1, and React Native 0.84–0.86
 requires Xcode 16.1 or newer.
 
 ### 6. Clean and rebuild both native applications
@@ -219,8 +220,8 @@ The repository keeps `example/` as the React Native CLI regression application.
 
 ## Path B: use the package in an existing Expo application
 
-This path applies when the application already uses Expo SDK 56 and React Native
-0.85.3.
+This path applies when the application already uses Expo SDK 57 with React Native
+0.86.3, or Expo SDK 56 with React Native 0.85.3.
 
 ### 1. Install the native package and development client
 
@@ -232,32 +233,35 @@ npm install mapp-intelligence-reactnative-plugin
 The package contains native code. Expo Go cannot load it because Expo Go has a
 fixed native runtime. Use a development build for local testing.
 
-### 2. Register the package config plugin
+### 2. Configure the application toolchain
 
-Add the plugin to `app.json`:
+React Native autolinking registers the native module. Add
+`"mapp-intelligence-reactnative-plugin"` to `expo.plugins` to connect an explicit
+app Kotlin version to the Gradle classpath. The plugin supplies no version;
+without an app override, the framework selects the compiler.
+
+The native Android SDK requires a compatible Kotlin 2.3 compiler. The package
+inherits the app compiler without selecting a version. If the app default is older,
+install `expo-build-properties` with `npx expo install expo-build-properties`
+and configure the version in the app:
 
 ```json
-{
-  "expo": {
-    "plugins": ["mapp-intelligence-reactnative-plugin"]
-  }
-}
+["expo-build-properties", { "android": { "kotlinVersion": "2.3.20" } }]
 ```
 
-If the application already has plugins, append the package name to the existing
-array. Do not replace the other entries.
+For SDK 57 apps built with Xcode 27 / iOS 27, use Expo 57.0.23 or newer within
+SDK 57. Install or update `expo-build-properties` with
+`npx expo install expo-build-properties`, then add the application opt-in:
 
-The package config plugin:
+```json
+["expo-build-properties", { "ios": { "enableSceneSupport": true } }]
+```
 
-- Preserves an existing `android.kotlinVersion` value.
-- Supplies Kotlin 2.3.20 when that property is absent in the validated Expo SDK
-  56 setup.
-- Connects Expo's generated versionless Kotlin Gradle dependency to that
-  property.
-- Makes no Android manifest or iOS project changes.
-
-No Mapp Intelligence permissions, manifest entries, `Info.plist` entries, or
-manual Xcode files are required by this package.
+Merge this into the application's existing plugin options, preserving any
+Android settings. Expo migrates the standard AppDelegate and scene manifest
+during prebuild. Apps with custom native lifecycle code should follow
+[Expo's scene migration guide](https://github.com/expo/fyi/blob/main/ios-scene-lifecycle.md#staying-on-sdk-57-with-xcode-27).
+Remove the option after upgrading to SDK 58, which enables scenes by default.
 
 ### 3. Resolve the Expo configuration
 
@@ -273,8 +277,8 @@ Resolve any config-plugin error before generating native projects.
 npx expo prebuild --clean
 ```
 
-Expo Prebuild applies the package plugin, then React Native autolinking discovers
-the Android module and iOS pod. Generated native directories should not contain
+During Expo Prebuild, React Native autolinking discovers the Android module and
+iOS pod. Generated native directories should not contain
 hand-written configuration that would be lost during a clean Prebuild.
 
 ### 5. Build a development application
@@ -320,9 +324,9 @@ config plugins first.
 
 ### 1. Choose a supported Expo and React Native pair
 
-The validated target for this package is Expo SDK 56.0.0 with React Native
-0.85.3 and React 19.2.3. Do not migrate to a React Native version outside the
-package peer range `>=0.84.0 <0.86.0`.
+The validated target for this package is Expo SDK 57.0.30 with React Native
+0.86.3 and React 19.2.3. Do not migrate to a React Native version outside the
+package peer range `>=0.84.0 <0.87.0`.
 
 Expo requires its SDK and React Native versions to be compatible. Follow Expo's
 [Adopt Prebuild guide](https://docs.expo.dev/guides/adopting-prebuild/) and
@@ -340,19 +344,19 @@ Before the first clean Prebuild, inventory changes currently stored in:
 - Native files required by other installed SDKs.
 
 Move those settings into `app.json`, `app.config.js`, `app.config.ts`, or app-level
-config plugins. The Mapp Intelligence package plugin covers only its Android
-Kotlin compatibility change; it cannot preserve unrelated native app edits.
+config plugins. Use `expo-build-properties` for app-owned Kotlin selection and
+the SDK 57 iOS scene opt-in; other native app edits need their own config plugins.
 
 ### 3. Adopt Expo modules and the Expo entry point
 
-After aligning the application with React Native 0.85.3, run Expo's automatic
+After aligning the application with React Native 0.86.3, run Expo's automatic
 existing-app installer:
 
 ```sh
 npx install-expo-modules@latest
 ```
 
-Confirm that the resulting Expo dependency is SDK 56 compatible. If the
+Confirm that the resulting Expo dependency is SDK 57 compatible. If the
 automatic installer cannot update a customized project, follow the manual
 Android and iOS changes in Expo's existing-app installation guide.
 
@@ -433,7 +437,7 @@ generated from Expo configuration.
 
 ### Staying on React Native CLI
 
-- [ ] React Native is within `>=0.84.0 <0.86.0`.
+- [ ] React Native is within `>=0.84.0 <0.87.0`.
 - [ ] React satisfies `^19.2.3`.
 - [ ] Android uses min SDK 24+, compile SDK 36+, and Kotlin 2.3.x.
 - [ ] A custom Gradle setup provides the standard React Native build plugins.
@@ -443,7 +447,7 @@ generated from Expo configuration.
 
 ### Moving to Expo Prebuild/CNG
 
-- [ ] Expo SDK and React Native versions are compatible; SDK 56/RN 0.85.3 is the
+- [ ] Expo SDK and React Native versions are compatible; SDK 57/RN 0.86.3 is the
   validated target.
 - [ ] Existing native customizations were moved into Expo configuration or
   app-level config plugins.

@@ -31,8 +31,14 @@ android {
   }
 
   compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
+    sourceCompatibility JavaVersion.VERSION_17
+    targetCompatibility JavaVersion.VERSION_17
+  }
+}
+
+kotlin {
+  compilerOptions {
+    jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
   }
 }
 
@@ -48,6 +54,9 @@ dependencies {
   implementation("androidx.annotation:annotation:1.9.1")
   implementation("androidx.core:core-ktx:1.16.0")
   implementation("androidx.appcompat:appcompat:1.7.0")
+  // Export alignment to CLI and Expo consumers: mixing the SDK's OkHttp 5 with
+  // React Native's OkHttp 4 URLConnection module causes JavaNetCookieJar crashes.
+  api(platform("com.squareup.okhttp3:okhttp-bom:5.4.0"))
   implementation("com.mapp.sdk:intelligence-android:5.1.14")
 }
 

@@ -2,7 +2,19 @@
 
 All notable changes to this project are documented in this file.
 
-## [2.0.0] - 2026-09-28
+## [2.0.1] - [Unreleased]
+
+- Removed the package config plugin's Kotlin default. Apps own compiler selection; the Expo sample uses `expo-build-properties` for Kotlin 2.3.20. The Gradle binding honors an explicit app version and otherwise keeps framework dependency selection.
+- The Expo SDK 57 sample opts in to iOS scene support through `expo-build-properties` for Xcode 27 / iOS 27. Expo owns the scene migration.
+- Fixed iOS New Architecture builds by importing the configured Codegen header, using the generated protocol and TurboModule adapter, and matching native method signatures to the TypeScript spec.
+- Upgraded the Expo development-build example to Expo SDK 57.0.30 and React Native 0.86.3, with SDK-compatible native modules.
+- Updated generated-project assertions to check the app-selected Kotlin property and Gradle binding with a versionless fallback.
+- Widened the React Native peer range to `>=0.84.0 <0.87.0`, including 0.86.3.
+- Replaced manual iOS React Native pod dependencies with `install_modules_dependencies`, resolving the current `ReactCodegen` pod name and removing unused Folly flags.
+- Exported the OkHttp 5.4.0 BOM from the Android library so both Expo and bare React Native apps align networking dependencies without an app-level config plugin.
+- Aligned Java and Kotlin compilation targets to JVM 17.
+
+## [2.0.0] - 2026-09-15
 
 ### Expo support
 

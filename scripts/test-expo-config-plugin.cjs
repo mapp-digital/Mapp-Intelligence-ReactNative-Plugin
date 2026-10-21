@@ -12,10 +12,6 @@ function applyPlugin(properties, contents) {
     require(name) {
       assert.equal(name, 'expo/config-plugins');
       return {
-        withGradleProperties(config, action) {
-          config.properties = action({ modResults: properties }).modResults;
-          return config;
-        },
         withProjectBuildGradle(config, action) {
           config.gradle = action({
             modResults: { language: 'groovy', contents },
@@ -29,18 +25,18 @@ function applyPlugin(properties, contents) {
     fs.readFileSync(path.join(__dirname, '../app.plugin.js'), 'utf8'),
     sandbox
   );
-  return sandbox.module.exports({});
+  const config = { properties };
+  return sandbox.module.exports(config);
 }
 
 const template =
   "dependencies { classpath('org.jetbrains.kotlin:kotlin-gradle-plugin') }";
 
-test('supplies a compatible Expo compiler default and binds the classpath to the property', () => {
+test('leaves compiler selection to the app or framework without adding a default', () => {
   const result = applyPlugin([], template);
-  assert.equal(result.properties.length, 1);
-  assert.equal(result.properties[0].key, 'android.kotlinVersion');
-  assert.equal(result.properties[0].value, '2.3.20');
-  assert.ok(result.gradle.includes("${findProperty('android.kotlinVersion')}"));
+  assert.deepEqual(result.properties, []);
+  assert.ok(result.gradle.includes("findProperty('android.kotlinVersion')"));
+  assert.ok(result.gradle.includes(': ""'));
   assert.ok(!result.gradle.includes('2.3.20'));
 });
 

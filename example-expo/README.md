@@ -5,7 +5,7 @@ app. Both examples expose configuration, page, action, campaign, ecommerce,
 media, exception, webview, video, fetch, and plugin integration-test screens.
 Keep `../example/` for CLI regression testing; do not convert it to Expo.
 
-The validation target is Expo SDK 56.0.0, React Native 0.85.3, React 19.2.3,
+The validation target is Expo SDK 57.0.30, React Native 0.86.3, React 19.2.3,
 Kotlin 2.3.20, Android SDK 24/36/36, and iOS 15.1. Native directories are
 generated and ignored by Git.
 
@@ -25,7 +25,12 @@ npm run prebuild
 the generated projects for idempotence. It deletes and regenerates both native
 directories, so keep native settings in `app.json` or config plugins.
 
-The package's plugin configures the Kotlin compiler required by the Android SDK.
+The app selects Kotlin 2.3.20 through `expo-build-properties` to meet the native
+SDK's Kotlin 2.3 requirement. The package's config plugin connects that app
+setting to the Gradle classpath without supplying its own version. When the app
+has no override, the framework selects the compiler.
+The sample opts in to Expo SDK 57's iOS scene lifecycle through its existing
+`expo-build-properties` entry in `app.json`.
 This example has two additional app-local plugins: one constrains AndroidX
 Lifecycle for the combined Mapp Engage/video dependency graph, and one adds
 Mapp Engage's `AppoxeeConfig.plist` to the generated iOS target. Neither setting
@@ -42,6 +47,13 @@ npm run android
 ```
 
 iOS, on a macOS host with full Xcode and CocoaPods:
+
+The sample sets `ios.enableSceneSupport: true` in its `expo-build-properties`
+options for Xcode 27 / iOS 27. Expo owns the scene manifest and AppDelegate
+migration during prebuild. This requires Expo 57.0.23 or newer within SDK 57 and
+an updated `expo-build-properties`, both already installed by the sample.
+Remove the option after upgrading to SDK 58. See
+[Expo's scene lifecycle guide](https://github.com/expo/fyi/blob/main/ios-scene-lifecycle.md#staying-on-sdk-57-with-xcode-27).
 
 ```sh
 npm run prebuild:ios

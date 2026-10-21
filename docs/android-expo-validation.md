@@ -13,24 +13,31 @@ manages codegen. Android SDK values come from the root project when present,
 with library fallbacks for compatible CLI layouts. There is no hard-coded React
 Native Maven version.
 
-Expo discovers the package through React Native autolinking. Its package-level
-`app.plugin.js` supplies Kotlin 2.3.20 for Expo SDK 56 only when the application
-has not selected a version, then binds the generated versionless Kotlin
-buildscript dependency to that property. Existing Kotlin properties and
-explicit dependency versions remain app-owned. The plugin makes no Android
-manifest or iOS project changes because the Intelligence module does not require
-them.
+The library exports the OkHttp 5.4.0 BOM to align networking dependencies for
+both CLI and Expo consumers, and targets JVM 17 for Java and Kotlin compilation.
+
+Expo discovers the package through React Native autolinking. The package's
+`app.plugin.js` connects an explicit `android.kotlinVersion` to the Gradle
+classpath without supplying a default. With no app override, the dependency
+remains versionless and the framework selects the compiler.
+The app owns compiler selection. The sample selects Kotlin 2.3.20 through
+`expo-build-properties` to meet the native SDK's Kotlin 2.3 requirement; Expo
+owns the compiler version, and the package config plugin binds it to the classpath.
+
+The sample's `expo-build-properties` options enable `ios.enableSceneSupport`
+for Expo SDK 57 builds with Xcode 27 / iOS 27. Expo generates the scene manifest
+and migrates the standard Swift AppDelegate. See [Expo's scene lifecycle guide](https://github.com/expo/fyi/blob/main/ios-scene-lifecycle.md#staying-on-sdk-57-with-xcode-27).
 
 ## Validated targets
 
 | App | Expo | React Native | React | Kotlin | Gradle | Native target |
 | --- | --- | --- | --- | --- | --- | --- |
 | `example/` CLI regression | — | 0.84.1 | 19.2.3 | 2.3.21 | 9.0 | Android 24/36/36; iOS 15.1, Xcode 16.1+ |
-| `example-expo/` development build | 56.0.0 | 0.85.3 | 19.2.3 | 2.3.20 | 9.3.1 | Android 24/36/36; iOS 15.1, Xcode 16.1+ |
+| `example-expo/` development build | 57.0.30 | 0.86.3 | 19.2.3 | 2.3.20 | 9.3.1 | Android 24/36/36; iOS 15.1, Xcode 16.1+ |
 
-Android builds use Java 21. React Native 0.84.1 and 0.85.3 both declare Xcode
+Android builds use Java 21. React Native 0.84.1 and 0.86.3 both declare Xcode
 16.1 as their minimum. The package peer range is React Native
-`>=0.84.0 <0.86.0`.
+`>=0.84.0 <0.87.0`.
 
 ## Automated package and CNG checks
 
@@ -44,10 +51,24 @@ npm run test:package
 ```
 
 `test:expo-plugin` covers absent and app-owned Kotlin settings, explicitly
-versioned dependencies, and idempotence. `test:package` performs an `npm pack`
+versioned dependencies, and idempotence. These JavaScript tests do not establish
+native iOS compatibility; that requires an Xcode build and runtime checks.
+`test:package` performs an `npm pack`
 dry run and requires the config-plugin entry point, Android sources, iOS podspec
 and XCFramework, JavaScript output, and TypeScript declarations while rejecting
 example app files.
+
+Check Android networking alignment from either example's `android/` directory:
+
+```sh
+./gradlew :app:dependencyInsight --configuration debugRuntimeClasspath --dependency com.squareup.okhttp3
+./gradlew :app:dependencyInsight --configuration releaseRuntimeClasspath --dependency com.squareup.okhttp3
+```
+
+The app should inherit `okhttp-bom:5.4.0` from this library and resolve `okhttp`,
+`okhttp-urlconnection`, and `okhttp-java-net-cookiejar` to 5.4.0 (or a newer
+compatible BOM selected by the app). Repeat with `debugCompileClasspath` and
+`releaseCompileClasspath` to verify compile-time alignment as well.
 
 From `example-expo/`:
 
@@ -59,7 +80,10 @@ npm run test:prebuild
 ```
 
 `test:prebuild` runs `expo prebuild --clean --platform all --no-install` twice
-and compares both generated projects. Xcode object IDs are normalized before
+and asserts that Expo writes the app-selected Kotlin version exactly once
+and checks the package's Kotlin classpath binding with a versionless fallback.
+It also checks that the sample opts in to scenes through `expo-build-properties`
+and that Expo generates the expected iOS scene manifest and AppDelegate startup. Xcode object IDs are normalized before
 comparison because clean Xcode project generation assigns new opaque IDs. The
 current check compares 36 Android and 18 iOS files.
 
@@ -112,7 +136,7 @@ npm start
 npm run test:integration
 ```
 
-## Results recorded on 2026-09-15
+## Results recorded on 2026-09-15 (Expo SDK 56 / RN 0.85.3)
 
 | Check | Result |
 | --- | --- |
@@ -130,7 +154,37 @@ npm run test:integration
 | Library Jest suite and TypeScript build | Passed: 31 tests |
 | Published artifact audit | Passed: 169 required package files checked; examples excluded |
 
-The iOS commands above are the remaining release validation gate. The local
-CocoaPods attempt reached autolinking and codegen discovery, then stopped because
-the selected developer directory contains Command Line Tools rather than full
-Xcode. This is an environment limitation rather than an autolinking error.
+At that validation run, iOS build and runtime checks remained outstanding. The
+local CocoaPods attempt reached autolinking and codegen discovery, then stopped
+because the selected developer directory contained Command Line Tools rather
+than full Xcode. The SDK 57 results below include later validation on full Xcode.
+
+## Results recorded on 2026-10-19 (Expo SDK 57 / RN 0.86.3)
+
+The Expo example now installs Expo 57.0.30, React Native 0.86.3,
+`expo-build-properties` 57.0.22, `expo-dev-client` 57.0.20, and
+`react-native-screens` 4.26.2 from its committed npm lockfile. React remains
+19.2.3. The package and both lockfiles already declare the required React Native
+peer range `>=0.84.0 <0.87.0`.
+
+| Check | Result |
+| --- | --- |
+| Expo dependency alignment (`npx expo install --check`) | Passed: dependencies are up to date |
+| Library TypeScript and Jest suite | Passed: 31 tests |
+| Package config-plugin tests and artifact audit | Passed: 4 tests; 169 package files checked |
+| Expo TypeScript and public config resolution | Passed |
+| Android and iOS JavaScript exports | Passed |
+| Two clean all-platform prebuilds | Passed: 36 Android and 18 iOS files identical; Kotlin assertions and Expo-owned scene migration assertions passed |
+| Expo Android arm64 debug APK (`assembleDebug`) | Passed: 433 Gradle tasks executed |
+| Expo Android TurboModule initialization and representative tracking flow | Passed on Pixel_10; Maestro reached `plugin-test-all-passed` |
+| Expo iOS autolinking | Passed: resolves the Intelligence podspec |
+| Android debug runtime dependency alignment | Passed: React Native 0.86.3, Intelligence Android 5.1.14, and OkHttp modules aligned to 5.4.0 |
+| RN 0.86.3 iOS codegen | Passed: generated Intelligence TurboModule artifacts and module providers |
+| Expo iOS native build | Passed: Xcode 27.0, iOS 27 simulator SDK, Debug arm64; retained Objective-C++ bridge compiled |
+| Expo iOS launch smoke check | Passed on iPhone 17 / iOS 27: Home and integration screens loaded without the UIScene lifecycle crash; the native `isInitialized()` getter returned true |
+| Full iOS tracking integration suite | Not run; the launch smoke check does not cover every tracking API |
+
+The React Native CLI sample remains on 0.84.1; its native build and runtime
+checks were not repeated for this Expo sample upgrade. The iOS build and launch
+checks used the sample's `expo-build-properties` scene opt-in. The full iOS
+tracking integration suite remains a separate release check.

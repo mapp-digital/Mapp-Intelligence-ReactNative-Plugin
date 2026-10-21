@@ -4,7 +4,7 @@
     "slug": "mapp-intelligence-expo-example",
     "scheme": "mapp-intelligence-expo",
     "version": "1.0.0",
-    "sdkVersion": "56.0.0",
+    "sdkVersion": "57.0.0",
     "android": {
       "package": "com.mappintelligence.expoexample"
     },
@@ -23,6 +23,9 @@
         {
           "android": {
             "kotlinVersion": "2.3.20"
+          },
+          "ios": {
+            "enableSceneSupport": true
           }
         }
       ],

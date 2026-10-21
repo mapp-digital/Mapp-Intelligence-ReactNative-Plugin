@@ -21,15 +21,15 @@
   "dependencies": {
     "@react-navigation/native": "6.1.18",
     "@react-navigation/native-stack": "6.11.0",
-    "expo": "56.0.0",
-    "expo-build-properties": "56.0.27",
-    "expo-dev-client": "56.0.26",
+    "expo": "57.0.30",
+    "expo-build-properties": "~57.0.22",
+    "expo-dev-client": "~57.0.20",
     "mapp-intelligence-reactnative-plugin": "file:..",
     "react": "19.2.3",
-    "react-native": "0.85.3",
+    "react-native": "0.86.3",
     "react-native-mapp-plugin": "1.4.2",
     "react-native-safe-area-context": "~5.7.0",
-    "react-native-screens": "4.25.1",
+    "react-native-screens": "~4.26.0",
     "react-native-video": "6.19.2",
     "react-native-webview": "13.16.1"
   }

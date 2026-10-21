@@ -1,7 +1,6 @@
 require "json"
 
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
-folly_compiler_flags = '-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32'
 
 Pod::Spec.new do |s|
   s.name         = "mapp-intelligence-reactnative-plugin"
@@ -20,8 +19,5 @@ Pod::Spec.new do |s|
   s.public_header_files = "ios/Frameworks/MappIntelligenceiOS.xcframework/ios-arm64/Headers/MappIntelligenceiOS/"
   s.requires_arc = true
   s.dependency "React-Core"
-  s.dependency "React-Codegen"
-  s.dependency "RCTRequired"
-  s.dependency "RCTTypeSafety"
-  s.dependency "ReactCommon/turbomodule/core"
+  install_modules_dependencies(s)
 end

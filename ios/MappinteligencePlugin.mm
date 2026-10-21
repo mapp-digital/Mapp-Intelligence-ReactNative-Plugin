@@ -7,6 +7,13 @@
 @implementation MappinteligencePlugin
 RCT_EXPORT_MODULE()
 
+#ifdef RCT_NEW_ARCH_ENABLED
+- (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:(const facebook::react::ObjCTurboModule::InitParams &)params
+{
+    return std::make_shared<facebook::react::NativeMappintelligencePluginSpecJSI>(params);
+}
+#endif
+
 // Example method
 // See // https://reactnative.dev/docs/native-modules-ios
 RCT_EXPORT_METHOD(multiply:(double)a
@@ -127,7 +134,7 @@ RCT_EXPORT_METHOD(initWithConfiguration:(NSArray*)trackIDs
     resolve(@1);
 }
 
-RCT_EXPORT_METHOD(setLogLevel:(NSInteger)level
+RCT_EXPORT_METHOD(setLogLevel:(double)level
                                         resolve:(RCTPromiseResolveBlock)resolve
                                         reject:(RCTPromiseRejectBlock)reject)
 {
@@ -137,7 +144,7 @@ RCT_EXPORT_METHOD(setLogLevel:(NSInteger)level
     resolve(@1);
 }
 
-RCT_EXPORT_METHOD(setExceptionLogLevel:(NSInteger)level
+RCT_EXPORT_METHOD(setExceptionLogLevel:(double)level
                                         resolve:(RCTPromiseResolveBlock)resolve
                                         reject:(RCTPromiseRejectBlock)reject)
 {
@@ -147,7 +154,7 @@ RCT_EXPORT_METHOD(setExceptionLogLevel:(NSInteger)level
     resolve(@1);
 }
 
-RCT_EXPORT_METHOD(setRequestInterval:(NSInteger)interval
+RCT_EXPORT_METHOD(setRequestInterval:(double)interval
                                         resolve:(RCTPromiseResolveBlock)resolve
                                         reject:(RCTPromiseRejectBlock)reject)
 {
@@ -177,12 +184,12 @@ RCT_EXPORT_METHOD(setEnableBackgroundSendout:(BOOL)enabled
     resolve(@1);
 }
 
-RCT_EXPORT_METHOD(setBatchSupportSize:(NSInteger)size
+RCT_EXPORT_METHOD(setBatchSupportSize:(double)size
                                         resolve:(RCTPromiseResolveBlock)resolve
                                         reject:(RCTPromiseRejectBlock)reject)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[MappIntelligence shared] setBatchSupportSize:size];
+        [[MappIntelligence shared] setBatchSupportSize:(NSInteger)size];
     });
     resolve(@1);
 }
@@ -228,7 +235,7 @@ RCT_EXPORT_METHOD(setEnableUserMatching:(BOOL)enabled
 }
 
 RCT_EXPORT_METHOD(trackPage:(NSString*)pageTitle
-                                        reslove:(RCTPromiseResolveBlock)resolve
+                                        resolve:(RCTPromiseResolveBlock)resolve
                                         reject:(RCTPromiseRejectBlock)reject)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -249,7 +256,7 @@ RCT_EXPORT_METHOD(trackPage:(NSString*)pageTitle
 
 RCT_EXPORT_METHOD(trackCustomPage:(NSString*)pageTitle
                                         pageParameters:(id)pageParameters
-                                        sessionParamters:(id)sessionParamters
+                                        sessionParameters:(id)sessionParameters
                                         userCategories:(id)userCategories
                                         ecommerceParameters:(id)ecommerceParameters
                                         campaignParameters:(id)campaignParameters
@@ -260,7 +267,7 @@ RCT_EXPORT_METHOD(trackCustomPage:(NSString*)pageTitle
         MIPageViewEvent* event = [[MIPageViewEvent alloc] initWithName:pageTitle];
       
       NSDictionary* pp = [pageParameters isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)pageParameters;
-      NSDictionary* sp = [sessionParamters isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)sessionParamters;
+      NSDictionary* sp = [sessionParameters isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)sessionParameters;
       NSDictionary* uc = [userCategories isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)userCategories;
       NSDictionary* ep = [ecommerceParameters isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)ecommerceParameters;
       NSDictionary* cp = [campaignParameters isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)campaignParameters;
@@ -290,7 +297,7 @@ RCT_EXPORT_METHOD(trackPageWithCustomData:(NSDictionary*)pageParameters
 
 RCT_EXPORT_METHOD(trackAction:(NSString*)name
                                         eventParameters:(id)eventParameters
-                                        sessionParamters:(id)sessionParamters
+                                        sessionParameters:(id)sessionParameters
                                         userCategories:(id)userCategories
                                         ecommerceParameters:(id)ecommerceParameters
                                         campaignParameters:(id)campaignParameters
@@ -301,7 +308,7 @@ RCT_EXPORT_METHOD(trackAction:(NSString*)name
          MIActionEvent* actionEvent = [[MIActionEvent alloc] initWithName:name];
 
          NSDictionary* ep = [eventParameters isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)eventParameters;
-         NSDictionary* sp = [sessionParamters isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)sessionParamters;
+         NSDictionary* sp = [sessionParameters isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)sessionParameters;
          NSDictionary* uc = [userCategories isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)userCategories;
          NSDictionary* ecp = [ecommerceParameters isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)ecommerceParameters;
          NSDictionary* cp = [campaignParameters isKindOfClass:[NSNull class]] ? nil : (NSDictionary*)campaignParameters;
