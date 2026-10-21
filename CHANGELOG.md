@@ -2,7 +2,7 @@
 
 All notable changes to this project are documented in this file.
 
-## [2.0.1] - [Unreleased]
+## [2.0.1] - [2026-10-21]
 
 - Removed the package config plugin's Kotlin default. Apps own compiler selection; the Expo sample uses `expo-build-properties` for Kotlin 2.3.20. The Gradle binding honors an explicit app version and otherwise keeps framework dependency selection.
 - The Expo SDK 57 sample opts in to iOS scene support through `expo-build-properties` for Xcode 27 / iOS 27. Expo owns the scene migration.
